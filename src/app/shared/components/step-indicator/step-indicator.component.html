@@ -1,23 +1,24 @@
-<div
-  class="step-indicator"
-  role="navigation"
-  aria-label="Registration progress"
->
+<nav class="step-indicator" aria-label="Form Steps">
   <div class="steps-container">
     <div
       *ngFor="let step of steps; let i = index"
       class="step"
-      [class.completed]="getStepState(i) === 'completed'"
-      [class.current]="getStepState(i) === 'current'"
+      [class.completed]="step.completed"
+      [class.current]="step.current"
+      [class.clickable]="isStepClickable(i)"
       [attr.aria-current]="step.current ? 'step' : null"
-      [attr.aria-label]="getAriaLabel(step, i)"
+      [attr.aria-label]="getStepAriaLabel(step, i)"
+      (click)="navigateToStep(i)"
+      [attr.tabindex]="isStepClickable(i) ? 0 : -1"
+      role="button"
     >
-      <div class="step-circle">
-        <mat-icon *ngIf="getStepState(i) === 'completed'">check</mat-icon>
-        <span *ngIf="getStepState(i) !== 'completed'">{{ i + 1 }}</span>
+      <div class="step-line" *ngIf="i > 0"></div>
+      <div class="step-indicator-content">
+        <div class="step-circle">
+          <span class="step-number">{{ i + 1 }}</span>
+        </div>
+        <span class="step-label">{{ step.label }}</span>
       </div>
-      <div class="step-label">{{ step.label }}</div>
-      <div class="step-connector" *ngIf="i < steps.length - 1"></div>
     </div>
   </div>
-</div>
+</nav>

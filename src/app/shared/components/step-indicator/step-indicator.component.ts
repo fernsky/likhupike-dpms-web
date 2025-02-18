@@ -1,11 +1,15 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface Step {
   label: string;
+  description: string; // Added description
   completed: boolean;
   current: boolean;
+  valid?: boolean;
+  icon?: string; // Added icon support
 }
 
 @Component({
@@ -13,28 +17,48 @@ export interface Step {
   templateUrl: './step-indicator.component.html',
   styleUrls: ['./step-indicator.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule],
 })
 export class StepIndicatorComponent {
   @Input() steps: Step[] = [];
   @Input() currentStepIndex: number = 0;
+  @Input() allowNavigation: boolean = true;
+  @Output() stepChange = new EventEmitter<number>();
 
-  getStepState(index: number): 'completed' | 'current' | 'upcoming' {
-    if (index < this.currentStepIndex) {
-      return 'completed';
-    } else if (index === this.currentStepIndex) {
-      return 'current';
+  navigateToStep(index: number): void {
+    if (!this.allowNavigation) return;
+
+    const canNavigate = this.isStepClickable(index);
+    if (canNavigate) {
+      this.stepChange.emit(index);
     }
-    return 'upcoming';
   }
 
-  // For screen readers
-  getAriaLabel(step: Step, index: number): string {
+  isStepClickable(index: number): boolean {
+    if (!this.allowNavigation) return false;
+
+    // Can always go back to previous steps
+    if (index < this.currentStepIndex) return true;
+
+    // Can only go to next step if current step is valid
+    if (index === this.currentStepIndex + 1) {
+      return this.steps[this.currentStepIndex]?.valid ?? false;
+    }
+
+    // Cannot skip steps
+    return false;
+  }
+
+  getStepAriaLabel(step: Step, index: number): string {
     const status = step.completed
       ? 'completed'
       : step.current
         ? 'current'
         : 'pending';
-    return `Step ${index + 1}: ${step.label} - ${status}`;
+    return `Step ${index + 1}: ${step.label} - ${step.description}. Status: ${status}`;
+  }
+
+  getTooltipContent(step: Step): string {
+    return `${step.label}: ${step.description}${step.valid ? ' ✓' : ''}`;
   }
 }

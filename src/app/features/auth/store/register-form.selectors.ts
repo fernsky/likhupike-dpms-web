@@ -57,3 +57,12 @@ export const selectStepFormData = (step: number) =>
         return {};
     }
   });
+
+export const selectStepValidities = createSelector(
+  selectRegisterFormState,
+  (state: RegisterFormState) => [
+    state.isValid.step1,
+    state.isValid.step2,
+    state.isValid.step3,
+  ]
+);

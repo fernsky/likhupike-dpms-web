@@ -1,27 +1,47 @@
 import { createReducer, on } from '@ngrx/store';
 import { RegisterFormActions } from './register-form.actions';
 import {
-  RegisterFormState,
   initialRegisterFormState,
+  RegisterFormState,
 } from './register-form.state';
 
 export const registerFormReducer = createReducer(
   initialRegisterFormState,
 
   on(
+    RegisterFormActions.updateStepValidity,
+    (state, { step, isValid }): RegisterFormState => {
+      const stepKey = `step${step}` as keyof typeof state.isValid;
+      return {
+        ...state,
+        isValid: {
+          ...state.isValid,
+          [stepKey]: isValid,
+        },
+      };
+    }
+  ),
+
+  on(
     RegisterFormActions.nextStep,
-    (state, { currentStep }): RegisterFormState => ({
-      ...state,
-      currentStep: Math.min(state.totalSteps, currentStep + 1),
-    })
+    (state, { currentStep }): RegisterFormState => {
+      const nextStep = Math.min(state.totalSteps, currentStep + 1);
+      return {
+        ...state,
+        currentStep: nextStep,
+      };
+    }
   ),
 
   on(
     RegisterFormActions.previousStep,
-    (state, { currentStep }): RegisterFormState => ({
-      ...state,
-      currentStep: Math.max(1, currentStep - 1),
-    })
+    (state, { currentStep }): RegisterFormState => {
+      const prevStep = Math.max(1, currentStep - 1);
+      return {
+        ...state,
+        currentStep: prevStep,
+      };
+    }
   ),
 
   on(
@@ -31,17 +51,6 @@ export const registerFormReducer = createReducer(
       formData: {
         ...state.formData,
         ...formData,
-      },
-    })
-  ),
-
-  on(
-    RegisterFormActions.updateStepValidity,
-    (state, { step, isValid }): RegisterFormState => ({
-      ...state,
-      isValid: {
-        ...state.isValid,
-        [`step${step}`]: isValid,
       },
     })
   ),

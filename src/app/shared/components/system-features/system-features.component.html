@@ -1,0 +1,14 @@
+<div class="features-container">
+  <h2>Digital Profile Management System</h2>
+  <p class="subtitle">
+    Streamline your government services with a secure digital identity
+  </p>
+
+  <div class="features-grid">
+    <div class="feature-card" *ngFor="let feature of features">
+      <mat-icon [fontIcon]="feature.icon"></mat-icon>
+      <h3>{{ feature.title }}</h3>
+      <p>{{ feature.description }}</p>
+    </div>
+  </div>
+</div>

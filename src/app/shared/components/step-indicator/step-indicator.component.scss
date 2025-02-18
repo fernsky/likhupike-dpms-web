@@ -1,169 +1,150 @@
 .step-indicator {
-  padding: 1rem 0 1.5rem;
-  margin: 0.5rem 0;
-  overflow-x: auto;
+  margin: 1rem 0;
 
   .steps-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-width: min-content;
     gap: 1rem;
     padding: 0 1rem;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50px;
+      right: 50px;
+      height: 1px;
+      background: #e0e0e0;
+      z-index: 0;
+    }
   }
 
   .step {
     position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
-    min-width: 120px;
+    min-width: 60px;
 
-    &.completed {
-      .step-circle {
-        background: var(--primary-color);
-        border-color: var(--primary-color);
-        color: white;
-        transform: scale(1.05);
-
-        mat-icon {
-          font-size: 16px;
-          width: 16px;
-          height: 16px;
-          animation: checkmark 0.3s ease-in-out forwards;
-        }
-      }
-
-      .step-connector {
-        background-color: var(--primary-color);
-        transform: scaleX(1);
-      }
-
-      .step-label {
-        color: var(--primary-color);
-        font-weight: 500;
-      }
-    }
-
-    &.current {
-      .step-circle {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        font-weight: bold;
-        background-color: rgba(25, 118, 210, 0.05);
-        box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
-        animation: pulse 2s infinite;
-      }
-
-      .step-label {
-        color: var(--primary-color);
-        font-weight: 500;
-        transform: scale(1.05);
-      }
+    .step-indicator-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
 
     .step-circle {
       width: 28px;
       height: 28px;
       border-radius: 50%;
-      border: 2px solid #bdbdbd;
+      background: white;
+      border: 1.5px solid #bdbdbd;
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: white;
-      z-index: 1;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-size: 0.75rem;
-      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+      z-index: 2; // Ensure circle is above the line
+      box-shadow: 0 0 0 4px white; // Add white background around circle
 
-      mat-icon {
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
+      .step-number {
+        font-size: 13px;
+        font-weight: 500;
+        color: #333; // Darker text color
       }
     }
 
     .step-label {
-      margin-top: 0.5rem;
-      font-size: 0.75rem;
-      color: #666;
+      font-size: 12px;
+      color: #757575;
       text-align: center;
-      transition: all 0.3s ease;
+      transition: color 0.2s ease;
       white-space: nowrap;
-      letter-spacing: 0.2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 80px;
     }
 
-    .step-connector {
-      position: absolute;
-      top: 14px;
-      left: calc(50% + 14px);
-      width: calc(100% - 28px);
-      height: 2px;
-      background-color: #e0e0e0;
-      transform-origin: left;
-      transition: background-color 0.3s ease;
-    }
-  }
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
-  }
-  70% {
-    box-shadow: 0 0 0 8px rgba(25, 118, 210, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
-  }
-}
-
-@keyframes checkmark {
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-// Responsive adjustments
-@media (max-width: 768px) {
-  .step-indicator {
-    padding: 0.75rem 0 1rem;
-
-    .steps-container {
-      gap: 0.5rem;
-    }
-
-    .step {
-      min-width: 90px;
-
+    &.completed {
       .step-circle {
-        width: 24px;
-        height: 24px;
-        font-size: 0.7rem;
+        background: white; // Keep white background
+        border-color: var(--primary-color);
 
-        mat-icon {
-          font-size: 14px;
-          width: 14px;
-          height: 14px;
+        .step-number {
+          color: var(--primary-color); // Use primary color for number
+        }
+      }
+
+      .step-line {
+        background-color: var(--primary-color);
+      }
+
+      .step-label {
+        color: var(--primary-color);
+      }
+
+      ~ .step::before {
+        background-color: #e0e0e0; // Reset the line color for following steps
+      }
+    }
+
+    // Add this new selector for completed steps' connecting line
+    &.completed + .step::before {
+      background-color: var(--primary-color);
+    }
+
+    &.current {
+      .step-circle {
+        border: 2px solid var(--primary-color);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.1);
+
+        .step-number {
+          color: var(--primary-color);
         }
       }
 
       .step-label {
-        font-size: 0.7rem;
-        margin-top: 0.35rem;
+        color: var(--primary-color);
+        font-weight: 500;
       }
+    }
 
-      .step-connector {
-        top: 12px;
-        left: calc(50% + 12px);
-        width: calc(100% - 24px);
+    &.clickable {
+      cursor: pointer;
+
+      &:hover .step-circle {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.15);
       }
+    }
+
+    .step-line {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .step-indicator .step {
+    min-width: 40px;
+
+    .step-circle {
+      width: 24px;
+      height: 24px;
+
+      .step-number {
+        font-size: 11px;
+      }
+    }
+
+    .step-label {
+      font-size: 10px;
+      max-width: 60px;
     }
   }
 }

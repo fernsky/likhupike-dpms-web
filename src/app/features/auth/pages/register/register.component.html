@@ -1,24 +1,21 @@
 <div class="auth-container">
-  <div class="auth-content">
-    <!-- Branding -->
-    <div class="branding">
-      <img
-        src="assets/images/nepal-government-logo.png"
-        alt="Government Logo"
-      />
-      <h1>नेपाल सरकार</h1>
-      <h2>डिजिटल प्रोफाइल व्यवस्थापन प्रणाली</h2>
-      <h3>Digital Profile Management System</h3>
-    </div>
+  <app-background-particles></app-background-particles>
+  <div class="auth-header">
+    <app-gov-branding></app-gov-branding>
+  </div>
 
+  <div class="auth-content">
+    <app-system-features></app-system-features>
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Setup Your Account</mat-card-title>
+        <mat-card-title>Create Your Profile</mat-card-title>
+        <mat-card-subtitle>
+          Welcome to the official digital profile registration system
+        </mat-card-subtitle>
         <app-step-indicator
           [steps]="steps$ | async"
-          [currentStepIndex]="
-            (currentStep$ | async) ? (currentStep$ | async)! - 1 : 0
-          "
+          [currentStepIndex]="(currentStep$ | async)! - 1"
+          (stepChange)="onNextStep($event + 1)"
         ></app-step-indicator>
       </mat-card-header>
 
@@ -29,17 +26,11 @@
           <app-register-step-three *ngSwitchCase="3"></app-register-step-three>
           <app-register-step-one *ngSwitchDefault></app-register-step-one>
         </ng-container>
-      </mat-card-content>
-
-      <mat-card-actions>
-        <div class="form-footer">
-          <span>Already have an account?</span>
-          <a mat-button color="primary" routerLink="/auth/login">Sign in</a>
-        </div>
 
         <div class="form-actions">
           <button
-            mat-button
+            mat-stroked-button
+            color="primary"
             *ngIf="(currentStep$ | async)! > 1"
             (click)="handlePreviousStep()"
             [disabled]="loading"
@@ -67,7 +58,12 @@
             {{ loading ? "Creating Account..." : "Create Account" }}
           </button>
         </div>
-      </mat-card-actions>
+
+        <div class="form-footer">
+          <span>Already have an account?</span>
+          <a mat-button routerLink="/auth/login">Sign in</a>
+        </div>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

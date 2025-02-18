@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
+import { Subject, combineLatest } from 'rxjs';
 import { takeUntil, take, map } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
@@ -17,11 +17,15 @@ import {
   selectFormData,
   selectCanProceedToNextStep,
   selectIsLastStep,
+  selectStepValidities,
 } from '../../store/register-form.selectors';
 import {
   StepIndicatorComponent,
   Step,
 } from '@app/shared/components/step-indicator/step-indicator.component';
+import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
+import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
+import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
 
 @Component({
   selector: 'app-register',
@@ -36,6 +40,9 @@ import {
     StepTwoComponent,
     StepThreeComponent,
     StepIndicatorComponent,
+    GovBrandingComponent,
+    SystemFeaturesComponent,
+    BackgroundParticlesComponent,
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -48,17 +55,43 @@ export class RegisterComponent implements OnInit, OnDestroy {
   loading = false;
 
   steps: Step[] = [
-    { label: 'Personal Info', completed: false, current: true },
-    { label: 'Office Details', completed: false, current: false },
-    { label: 'Account Setup', completed: false, current: false },
+    {
+      label: 'Personal Info',
+      description:
+        'Enter your personal details including full name and date of birth',
+      icon: 'person',
+      completed: false,
+      current: true,
+      valid: false,
+    },
+    {
+      label: 'Office Details',
+      description: 'Provide your office information and ward details',
+      icon: 'business',
+      completed: false,
+      current: false,
+      valid: false,
+    },
+    {
+      label: 'Account Setup',
+      description: 'Create your account credentials and security settings',
+      icon: 'lock',
+      completed: false,
+      current: false,
+      valid: false,
+    },
   ];
 
-  steps$ = this.currentStep$.pipe(
-    map((currentStep) =>
+  steps$ = combineLatest([
+    this.currentStep$,
+    this.store.select(selectStepValidities), // Add this selector
+  ]).pipe(
+    map(([currentStep, validities]) =>
       this.steps.map((step, index) => ({
         ...step,
         completed: index < currentStep - 1,
         current: index === currentStep - 1,
+        valid: validities[index],
       }))
     )
   );
