@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import {
+  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
   Validators,
-  ReactiveFormsModule,
 } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,9 +17,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import * as AuthActions from '../../../../core/store/auth/auth.actions';
-import { selectAuthState } from '../../../../core/store/auth/auth.selectors';
-import { LoginRequest } from '../../../../core/models/auth.interface';
+import * as AuthActions from '@app/core/store/auth/auth.actions';
+import { selectAuthState } from '@app/core/store/auth/auth.selectors';
+import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
+import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
+import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +39,9 @@ import { LoginRequest } from '../../../../core/models/auth.interface';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatDividerModule,
+    GovBrandingComponent,
+    SystemFeaturesComponent,
+    BackgroundParticlesComponent,
   ],
 })
 export class LoginComponent implements OnInit, OnDestroy {
@@ -47,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private store: Store,
+    private store: Store
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -70,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.store.dispatch(
-        AuthActions.login({ credentials: this.loginForm.value }),
+        AuthActions.login({ credentials: this.loginForm.value })
       );
     } else {
       this.loginForm.markAllAsTouched();

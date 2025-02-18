@@ -123,7 +123,7 @@
       "propertiesClass": [
         {
           "name": "title",
-          "defaultValue": "'Angular Starter!'",
+          "defaultValue": "'Digital Profile Management System'",
           "deprecated": false,
           "deprecationMessage": "",
           "type": "string",
@@ -151,7 +151,7 @@
       "description": "",
       "rawdescription": "\n",
       "type": "component",
-      "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\nimport { TranslocoRootModule } from './transloco-root.module';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  imports: [RouterOutlet, TranslocoRootModule],\n  templateUrl: './app.component.html',\n  styleUrl: './app.component.scss',\n})\nexport class AppComponent {\n  title = 'Angular Starter!';\n}\n",
+      "sourceCode": "import { Component } from '@angular/core';\nimport { RouterOutlet } from '@angular/router';\nimport { TranslocoRootModule } from './transloco-root.module';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  imports: [RouterOutlet, TranslocoRootModule],\n  templateUrl: './app.component.html',\n  styleUrl: './app.component.scss',\n})\nexport class AppComponent {\n  title = 'Digital Profile Management System';\n}\n",
       "styleUrl": "./app.component.scss",
       "assetsDirs": [],
       "styleUrlsData": "",

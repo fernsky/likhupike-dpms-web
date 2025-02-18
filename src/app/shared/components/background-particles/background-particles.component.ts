@@ -26,7 +26,7 @@ export class BackgroundParticlesComponent implements OnInit {
     if (!ctx) return;
 
     const particles: Particle[] = [];
-    const particleCount = 100; // More particles for better effect
+    const particleCount = 10; // More particles for better effect
 
     // Set canvas size with DPI awareness
     const resize = () => {

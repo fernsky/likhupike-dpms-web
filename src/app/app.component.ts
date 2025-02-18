@@ -10,5 +10,5 @@ import { TranslocoRootModule } from './transloco-root.module';
   standalone: true,
 })
 export class AppComponent {
-  title = 'Angular Starter!';
+  title = 'Digital Profile Management Information System';
 }
