@@ -1,6 +1,6 @@
 <form [formGroup]="stepForm">
   <div class="form-fields">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Office Position</mat-label>
       <mat-select formControlName="officePost">
         <mat-option
@@ -23,7 +23,10 @@
         I am a ward office user.
       </mat-checkbox>
 
-      <mat-form-field *ngIf="stepForm.get('isFromWard')?.value">
+      <mat-form-field
+        *ngIf="stepForm.get('isFromWard')?.value"
+        appearance="outline"
+      >
         <mat-label>Ward Number</mat-label>
         <mat-select
           formControlName="wardNumber"

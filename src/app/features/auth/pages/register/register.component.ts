@@ -26,6 +26,7 @@ import {
 import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
 import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
 import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-register',
@@ -43,6 +44,7 @@ import { BackgroundParticlesComponent } from '@app/shared/components/background-
     GovBrandingComponent,
     SystemFeaturesComponent,
     BackgroundParticlesComponent,
+    MatIcon,
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {

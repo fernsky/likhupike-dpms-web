@@ -43,6 +43,10 @@
   .gov-branding {
     gap: 1.5rem;
 
+    .gov-logo {
+      width: 48px;
+    }
+
     &.horizontal {
       flex-direction: column;
       gap: 1.5rem;
@@ -54,13 +58,13 @@
 
     .titles {
       .nepali-title {
-        font-size: 2.5rem;
+        font-size: 1rem;
       }
       .system-title {
-        font-size: 1.5rem;
+        font-size: 1rem;
       }
       .system-title-en {
-        font-size: 1.1rem;
+        font-size: 0.8rem;
       }
     }
   }

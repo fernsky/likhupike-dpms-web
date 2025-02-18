@@ -1,6 +1,6 @@
 <form [formGroup]="stepForm">
   <div class="form-fields">
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Email Address</mat-label>
       <input
         matInput
@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <div class="password-section">
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Password</mat-label>
         <input
           matInput
@@ -42,64 +42,67 @@
 
       <!-- Only show strength indicator when password is not empty and not fully valid -->
       <ng-container *ngIf="showPasswordStrength">
-        <div class="password-strength">
-          <div class="strength-meter">
-            <div
-              class="strength-label"
-              [ngClass]="{
-                weak: getPasswordStrength() < 50,
-                medium:
-                  getPasswordStrength() >= 50 && getPasswordStrength() < 75,
-                strong: getPasswordStrength() >= 75,
-              }"
-            >
-              <mat-icon>
-                {{
-                  getPasswordStrength() < 50
-                    ? "error_outline"
-                    : getPasswordStrength() < 75
-                      ? "warning"
-                      : "check_circle"
-                }}
-              </mat-icon>
-              <span
-                >Password Strength:
-                {{
-                  getPasswordStrength() < 50
-                    ? "Weak"
-                    : getPasswordStrength() < 75
-                      ? "Medium"
-                      : "Strong"
-                }}</span
-              >
-            </div>
-
-            <div class="strength-bar">
+        <div class="password-strength-container">
+          <div class="password-strength">
+            <div class="strength-meter">
               <div
-                class="strength-progress"
-                [style.width.%]="getPasswordStrength()"
+                class="strength-label"
                 [ngClass]="{
                   weak: getPasswordStrength() < 50,
                   medium:
                     getPasswordStrength() >= 50 && getPasswordStrength() < 75,
                   strong: getPasswordStrength() >= 75,
                 }"
-              ></div>
-            </div>
-          </div>
-
-          <div class="strength-requirements">
-            <div class="requirement" *ngFor="let error of getPasswordErrors()">
-              <mat-icon [ngClass]="{ unmet: true }"
-                >radio_button_unchecked</mat-icon
               >
-              <span>{{ error }}</span>
+                <mat-icon>
+                  {{
+                    getPasswordStrength() < 50
+                      ? "error_outline"
+                      : getPasswordStrength() < 75
+                        ? "security"
+                        : "verified"
+                  }}
+                </mat-icon>
+                <span
+                  >Password Strength:
+                  {{
+                    getPasswordStrength() < 50
+                      ? "Weak"
+                      : getPasswordStrength() < 75
+                        ? "Medium"
+                        : "Strong"
+                  }}</span
+                >
+              </div>
+
+              <div class="strength-bar">
+                <div
+                  class="strength-progress"
+                  [style.width.%]="getPasswordStrength()"
+                  [ngClass]="{
+                    weak: getPasswordStrength() < 50,
+                    medium:
+                      getPasswordStrength() >= 50 && getPasswordStrength() < 75,
+                    strong: getPasswordStrength() >= 75,
+                  }"
+                ></div>
+              </div>
+            </div>
+
+            <div class="strength-requirements">
+              <div
+                class="requirement"
+                *ngFor="let error of getPasswordErrors()"
+              >
+                <mat-icon [ngClass]="{ unmet: true }">info</mat-icon>
+                <span>{{ error }}</span>
+              </div>
             </div>
           </div>
         </div>
       </ng-container>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline">
         <mat-label>Confirm Password</mat-label>
         <input
           matInput

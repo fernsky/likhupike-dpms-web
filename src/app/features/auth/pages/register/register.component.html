@@ -1,4 +1,7 @@
 <div class="auth-container">
+  <div class="background-decorations">
+    <div class="curved-line"></div>
+  </div>
   <app-background-particles></app-background-particles>
   <div class="auth-header">
     <app-gov-branding></app-gov-branding>
@@ -8,10 +11,12 @@
     <app-system-features></app-system-features>
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Create Your Profile</mat-card-title>
-        <mat-card-subtitle>
-          Welcome to the official digital profile registration system
-        </mat-card-subtitle>
+        <div class="header-content">
+          <mat-card-title>Create Your Profile</mat-card-title>
+          <mat-card-subtitle>
+            Digital Profile Management System
+          </mat-card-subtitle>
+        </div>
         <app-step-indicator
           [steps]="steps$ | async"
           [currentStepIndex]="(currentStep$ | async)! - 1"
@@ -20,43 +25,59 @@
       </mat-card-header>
 
       <mat-card-content>
-        <ng-container [ngSwitch]="currentStep$ | async">
-          <app-register-step-one *ngSwitchCase="1"></app-register-step-one>
-          <app-register-step-two *ngSwitchCase="2"></app-register-step-two>
-          <app-register-step-three *ngSwitchCase="3"></app-register-step-three>
-          <app-register-step-one *ngSwitchDefault></app-register-step-one>
-        </ng-container>
+        <div class="form-scroll-container">
+          <ng-container [ngSwitch]="currentStep$ | async">
+            <app-register-step-one *ngSwitchCase="1"></app-register-step-one>
+            <app-register-step-two *ngSwitchCase="2"></app-register-step-two>
+            <app-register-step-three
+              *ngSwitchCase="3"
+            ></app-register-step-three>
+            <app-register-step-one *ngSwitchDefault></app-register-step-one>
+          </ng-container>
+        </div>
 
-        <div class="form-actions">
-          <button
-            mat-stroked-button
-            color="primary"
-            *ngIf="(currentStep$ | async)! > 1"
-            (click)="handlePreviousStep()"
-            [disabled]="loading"
-          >
-            Previous
-          </button>
+        <div class="form-navigation">
+          <div class="nav-buttons">
+            <button
+              mat-stroked-button
+              color="primary"
+              class="prev-btn"
+              *ngIf="(currentStep$ | async)! > 1"
+              (click)="handlePreviousStep()"
+              [disabled]="loading"
+            >
+              <mat-icon>arrow_back</mat-icon>
+              Previous
+            </button>
 
-          <button
-            mat-raised-button
-            color="primary"
-            *ngIf="!(isLastStep$ | async)"
-            (click)="handleNextStep()"
-            [disabled]="!(canProceedToNextStep$ | async) || loading"
-          >
-            Next
-          </button>
+            <ng-container *ngIf="!(isLastStep$ | async); else submitButton">
+              <button
+                mat-flat-button
+                color="primary"
+                class="next-btn"
+                (click)="handleNextStep()"
+                [disabled]="!(canProceedToNextStep$ | async) || loading"
+              >
+                Next
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </ng-container>
 
-          <button
-            mat-raised-button
-            color="primary"
-            *ngIf="isLastStep$ | async"
-            (click)="onSubmit()"
-            [disabled]="!(canProceedToNextStep$ | async) || loading"
-          >
-            {{ loading ? "Creating Account..." : "Create Account" }}
-          </button>
+            <ng-template #submitButton>
+              <button
+                mat-flat-button
+                color="accent"
+                class="submit-btn"
+                (click)="onSubmit()"
+                [disabled]="!(canProceedToNextStep$ | async) || loading"
+              >
+                <span class="submit-content">
+                  <mat-icon>login</mat-icon>
+                  {{ loading ? "Creating Account..." : "Create Account" }}
+                </span>
+              </button>
+            </ng-template>
+          </div>
         </div>
 
         <div class="form-footer">
