@@ -12,7 +12,6 @@ export interface RegisterRequest {
   fullName: string;
   fullNameNepali: string;
   dateOfBirth: string; // Will be sent as ISO string
-  address: string;
   officePost: string;
   wardNumber?: number;
 }

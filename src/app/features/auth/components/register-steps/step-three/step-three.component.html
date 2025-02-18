@@ -1,0 +1,133 @@
+<form [formGroup]="stepForm">
+  <div class="form-fields">
+    <mat-form-field>
+      <mat-label>Email Address</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        placeholder="e.g., your.name@nepal.gov.np"
+      />
+      <mat-error *ngIf="stepForm.get('email')?.hasError('required')">
+        Email is required
+      </mat-error>
+      <mat-error *ngIf="stepForm.get('email')?.hasError('email')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="stepForm.get('email')?.hasError('governmentEmail')">
+        Please use a valid email address
+      </mat-error>
+    </mat-form-field>
+
+    <div class="password-section">
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="hidePassword ? 'password' : 'text'"
+          formControlName="password"
+          autocomplete="new-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hidePassword = !hidePassword"
+          type="button"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <!-- Only show strength indicator when password is not empty and not fully valid -->
+      <ng-container *ngIf="showPasswordStrength">
+        <div class="password-strength">
+          <div class="strength-meter">
+            <div
+              class="strength-label"
+              [ngClass]="{
+                weak: getPasswordStrength() < 50,
+                medium:
+                  getPasswordStrength() >= 50 && getPasswordStrength() < 75,
+                strong: getPasswordStrength() >= 75,
+              }"
+            >
+              <mat-icon>
+                {{
+                  getPasswordStrength() < 50
+                    ? "error_outline"
+                    : getPasswordStrength() < 75
+                      ? "warning"
+                      : "check_circle"
+                }}
+              </mat-icon>
+              <span
+                >Password Strength:
+                {{
+                  getPasswordStrength() < 50
+                    ? "Weak"
+                    : getPasswordStrength() < 75
+                      ? "Medium"
+                      : "Strong"
+                }}</span
+              >
+            </div>
+
+            <div class="strength-bar">
+              <div
+                class="strength-progress"
+                [style.width.%]="getPasswordStrength()"
+                [ngClass]="{
+                  weak: getPasswordStrength() < 50,
+                  medium:
+                    getPasswordStrength() >= 50 && getPasswordStrength() < 75,
+                  strong: getPasswordStrength() >= 75,
+                }"
+              ></div>
+            </div>
+          </div>
+
+          <div class="strength-requirements">
+            <div class="requirement" *ngFor="let error of getPasswordErrors()">
+              <mat-icon [ngClass]="{ unmet: true }"
+                >radio_button_unchecked</mat-icon
+              >
+              <span>{{ error }}</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <mat-form-field>
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          formControlName="confirmPassword"
+          autocomplete="new-password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          type="button"
+        >
+          <mat-icon>{{
+            hideConfirmPassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+        <mat-error
+          *ngIf="stepForm.get('confirmPassword')?.hasError('required')"
+        >
+          Please confirm your password
+        </mat-error>
+        <mat-error
+          *ngIf="stepForm.get('confirmPassword')?.hasError('passwordMismatch')"
+        >
+          Passwords do not match
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

@@ -10,7 +10,7 @@ export const authReducer = createReducer(
       ...state,
       loading: true,
       error: null,
-    }),
+    })
   ),
   on(
     AuthActions.loginSuccess,
@@ -21,7 +21,7 @@ export const authReducer = createReducer(
       refreshToken: response.refreshToken,
       loading: false,
       error: null,
-    }),
+    })
   ),
   on(
     AuthActions.loginFailure,
@@ -29,7 +29,7 @@ export const authReducer = createReducer(
       ...state,
       loading: false,
       error,
-    }),
+    })
   ),
   on(AuthActions.logout, (): AuthState => initialAuthState),
   on(
@@ -38,7 +38,7 @@ export const authReducer = createReducer(
       ...state,
       loading: true,
       error: null,
-    }),
+    })
   ),
   on(
     AuthActions.requestPasswordResetSuccess,
@@ -46,7 +46,7 @@ export const authReducer = createReducer(
       ...state,
       loading: false,
       error: null,
-    }),
+    })
   ),
   on(
     AuthActions.requestPasswordResetFailure,
@@ -54,6 +54,6 @@ export const authReducer = createReducer(
       ...state,
       loading: false,
       error,
-    }),
-  ),
+    })
+  )
 );

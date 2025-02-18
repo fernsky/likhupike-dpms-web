@@ -1,0 +1,144 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 1rem 0;
+  max-width: 100%;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    max-width: 90%;
+  }
+
+  @media (min-width: 992px) {
+    max-width: 80%;
+  }
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.password-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.password-strength-container {
+  background: rgba(25, 118, 210, 0.03);
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin: -0.5rem 0;
+  border: 1px solid rgba(25, 118, 210, 0.08);
+}
+
+.password-strength {
+  margin: -0.25rem 0 0.25rem;
+
+  .strength-meter {
+    margin-bottom: 0.25rem;
+
+    .strength-label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
+      color: rgba(0, 0, 0, 0.6);
+      height: 18px; // Fixed height to prevent layout shift
+
+      mat-icon {
+        font-size: 14px;
+        height: 14px;
+        width: 14px;
+      }
+
+      &.weak { color: #d32f2f; }
+      &.medium { color: #1976d2; }
+      &.strong { color: #2e7d32; }
+    }
+
+    .strength-bar {
+      height: 3px;
+      background-color: rgba(0, 0, 0, 0.08);
+      border-radius: 1.5px;
+      overflow: hidden;
+
+      .strength-progress {
+        height: 100%;
+        width: 0;
+        transition: all 0.3s ease;
+
+        &.weak { background: #d32f2f; }
+        &.medium { background: #1976d2; }
+        &.strong { background: #2e7d32; }
+      }
+    }
+  }
+
+  .strength-requirements {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+
+    .requirement {
+      flex: 1 1 calc(50% - 0.25rem);
+      min-width: 150px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      color: rgba(0, 0, 0, 0.6);
+      padding: 0.125rem 0;
+
+      mat-icon {
+        font-size: 12px;
+        height: 12px;
+        width: 12px;
+
+        &.met { color: #2e7d32; }
+        &.unmet { color: rgba(0, 0, 0, 0.38); }
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes scaleCheck {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+// Override Material styles for more compact layout
+:host ::ng-deep {
+  .mat-mdc-form-field {
+    .mat-mdc-form-field-subscript-wrapper {
+      padding: 0;
+    }
+
+    &-hint-wrapper {
+      padding: 0;
+    }
+  }
+
+  .mat-mdc-form-field-bottom-align {
+    padding-top: 0.25rem;
+  }
+
+  .mat-mdc-form-field-hint-wrapper {
+    width: 100%;
+  }
+}
+

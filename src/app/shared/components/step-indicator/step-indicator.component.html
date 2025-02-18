@@ -1,0 +1,23 @@
+<div
+  class="step-indicator"
+  role="navigation"
+  aria-label="Registration progress"
+>
+  <div class="steps-container">
+    <div
+      *ngFor="let step of steps; let i = index"
+      class="step"
+      [class.completed]="getStepState(i) === 'completed'"
+      [class.current]="getStepState(i) === 'current'"
+      [attr.aria-current]="step.current ? 'step' : null"
+      [attr.aria-label]="getAriaLabel(step, i)"
+    >
+      <div class="step-circle">
+        <mat-icon *ngIf="getStepState(i) === 'completed'">check</mat-icon>
+        <span *ngIf="getStepState(i) !== 'completed'">{{ i + 1 }}</span>
+      </div>
+      <div class="step-label">{{ step.label }}</div>
+      <div class="step-connector" *ngIf="i < steps.length - 1"></div>
+    </div>
+  </div>
+</div>

@@ -1,25 +1,27 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import * as AuthActions from '../../../../core/store/auth/auth.actions';
-import { selectAuthState } from '../../../../core/store/auth/auth.selectors';
-import { RegisterRequest } from '../../../../core/models/auth.interface';
-import { nepaliNameValidator } from '../../../../shared/validators/nepali-name.validator';
-import { OfficePost } from '../../../../core/models/office-post.enum';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { takeUntil, take, map } from 'rxjs/operators';
+import * as AuthActions from '@app/core/store/auth/auth.actions';
+import { selectAuthState } from '@app/core/store/auth/auth.selectors';
+import { RegisterRequest } from '@app/core/models/auth.interface';
 import { MatCardModule } from '@angular/material/card';
-import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { StepOneComponent } from '../../components/register-steps/step-one/step-one.component';
+import { StepTwoComponent } from '../../components/register-steps/step-two/step-two.component';
+import { StepThreeComponent } from '../../components/register-steps/step-three/step-three.component';
+import { RegisterFormActions } from '../../store/register-form.actions';
+import {
+  selectCurrentStep,
+  selectFormData,
+  selectCanProceedToNextStep,
+  selectIsLastStep,
+} from '../../store/register-form.selectors';
+import {
+  StepIndicatorComponent,
+  Step,
+} from '@app/shared/components/step-indicator/step-indicator.component';
 
 @Component({
   selector: 'app-register',
@@ -28,111 +30,97 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
     MatCardModule,
-    RouterModule,
+    MatButtonModule,
+    StepOneComponent,
+    StepTwoComponent,
+    StepThreeComponent,
+    StepIndicatorComponent,
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  registerForm!: FormGroup; // Added ! operator here
-  hidePassword = true;
-  loading = false;
-  maxDate = new Date(); // For date picker
-  officePosts = Object.values(OfficePost);
   private destroy$ = new Subject<void>();
+  currentStep$ = this.store.select(selectCurrentStep).pipe(
+    map((step) => step || 1) // Provide default value
+  );
+  canProceedToNextStep$ = this.store.select(selectCanProceedToNextStep);
+  isLastStep$ = this.store.select(selectIsLastStep);
+  loading = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private store: Store,
-  ) {
-    this.initializeForm();
-  }
+  steps: Step[] = [
+    { label: 'Personal Info', completed: false, current: true },
+    { label: 'Office Details', completed: false, current: false },
+    { label: 'Account Setup', completed: false, current: false },
+  ];
 
-  private initializeForm(): void {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])/,
-          ),
-        ],
-      ],
-      fullName: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(100),
-        ],
-      ],
-      fullNameNepali: ['', [Validators.required, nepaliNameValidator()]],
-      dateOfBirth: ['', [Validators.required]],
-      address: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(5),
-          Validators.maxLength(200),
-        ],
-      ],
-      officePost: ['', [Validators.required]],
-      wardNumber: [null],
-    });
+  steps$ = this.currentStep$.pipe(
+    map((currentStep) =>
+      this.steps.map((step, index) => ({
+        ...step,
+        completed: index < currentStep - 1,
+        current: index === currentStep - 1,
+      }))
+    )
+  );
 
-    // Add ward number validation based on office post
-    this.registerForm
-      .get('officePost')
-      ?.valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe((post) => {
-        const wardControl = this.registerForm.get('wardNumber');
-        if (post !== OfficePost.CHIEF_ADMINISTRATIVE_OFFICER) {
-          wardControl?.setValidators([
-            Validators.required,
-            Validators.min(1),
-            Validators.max(50),
-          ]);
-        } else {
-          wardControl?.clearValidators();
-        }
-        wardControl?.updateValueAndValidity();
-      });
-  }
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
+    // Reset form state when component initializes
+    this.store.dispatch(RegisterFormActions.resetForm());
+
+    // Monitor auth state for loading and errors
     this.store
       .select(selectAuthState)
       .pipe(takeUntil(this.destroy$))
       .subscribe((authState) => {
-        this.loading = authState.loading;
-        if (authState.error) {
-          this.registerForm.setErrors({ serverError: authState.error });
+        if (authState) {
+          this.loading = authState.loading;
         }
       });
   }
 
+  handlePreviousStep(): void {
+    this.currentStep$
+      .pipe(take(1), takeUntil(this.destroy$))
+      .subscribe((step) => {
+        this.store.dispatch(
+          RegisterFormActions.previousStep({ currentStep: step })
+        );
+      });
+  }
+
+  handleNextStep(): void {
+    this.currentStep$
+      .pipe(take(1), takeUntil(this.destroy$))
+      .subscribe((step) => {
+        this.store.dispatch(
+          RegisterFormActions.nextStep({ currentStep: step })
+        );
+      });
+  }
+
+  onNextStep(currentStep: number): void {
+    this.store.dispatch(RegisterFormActions.nextStep({ currentStep }));
+  }
+
+  onPreviousStep(currentStep: number): void {
+    this.store.dispatch(RegisterFormActions.previousStep({ currentStep }));
+  }
+
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const formValue = this.registerForm.value;
-      const registerData: RegisterRequest = {
-        ...formValue,
-        dateOfBirth: formValue.dateOfBirth.toISOString(),
-      };
-      this.store.dispatch(AuthActions.register({ userData: registerData }));
-    } else {
-      this.registerForm.markAllAsTouched();
-    }
+    this.store
+      .select(selectFormData)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((formData) => {
+        if (formData) {
+          const registerData: RegisterRequest = {
+            ...formData,
+            dateOfBirth: formData.dateOfBirth?.toISOString(),
+          };
+          this.store.dispatch(AuthActions.register({ userData: registerData }));
+        }
+      });
   }
 
   ngOnDestroy(): void {

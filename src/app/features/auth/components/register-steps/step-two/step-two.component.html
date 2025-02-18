@@ -1,0 +1,45 @@
+<form [formGroup]="stepForm">
+  <div class="form-fields">
+    <mat-form-field>
+      <mat-label>Office Position</mat-label>
+      <mat-select formControlName="officePost">
+        <mat-option
+          *ngFor="let post of officePosts; trackBy: trackByValue"
+          [value]="post"
+        >
+          {{ post | titlecase }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stepForm.get('officePost')?.hasError('required')">
+        Please select your office position
+      </mat-error>
+    </mat-form-field>
+
+    <div class="ward-section">
+      <mat-checkbox
+        formControlName="isFromWard"
+        (change)="onWardCheckboxChange()"
+      >
+        I am a ward office user.
+      </mat-checkbox>
+
+      <mat-form-field *ngIf="stepForm.get('isFromWard')?.value">
+        <mat-label>Ward Number</mat-label>
+        <mat-select
+          formControlName="wardNumber"
+          (selectionChange)="onWardNumberChange()"
+        >
+          <mat-option
+            *ngFor="let number of wardNumbers; trackBy: trackByValue"
+            [value]="number"
+          >
+            Ward {{ number }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="stepForm.get('wardNumber')?.hasError('required')">
+          Please select a ward number
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

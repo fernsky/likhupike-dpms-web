@@ -2,16 +2,24 @@ export const PASSWORD_PATTERN =
   /^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
 
 export const PASSWORD_RULES = {
-  minLength: 8,
+  minLength: 12,
   maxLength: 128,
   requireUppercase: true,
   requireLowercase: true,
   requireNumbers: true,
   requireSpecialChars: true,
-  allowedSpecialChars: '!@#$%^&*',
+  allowedSpecialChars: '!@#$%^&*(),.?":{}|<>',
   preventCommonWords: true,
   preventSequential: true,
   preventRepeating: true,
+};
+
+export const EMAIL_RULES = {
+  governmentDomains: [
+    'nepal.gov.np',
+    'moha.gov.np',
+    // Add other government domains here
+  ],
 };
 
 export const PASSWORD_VALIDATION_MESSAGES = {
