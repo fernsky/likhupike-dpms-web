@@ -1,0 +1,117 @@
+<section
+  class="quick-actions-container"
+  role="region"
+  aria-labelledby="quickActionsTitle"
+  [@containerAnimation]="'in'"
+>
+  <header class="section-header">
+    <h2 id="quickActionsTitle" class="section-title">
+      {{ "dashboard.quickActions.title" }}
+      <mat-icon class="section-icon" [@iconAnimation]="'in'"
+        >dashboard_customize</mat-icon
+      >
+    </h2>
+    <p class="section-description">
+      {{ "dashboard.quickActions.description" }}
+    </p>
+  </header>
+
+  <div class="actions-grid" role="list">
+    <div
+      *ngFor="let action of actions; trackBy: trackByActionId"
+      class="action-card"
+      [class.disabled]="action.disabled || isActionLoading(action.id)"
+      [attr.data-action-id]="action.id"
+      role="listitem"
+      (click)="onActionClick(action)"
+      [attr.aria-disabled]="action.disabled || isActionLoading(action.id)"
+      tabindex="0"
+      (keydown.enter)="onActionClick(action)"
+      (keydown.space)="$event.preventDefault(); onActionClick(action)"
+      [@cardAnimation]="'in'"
+    >
+      <!-- Loading Overlay -->
+      <div
+        *ngIf="isActionLoading(action.id)"
+        class="action-loading-overlay"
+        [@fadeInOut]="'in'"
+      >
+        <mat-spinner diameter="24"></mat-spinner>
+      </div>
+
+      <!-- Action Content -->
+      <div class="action-content-wrapper">
+        <div class="action-icon-wrapper">
+          <mat-icon
+            [class.has-badge]="action.badge"
+            class="action-icon"
+            [@iconAnimation]="'in'"
+          >
+            {{ action.icon }}
+          </mat-icon>
+          <span
+            *ngIf="action.badge"
+            class="badge"
+            role="status"
+            [@badgeAnimation]="'in'"
+          >
+            {{ action.badge }}
+          </span>
+        </div>
+
+        <div class="action-content">
+          <h3 class="action-title">
+            {{ action.label }}
+          </h3>
+          <p class="action-description">
+            {{ action.description }}
+          </p>
+
+          <!-- Error Message -->
+          <p
+            *ngIf="getActionError(action.id)"
+            class="action-error"
+            role="alert"
+          >
+            {{ getActionError(action.id) }}
+          </p>
+        </div>
+
+        <div class="action-footer">
+          <span
+            class="action-status"
+            *ngIf="getActionStatus(action) | async"
+            [@statusAnimation]="'in'"
+          >
+            <mat-icon class="status-icon">check_circle</mat-icon>
+            {{ "common.available" }}
+          </span>
+          <mat-icon
+            class="nav-icon"
+            [class.animated]="!action.disabled && !isActionLoading(action.id)"
+          >
+            {{ "arrow_forward" }}
+          </mat-icon>
+        </div>
+      </div>
+
+      <!-- Accessibility Enhancement -->
+      <span
+        class="sr-only"
+        role="status"
+        [attr.aria-live]="isActionLoading(action.id) ? 'polite' : 'off'"
+      >
+        {{ "hari" }}
+        <ng-container *ngIf="isActionLoading(action.id)">
+          {{ "accessibility.loading" }}
+        </ng-container>
+      </span>
+    </div>
+  </div>
+
+  <!-- No Actions Fallback -->
+  <div *ngIf="actions.length === 0" class="no-actions-fallback" role="alert">
+    <mat-icon>info</mat-icon>
+    <p>{{ "dashboard.quickActions.noActions" }}</p>
+  </div>
+</section>

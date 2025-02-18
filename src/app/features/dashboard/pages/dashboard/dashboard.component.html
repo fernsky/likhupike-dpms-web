@@ -1,0 +1,72 @@
+<div class="dashboard-container" [class.is-handset]="isHandset$ | async">
+  <mat-sidenav-container class="sidenav-container">
+    <!-- Sidebar Navigation -->
+    <mat-sidenav
+      #sidenav
+      [mode]="(sidenavMode$ | async) ?? 'side'"
+      [opened]="sidenavOpened$ | async"
+      class="sidenav"
+      fixedInViewport
+      role="navigation"
+      [attr.aria-label]="'navigation.sidebar'"
+    >
+      <!-- Government Branding -->
+      <div class="gov-branding">
+        <img
+          src="assets/images/nepal-government-logo.png"
+          alt="Government Logo"
+          class="gov-logo"
+          [attr.aria-label]="'branding.govLogoAlt'"
+        />
+        <div class="branding-text">
+          <h1 class="gov-title">{{ "branding.govName" }}</h1>
+          <h2 class="system-name">{{ "branding.systemName" }}</h2>
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <app-sidenav></app-sidenav>
+    </mat-sidenav>
+
+    <!-- Main Content -->
+    <mat-sidenav-content class="content-container">
+      <!-- Header -->
+      <app-header
+        (menuToggled)="sidenav.toggle()"
+        [isSidenavOpen]="sidenav.opened"
+        class="dashboard-header"
+      >
+      </app-header>
+
+      <!-- Main Content Area -->
+      <main class="main-content" role="main">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb" aria-label="breadcrumb">
+          <!-- Breadcrumb implementation will be added -->
+        </nav>
+
+        <!-- Quick Actions -->
+        <app-quick-actions class="quick-actions-section"></app-quick-actions>
+
+        <!-- Router Outlet for Child Routes -->
+        <div class="router-outlet-container">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="dashboard-footer" role="contentinfo">
+        <div class="footer-content">
+          <span class="copyright">
+            {{ "footer.copyright" }} © {{ currentYear }}
+          </span>
+          <div class="footer-links">
+            <a mat-button href="/help">{{ "footer.help" }}</a>
+            <a mat-button href="/privacy">{{ "footer.privacy" }}</a>
+            <a mat-button href="/terms">{{ "footer.terms" }}</a>
+          </div>
+        </div>
+      </footer>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

@@ -1,0 +1,108 @@
+<div class="dashboard-header-wrapper">
+  <header class="dashboard-header" role="banner">
+    <!-- Left Section -->
+    <div class="header-section header-left">
+      <button
+        mat-icon-button
+        class="menu-toggle"
+        (click)="menuToggled.emit()"
+        [attr.aria-label]="
+          isSidenavOpen ? 'header.closeMenu' : 'header.openMenu'
+        "
+        [attr.aria-expanded]="isSidenavOpen"
+        [class.active]="isSidenavOpen"
+      >
+        <mat-icon>{{ isSidenavOpen ? "menu_open" : "menu" }}</mat-icon>
+      </button>
+
+      <!-- Global Search -->
+      <div
+        class="search-container"
+        [class.expanded]="searchForm.get('query')?.value"
+      >
+        <form [formGroup]="searchForm">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-icon matPrefix>search</mat-icon>
+            <input
+              matInput
+              formControlName="query"
+              [placeholder]="'header.search.placeholder'"
+              [attr.aria-label]="'header.search.ariaLabel'"
+              class="search-input"
+              autocomplete="off"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              *ngIf="searchForm.get('query')?.value"
+              (click)="searchForm.get('query')?.reset()"
+              [attr.aria-label]="'header.search.clear'"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+
+    <!-- Center Section -->
+    <div class="header-section header-center">
+      <div class="digital-clock" role="timer" aria-live="polite">
+        <div class="time">{{ currentDateTime | date: "HH:mm:ss" }}</div>
+        <div class="date">{{ currentDateTime | date: "fullDate" }}</div>
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="header-section header-right">
+      <!-- Notifications -->
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="notificationsMenu"
+        class="notifications-button"
+        matBadgeColor="warn"
+        matBadgeSize="small"
+      >
+        <mat-icon>notifications</mat-icon>
+      </button>
+
+      <!-- User Profile -->
+      <ng-container *ngIf="vm$ | async as vm">
+        <button
+          mat-button
+          [matMenuTriggerFor]="profileMenu"
+          class="profile-button"
+        >
+          <div class="user-info">
+            <mat-icon class="dropdown-icon">arrow_drop_down</mat-icon>
+          </div>
+        </button>
+      </ng-container>
+    </div>
+  </header>
+
+  <!-- Notifications Menu -->
+  <mat-menu #notificationsMenu="matMenu" xPosition="before">
+    <ng-container *ngIf="vm$ | async as vm">
+      <div *ngFor="let notification of vm.notifications">
+        <button mat-menu-item (click)="(null)">
+          <mat-icon>{{ getNotificationIcon(notification.type) }}</mat-icon>
+          <span>{{ notification.message }}</span>
+        </button>
+      </div>
+    </ng-container>
+  </mat-menu>
+
+  <!-- Profile Menu -->
+  <mat-menu #profileMenu="matMenu" xPosition="before">
+    <button mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      <span>{{ "header.profile.viewProfile" }}</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item>
+      <mat-icon>exit_to_app</mat-icon>
+      <span>{{ "header.profile.logout" }}</span>
+    </button>
+  </mat-menu>
+</div>

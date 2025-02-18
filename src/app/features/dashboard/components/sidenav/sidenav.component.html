@@ -1,0 +1,108 @@
+<nav class="sidenav-container" [class.collapsed]="collapsed" role="navigation">
+  <div class="nav-list" role="menubar" [attr.aria-label]="'Main Menu'">
+    <ng-container *ngFor="let item of navigationItems">
+      <div
+        class="nav-item-wrapper"
+        [class.has-children]="item.children?.length"
+        [class.expanded]="isExpanded(item.id)"
+        role="none"
+        *ngIf="hasRole(item.roles) | async"
+      >
+        <!-- Single Menu Item -->
+        <a
+          *ngIf="!item.children?.length"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-item"
+          role="menuitem"
+          [attr.aria-current]="isActive(item.route || '') ? 'page' : undefined"
+        >
+          <mat-icon class="nav-icon" aria-hidden="true">{{
+            item.icon
+          }}</mat-icon>
+          <span class="nav-label">{{ item.label }}</span>
+        </a>
+
+        <!-- Parent Menu Item -->
+        <button
+          *ngIf="item.children?.length"
+          class="nav-item parent-item"
+          (click)="toggleExpand(item.id)"
+          role="menuitem"
+          [attr.aria-expanded]="isExpanded(item.id)"
+          [attr.aria-controls]="'submenu-' + item.id"
+        >
+          <mat-icon class="nav-icon" aria-hidden="true">{{
+            item.icon
+          }}</mat-icon>
+          <span class="nav-label">{{ item.label }}</span>
+          <mat-icon class="expand-icon" [class.expanded]="isExpanded(item.id)">
+            expand_more
+          </mat-icon>
+        </button>
+
+        <!-- Submenu -->
+        <div
+          *ngIf="item.children?.length"
+          [@submenuAnimation]="isExpanded(item.id) ? 'expanded' : 'collapsed'"
+          class="submenu"
+          [id]="'submenu-' + item.id"
+          role="menu"
+          [attr.aria-hidden]="!isExpanded(item.id)"
+        >
+          <a
+            *ngFor="let child of item.children"
+            [routerLink]="child.route"
+            routerLinkActive="active"
+            class="nav-item child-item"
+            role="menuitem"
+            [attr.aria-current]="
+              isActive(child.route || '') ? 'page' : undefined
+            "
+          >
+            <mat-icon class="nav-icon" aria-hidden="true">{{
+              child.icon
+            }}</mat-icon>
+            <span class="nav-label">{{ child.label }}</span>
+
+            <span
+              *ngIf="child.badge"
+              class="badge"
+              [ngClass]="child.badge.color"
+              role="status"
+              [attr.aria-label]="child.badge.value"
+            >
+              {{ child.badge.value }}
+            </span>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Bottom Actions -->
+  <div class="secondary-actions" role="complementary">
+    <mat-divider></mat-divider>
+    <a
+      href="/help"
+      class="help-link"
+      target="_blank"
+      rel="noopener noreferrer"
+      role="menuitem"
+    >
+      <mat-icon aria-hidden="true">help_outline</mat-icon>
+      <span>Help</span>
+    </a>
+
+    <button
+      class="collapse-toggle"
+      (click)="collapsed = !collapsed"
+      [attr.aria-label]="collapsed ? 'Expand' : 'Collapse'"
+      [attr.title]="collapsed ? 'Expand' : 'Collapse'"
+    >
+      <mat-icon aria-hidden="true">
+        {{ collapsed ? "chevron_right" : "chevron_left" }}
+      </mat-icon>
+    </button>
+  </div>
+</nav>

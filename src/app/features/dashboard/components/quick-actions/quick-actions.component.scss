@@ -1,0 +1,221 @@
+// Government Enterprise Theme Variables
+:host {
+  --action-card-bg: var(--surface-card, #ffffff);
+  --action-card-border: var(--border-subtle, rgba(0, 0, 0, 0.12));
+  --action-card-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+  --action-hover-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+  --badge-bg: var(--primary-color, #1a73e8);
+  --official-accent: var(--gov-accent, #c41e3a);
+
+  display: block;
+  margin: 1.5rem 0;
+}
+
+.quick-actions-container {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg, 0.5rem);
+  background: var(--surface-background, #f8f9fa);
+  border: 1px solid var(--border-subtle);
+}
+
+.section-header {
+  margin-bottom: 2rem;
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -0.5rem;
+      width: 3rem;
+      height: 3px;
+      background: var(--official-accent);
+      border-radius: 2px;
+    }
+  }
+
+  .section-description {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-top: 1rem;
+  }
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.action-card {
+  background: var(--action-card-bg);
+  border: 1px solid var(--action-card-border);
+  border-radius: var(--radius-md, 0.375rem);
+  padding: 1.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  cursor: pointer;
+  box-shadow: var(--action-card-shadow);
+
+  &:hover:not(.disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--action-hover-shadow);
+    border-color: var(--primary-color);
+
+    .nav-icon {
+      transform: translateX(4px);
+      color: var(--primary-color);
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--focus-ring-color);
+  }
+
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+  }
+}
+
+.action-icon-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+
+  .action-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+    color: var(--primary-color);
+
+    &.has-badge {
+      color: var(--official-accent);
+    }
+  }
+
+  .badge {
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    background: var(--badge-bg);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.action-content {
+  .action-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .action-description {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+}
+
+.action-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+
+  .action-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--success-color);
+    font-size: 0.875rem;
+
+    .status-icon {
+      font-size: 1rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  .nav-icon {
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+  }
+}
+
+// Accessibility & High Contrast
+@media (prefers-contrast: more) {
+  .action-card {
+    border-width: 2px;
+
+    &:hover:not(.disabled) {
+      outline: 2px solid currentColor;
+    }
+  }
+
+  .action-status {
+    outline: 1px solid currentColor;
+    padding: 0.25rem;
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .action-card,
+  .nav-icon {
+    transition: none;
+  }
+}
+
+// RTL Support
+[dir="rtl"] {
+  .section-title::after {
+    right: 0;
+    left: auto;
+  }
+
+  .nav-icon {
+    transform: scaleX(-1);
+  }
+
+  .action-card:hover:not(.disabled) .nav-icon {
+    transform: scaleX(-1) translateX(4px);
+  }
+}
+
+// Responsive Design
+@media screen and (max-width: 768px) {
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-card {
+    padding: 1rem;
+  }
+}
+
+// Print Styles
+@media print {
+  .action-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+    box-shadow: none;
+  }
+}

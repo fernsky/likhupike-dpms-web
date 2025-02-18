@@ -1,0 +1,106 @@
+<div class="auth-container">
+  <div class="auth-content">
+    <div class="branding">
+      <img
+        src="assets/images/nepal-government-logo.png"
+        alt="Government Logo"
+        class="gov-logo"
+      />
+      <h1 class="gov-title">नेपाल सरकार</h1>
+      <h2 class="system-name-np">डिजिटल प्रोफाइल व्यवस्थापन प्रणाली</h2>
+      <h3 class="system-name-en">Digital Profile Management System</h3>
+    </div>
+
+    <mat-card class="auth-card" [class.loading]="loading">
+      <mat-card-content>
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="onSubmit()"
+          class="login-form"
+        >
+          <div class="form-header">
+            <h2>Login</h2>
+            <p>Please enter your credentials to continue</p>
+          </div>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              type="email"
+              placeholder="Enter your email"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+              Email is required
+            </mat-error>
+            <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+              Please enter a valid email address
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              [type]="hidePassword ? 'password' : 'text'"
+              placeholder="Enter your password"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hidePassword"
+            >
+              <mat-icon>{{
+                hidePassword ? "visibility_off" : "visibility"
+              }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+          </mat-form-field>
+
+          <div class="form-error" *ngIf="loginForm.hasError('serverError')">
+            <mat-icon>error_outline</mat-icon>
+            <span>{{ loginForm.getError("serverError") }}</span>
+          </div>
+
+          <div class="form-actions">
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="loginForm.invalid || loading"
+              class="submit-button"
+            >
+              <span>Login</span>
+              <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            </button>
+            <a
+              mat-button
+              routerLink="/auth/forgot-password"
+              class="forgot-password"
+            >
+              Forgot Password?
+            </a>
+          </div>
+        </form>
+
+        <mat-divider></mat-divider>
+
+        <div class="register-section">
+          <span>Don't have an account?</span>
+          <a mat-flat-button color="accent" routerLink="/auth/register">
+            Register Now
+          </a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
