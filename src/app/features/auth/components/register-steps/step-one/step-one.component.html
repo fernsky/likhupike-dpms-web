@@ -23,20 +23,18 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Date of Birth</mat-label>
+      <mat-label>Phone Number</mat-label>
       <input
         matInput
-        [matDatepicker]="picker"
-        [max]="maxDate"
-        formControlName="dateOfBirth"
+        formControlName="phoneNumber"
+        type="tel"
+        placeholder="98XXXXXXXX"
       />
-      <mat-datepicker-toggle
-        matIconSuffix
-        [for]="picker"
-      ></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="stepForm.get('dateOfBirth')?.hasError('required')">
-        Date of birth is required
+      <mat-error *ngIf="stepForm.get('phoneNumber')?.hasError('required')">
+        Phone number is required
+      </mat-error>
+      <mat-error *ngIf="stepForm.get('phoneNumber')?.hasError('nepaliPhone')">
+        Please enter a valid Nepali phone number (98XXXXXXXX)
       </mat-error>
     </mat-form-field>
   </div>

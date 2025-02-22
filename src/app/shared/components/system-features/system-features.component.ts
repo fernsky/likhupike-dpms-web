@@ -12,25 +12,24 @@ import { MatIconModule } from '@angular/material/icon';
 export class SystemFeaturesComponent {
   features = [
     {
-      icon: 'security',
-      title: 'Secure Digital Profile',
-      description:
-        'Your information is protected with enterprise-grade security',
+      icon: 'account_balance',
+      title: 'Municipal Services',
+      description: 'Access all municipal services from one platform',
     },
     {
       icon: 'speed',
-      title: 'Efficient Processing',
-      description: 'Quick and streamlined digital service delivery',
+      title: 'Quick Processing',
+      description: 'Fast and efficient municipal service delivery',
     },
     {
-      icon: 'verified_user',
-      title: 'Verified Identity',
-      description: 'Government-verified digital identity system',
+      icon: 'analytics',
+      title: 'Data Integration',
+      description: 'Integrated municipal data management system',
     },
     {
-      icon: 'devices',
-      title: 'Multi-Platform Access',
-      description: 'Access your profile from any device, anywhere',
+      icon: 'public',
+      title: 'Citizen Portal',
+      description: 'Easy access to municipal services for citizens',
     },
   ];
 }

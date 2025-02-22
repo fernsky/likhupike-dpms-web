@@ -34,7 +34,7 @@ export class AuthService {
 
   private initializeFromStorage(): void {
     if (!this.isBrowser) return;
-    
+
     const storedUser = localStorage.getItem('currentUser');
     const storedToken = localStorage.getItem('token');
 
@@ -48,11 +48,11 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}${environment.auth.loginEndpoint}`,
-        credentials,
+        credentials
       )
       .pipe(
         tap((response) => this.handleAuthResponse(response)),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -60,11 +60,11 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}${environment.auth.registerEndpoint}`,
-        userData,
+        userData
       )
       .pipe(
         tap((response) => this.handleAuthResponse(response)),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -82,11 +82,11 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}${environment.auth.refreshTokenEndpoint}`,
-        { refreshToken },
+        { refreshToken }
       )
       .pipe(
         tap((response) => this.handleAuthResponse(response)),
-        catchError(this.handleError),
+        catchError(this.handleError)
       );
   }
 
@@ -94,7 +94,7 @@ export class AuthService {
     return this.http
       .post<void>(
         `${environment.apiUrl}${environment.auth.passwordResetRequestEndpoint}`,
-        email,
+        email
       )
       .pipe(catchError(this.handleError));
   }
@@ -103,7 +103,7 @@ export class AuthService {
     return this.http
       .post<void>(
         `${environment.apiUrl}${environment.auth.passwordResetEndpoint}`,
-        resetData,
+        resetData
       )
       .pipe(catchError(this.handleError));
   }

@@ -27,6 +27,7 @@ import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-br
 import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
 import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
 import { MatIcon } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -34,6 +35,7 @@ import { MatIcon } from '@angular/material/icon';
   styleUrls: ['./register.component.scss'],
   standalone: true,
   imports: [
+    RouterModule,
     CommonModule,
     MatCardModule,
     MatButtonModule,
@@ -151,7 +153,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
         if (formData) {
           const registerData: RegisterRequest = {
             ...formData,
-            dateOfBirth: formData.dateOfBirth?.toISOString(),
           };
           this.store.dispatch(AuthActions.register({ userData: registerData }));
         }

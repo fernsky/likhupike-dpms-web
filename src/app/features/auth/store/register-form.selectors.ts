@@ -40,7 +40,7 @@ export const selectStepFormData = (step: number) =>
         return {
           fullNameNepali: formData.fullNameNepali,
           fullName: formData.fullName,
-          dateOfBirth: formData.dateOfBirth,
+          phoneNumber: formData.phoneNumber,
         };
       case 2:
         return {

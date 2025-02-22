@@ -5,6 +5,7 @@ import { map, mergeMap, catchError, tap, switchMap } from 'rxjs/operators';
 import { AuthService } from '@app/core/services/auth.service';
 import * as AuthActions from './auth.actions';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class AuthEffects {
@@ -58,6 +59,38 @@ export class AuthEffects {
       )
     )
   );
+
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.register),
+      switchMap(({ userData }) =>
+        this.authService.register(userData).pipe(
+          map((response) => AuthActions.registerSuccess({ response })),
+          catchError((error: HttpErrorResponse) =>
+            of(AuthActions.registerFailure({ error: this.handleError(error) }))
+          )
+        )
+      )
+    )
+  );
+
+  registerSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.registerSuccess),
+        tap(() => this.router.navigate(['/verify-email']))
+      ),
+    { dispatch: false }
+  );
+
+  private handleError(error: HttpErrorResponse): string {
+    if (error.error instanceof ErrorEvent) {
+      return error.error.message;
+    }
+    return (
+      error.error?.message || error.message || 'An unexpected error occurred'
+    );
+  }
 
   constructor(
     private actions$: Actions,

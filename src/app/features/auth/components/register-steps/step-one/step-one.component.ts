@@ -8,11 +8,10 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { Subject, takeUntil } from 'rxjs';
 import { BaseStepComponent } from '../base-step.component';
 import { nepaliNameValidator } from '../../../../../shared/validators/nepali-name.validator';
+import { nepaliPhoneNumberValidator } from '../../../../../shared/validators/phone-number.validator';
 import { selectStepFormData } from '../../../store/register-form.selectors';
 import { filter } from 'rxjs/operators';
 
@@ -26,8 +25,6 @@ import { filter } from 'rxjs/operators';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
   ],
 })
 export class StepOneComponent
@@ -37,7 +34,6 @@ export class StepOneComponent
   override stepForm!: FormGroup;
   override stepNumber = 1;
   private destroy$ = new Subject<void>();
-  maxDate = new Date();
 
   constructor(private fb: FormBuilder) {
     super();
@@ -55,7 +51,7 @@ export class StepOneComponent
           Validators.maxLength(100),
         ],
       ],
-      dateOfBirth: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required, nepaliPhoneNumberValidator()]],
     });
   }
 

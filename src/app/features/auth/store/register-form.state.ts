@@ -4,7 +4,7 @@ export interface RegisterFormState {
   formData: {
     fullNameNepali: string;
     fullName: string;
-    dateOfBirth: Date | null;
+    phoneNumber: string;
     isFromWard: boolean;
     wardNumber: number | null;
     officePost: string;
@@ -29,7 +29,7 @@ export const initialRegisterFormState: RegisterFormState = {
   formData: {
     fullNameNepali: '',
     fullName: '',
-    dateOfBirth: null,
+    phoneNumber: '',
     isFromWard: false,
     wardNumber: null,
     officePost: '',
