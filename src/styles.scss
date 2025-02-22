@@ -1,8 +1,12 @@
 @use '@angular/material' as mat;
+@use '@angular/cdk/overlay-prebuilt.css' as overlay;
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 :root {
   --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  @include mat.tooltip-overrides((
+    supporting-text-tracking: -0.01rem,
+  ));
 }
 
 * {
@@ -11,10 +15,20 @@
   box-sizing: border-box;
 }
 
-html, body {
+html {
   height: 100%;
-  font-family: var(--font-family-base) !important;
-  letter-spacing: -0.05rem !important;
+  @include mat.theme((
+    typography: var(--font-family-base),
+    density: 0
+  ));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01rem;
+}
+
+body {
+  height: 100%;
+  font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -44,16 +58,14 @@ html, body {
 .mdc-label,
 .ng-star-inserted,
 .mat-mdc-form-field-error,
-.mat-mdc-tooltip,
-.mat-mdc-tooltip-trigger,
-.mat-mdc-tooltip-content,
-[class*='cdk-describedby-message'],
-.cdk-describedby-message-ng-1-9,
-.cdk-overlay-container,
+.mat-mdc-plain-tooltip,
+.mat-mdc-plain-tooltip-text,
+.mat-mdc-plain-tooltip-supporting-text,
 .mdc-text-field__input {
   font-family: var(--font-family-base) !important;
   letter-spacing: -0.01rem;
 }
+
 
 // Override MDC typography
 .mdc-typography {

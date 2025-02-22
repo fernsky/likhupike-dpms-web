@@ -60,25 +60,24 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   steps: Step[] = [
     {
-      label: 'Personal Info',
-      description:
-        'Enter your personal details including full name and date of birth',
+      label: 'Personal',
+      description: 'Personal Information',
       icon: 'person',
       completed: false,
       current: true,
       valid: false,
     },
     {
-      label: 'Office Details',
-      description: 'Provide your office information and ward details',
-      icon: 'business',
+      label: 'Location',
+      description: 'Geographical Location',
+      icon: 'apartment',
       completed: false,
       current: false,
       valid: false,
     },
     {
-      label: 'Account Setup',
-      description: 'Create your account credentials and security settings',
+      label: 'Account',
+      description: 'Account Credentials',
       icon: 'lock',
       completed: false,
       current: false,
