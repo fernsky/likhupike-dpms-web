@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { RegisterFormState } from './register-form.state';
+import { UserType } from '@app/core/models/user-type.enum';
 
 export const selectRegisterFormState =
   createFeatureSelector<RegisterFormState>('registerForm');
@@ -46,6 +47,15 @@ export const selectStepFormData = (step: number) =>
         return {
           userType: formData.userType,
         };
+      case 3:
+        switch (formData.userType) {
+          case UserType.LOCAL_LEVEL_EMPLOYEE:
+            return formData.employeeInfo;
+          case UserType.ELECTED_REPRESENTATIVE:
+            return formData.electedRepInfo;
+          default:
+            return formData.location;
+        }
       case 4:
         return {
           email: formData.email,
@@ -63,4 +73,44 @@ export const selectStepValidities = createSelector(
     state.isValid.step2,
     state.isValid.step3,
   ]
+);
+
+export const selectLocationInfo = createSelector(
+  selectFormData,
+  (formData) => formData.location
+);
+
+export const selectEmployeeInfo = createSelector(
+  selectFormData,
+  (formData) => formData.employeeInfo
+);
+
+export const selectElectedRepInfo = createSelector(
+  selectFormData,
+  (formData) => formData.electedRepInfo
+);
+
+export const selectLocationValidationErrors = createSelector(
+  selectFormData,
+  (formData) => {
+    const errors: string[] = [];
+    if (!formData.location?.provinceCode) {
+      errors.push('Province is required');
+    }
+    if (!formData.location?.districtCode) {
+      errors.push('District is required');
+    }
+    if (!formData.location?.municipalityCode) {
+      errors.push('Municipality is required');
+    }
+    if (
+      (formData.userType === UserType.CITIZEN ||
+        formData.electedRepInfo?.position === 'WARD_CHAIRPERSON' ||
+        formData.electedRepInfo?.position === 'WARD_MEMBER') &&
+      !formData.location?.wardNumber
+    ) {
+      errors.push('Ward is required');
+    }
+    return errors;
+  }
 );

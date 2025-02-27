@@ -1,0 +1,8 @@
+// Reuse the same styles as step-one.component.scss
+@import '../step-one/step-one.component.scss';
+
+.form-fields {
+  mat-checkbox {
+    margin: 0.5rem 0;
+  }
+}

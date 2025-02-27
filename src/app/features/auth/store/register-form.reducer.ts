@@ -46,19 +46,80 @@ export const registerFormReducer = createReducer(
 
   on(
     RegisterFormActions.updateFormData,
-    (state, { formData }): RegisterFormState => ({
-      ...state,
-      formData: {
-        ...state.formData,
-        ...formData,
-      },
-    })
+    (state, { formData }): RegisterFormState => {
+      if (formData.userType && formData.userType !== state.formData.userType) {
+        // Clear location related data when user type changes
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            ...formData,
+            location: undefined,
+            employeeInfo: undefined,
+            electedRepInfo: undefined,
+          },
+        };
+      }
+      return {
+        ...state,
+        formData: {
+          ...state.formData,
+          ...formData,
+        },
+      };
+    }
   ),
 
   on(
     RegisterFormActions.resetForm,
     (): RegisterFormState => ({
       ...initialRegisterFormState,
+    })
+  ),
+
+  on(
+    RegisterFormActions.updateLocationInfo,
+    (state, { locationInfo }): RegisterFormState => ({
+      ...state,
+      formData: {
+        ...state.formData,
+        location: locationInfo,
+      },
+    })
+  ),
+
+  on(
+    RegisterFormActions.updateEmployeeInfo,
+    (state, { employeeInfo }): RegisterFormState => ({
+      ...state,
+      formData: {
+        ...state.formData,
+        employeeInfo,
+      },
+    })
+  ),
+
+  on(
+    RegisterFormActions.updateElectedRepInfo,
+    (state, { electedRepInfo }): RegisterFormState => ({
+      ...state,
+      formData: {
+        ...state.formData,
+        electedRepInfo,
+      },
+    })
+  ),
+
+  on(
+    RegisterFormActions.clearLocationData,
+    (state): RegisterFormState => ({
+      ...state,
+      formData: {
+        ...state.formData,
+        location: undefined,
+        employeeInfo: undefined,
+        electedRepInfo: undefined,
+      },
     })
   )
 );

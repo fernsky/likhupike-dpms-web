@@ -2,9 +2,9 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { BaseApiService } from '../api/base-api.service';
 import {
+  Municipality,
+  MunicipalitySchema,
   LocationSearchParams,
-  Province,
-  ProvinceSchema,
 } from '../models/location.model';
 import { TranslocoService } from '@jsverse/transloco';
 import { HttpClient } from '@angular/common/http';
@@ -13,7 +13,7 @@ import { CacheService } from '../cache/cache.service';
 import * as z from 'zod';
 
 @Injectable({ providedIn: 'root' })
-export class ProvinceService extends BaseApiService {
+export class MunicipalityService extends BaseApiService {
   constructor(
     private translocoService: TranslocoService,
     protected http: HttpClient,
@@ -23,7 +23,9 @@ export class ProvinceService extends BaseApiService {
     super(http, config, cacheService);
   }
 
-  searchProvinces(params: LocationSearchParams): Observable<Province[]> {
+  searchMunicipalities(
+    params: LocationSearchParams
+  ): Observable<Municipality[]> {
     const currentLang = this.translocoService.getActiveLang();
     const fields = params.fields.map((field) => {
       if (field === 'NAME' && currentLang === 'ne') {
@@ -32,25 +34,27 @@ export class ProvinceService extends BaseApiService {
       return field;
     });
 
-    return this.createRequest<Province[]>(
+    return this.createRequest<Municipality[]>(
       'GET',
-      '/provinces/search',
-      z.array(ProvinceSchema),
+      '/municipalities/search',
+      z.array(MunicipalitySchema),
       {
         params: {
-          fields: fields,
+          fields,
           ...(params.page && { page: params.page.toString() }),
           ...(params.limit && { limit: params.limit.toString() }),
           ...(params.search && { search: params.search }),
+          ...(params.districtCode && { districtCode: params.districtCode }),
         },
         cache: true,
-        cacheKey: `provinces:${currentLang}:${JSON.stringify(params)}`,
+        cacheKey: `municipalities:${currentLang}:${JSON.stringify(params)}`,
       }
     ).pipe(
-      map((provinces) =>
-        provinces.map((province) => ({
-          ...province,
-          NAME: currentLang === 'ne' ? province.NAME_NEPALI : province.NAME,
+      map((municipalities) =>
+        municipalities.map((municipality) => ({
+          ...municipality,
+          NAME:
+            currentLang === 'ne' ? municipality.NAME_NEPALI : municipality.NAME,
         }))
       )
     );

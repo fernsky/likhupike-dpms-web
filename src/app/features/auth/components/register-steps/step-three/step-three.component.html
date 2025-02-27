@@ -1,0 +1,129 @@
+<form [formGroup]="stepForm">
+  <div class="step-header">
+    <div class="step-icon">
+      <mat-icon>location_on</mat-icon>
+    </div>
+    <div class="step-intro">
+      <h2>{{ "registration.stepThree.title" | transloco }}</h2>
+      <p>{{ "registration.stepThree.subtitle" | transloco }}</p>
+    </div>
+  </div>
+
+  <div class="form-fields">
+    <!-- Location Selection -->
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.province.label" | transloco
+      }}</mat-label>
+      <mat-select formControlName="provinceCode">
+        <mat-option
+          *ngFor="let province of provinces$ | async"
+          [value]="province.CODE"
+        >
+          {{ province.NAME }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stepForm.get('provinceCode')?.hasError('required')">
+        {{
+          "registration.stepThree.fields.province.errors.required" | transloco
+        }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.district.label" | transloco
+      }}</mat-label>
+      <mat-select
+        formControlName="districtCode"
+        [disabled]="!stepForm.get('provinceCode')?.value"
+      >
+        <mat-option
+          *ngFor="let district of districts$ | async"
+          [value]="district.CODE"
+        >
+          {{ district.NAME }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stepForm.get('districtCode')?.hasError('required')">
+        {{
+          "registration.stepThree.fields.district.errors.required" | transloco
+        }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.municipality.label" | transloco
+      }}</mat-label>
+      <mat-select
+        formControlName="municipalityCode"
+        [disabled]="!stepForm.get('districtCode')?.value"
+      >
+        <mat-option
+          *ngFor="let municipality of municipalities$ | async"
+          [value]="municipality.CODE"
+        >
+          {{ municipality.NAME }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stepForm.get('municipalityCode')?.hasError('required')">
+        {{
+          "registration.stepThree.fields.municipality.errors.required"
+            | transloco
+        }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Ward Selection (Conditional) -->
+    <mat-form-field *ngIf="showWardSelection$ | async" appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.ward.label" | transloco
+      }}</mat-label>
+      <mat-select
+        formControlName="wardNumber"
+        [disabled]="!stepForm.get('municipalityCode')?.value"
+      >
+        <mat-option *ngFor="let ward of wards$ | async" [value]="ward.NUMBER">
+          {{ ward.NUMBER }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="stepForm.hasError('wardRequired')">
+        {{ "registration.stepThree.fields.ward.errors.required" | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Office Section (Conditional) -->
+    <ng-container *ngIf="showOfficeSection$ | async">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "registration.stepThree.fields.officeSection.label" | transloco
+        }}</mat-label>
+        <mat-select formControlName="officeSection">
+          <mat-option *ngFor="let section of officeSections" [value]="section">
+            {{ section | transloco }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-checkbox formControlName="isWardOffice">
+        {{ "registration.stepThree.fields.isWardOffice.label" | transloco }}
+      </mat-checkbox>
+    </ng-container>
+
+    <!-- Position Selection (Conditional) -->
+    <mat-form-field *ngIf="showPosition$ | async" appearance="outline">
+      <mat-label>{{
+        "registration.stepThree.fields.position.label" | transloco
+      }}</mat-label>
+      <mat-select formControlName="position">
+        <mat-option
+          *ngFor="let position of electedPositions"
+          [value]="position"
+        >
+          {{ position | transloco }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

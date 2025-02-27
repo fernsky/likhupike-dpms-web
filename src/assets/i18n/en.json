@@ -81,6 +81,51 @@
         "required": "Please select a user type"
       }
     },
+    "stepThree": {
+      "title": "Location Details",
+      "subtitle": "Tell us about your location and role-specific details",
+      "fields": {
+        "province": {
+          "label": "Province",
+          "errors": {
+            "required": "Province is required"
+          }
+        },
+        "district": {
+          "label": "District",
+          "errors": {
+            "required": "District is required"
+          }
+        },
+        "municipality": {
+          "label": "Municipality",
+          "errors": {
+            "required": "Municipality is required"
+          }
+        },
+        "ward": {
+          "label": "Ward Number",
+          "errors": {
+            "required": "Ward number is required"
+          }
+        },
+        "officeSection": {
+          "label": "Office Section",
+          "errors": {
+            "required": "Office section is required"
+          }
+        },
+        "isWardOffice": {
+          "label": "Works at Ward Office"
+        },
+        "position": {
+          "label": "Position",
+          "errors": {
+            "required": "Position is required"
+          }
+        }
+      }
+    },
     "userTypes": {
       "citizen": "Citizen",
       "localLevelEmployee": "Local Level Employee",
@@ -91,6 +136,23 @@
       "mediaAndPublicCommunication": "Media & Public Communication",
       "communityContributor": "Community Contributor",
       "other": "Other"
+    },
+    "officeSection": {
+      "generalAdmin": "General Administration",
+      "revenueFinancial": "Revenue & Financial Administration",
+      "infrastructure": "Infrastructure Development",
+      "socialDev": "Social Development",
+      "economicDev": "Economic Development",
+      "planningDev": "Planning & Development",
+      "envDisaster": "Environment & Disaster Management",
+      "legalInfo": "Legal & Information",
+      "other": "Other"
+    },
+    "electedPosition": {
+      "chairperson": "Chairperson",
+      "viceChairperson": "Vice Chairperson",
+      "wardChairperson": "Ward Chairperson",
+      "wardMember": "Ward Member"
     }
   }
 }

@@ -1,4 +1,21 @@
 import { UserType } from '@app/core/models/user-type.enum';
+import { OfficeSection, ElectedPosition } from '@app/core/models/office.enum';
+
+export interface LocationInfo {
+  provinceCode: string;
+  districtCode: string;
+  municipalityCode: string;
+  wardNumber?: number;
+}
+
+export interface EmployeeInfo extends LocationInfo {
+  officeSection: OfficeSection;
+  isWardOffice: boolean;
+}
+
+export interface ElectedRepInfo extends LocationInfo {
+  position: ElectedPosition;
+}
 
 export interface RegisterFormState {
   currentStep: number;
@@ -11,6 +28,9 @@ export interface RegisterFormState {
     userType: UserType;
     email: string;
     password: string;
+    location?: LocationInfo;
+    employeeInfo?: EmployeeInfo;
+    electedRepInfo?: ElectedRepInfo;
   };
   isValid: {
     step1: boolean;
@@ -35,6 +55,9 @@ export const initialRegisterFormState: RegisterFormState = {
     userType: UserType.CITIZEN,
     email: '',
     password: '',
+    location: undefined,
+    employeeInfo: undefined,
+    electedRepInfo: undefined,
   },
   isValid: {
     step1: false,

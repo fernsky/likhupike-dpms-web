@@ -82,6 +82,51 @@
         "required": "कृपया प्रयोगकर्ता प्रकार छान्नुहोस्"
       }
     },
+    "stepThree": {
+      "title": "स्थान विवरण",
+      "subtitle": "आफ्नो स्थान र भूमिका सम्बन्धी विवरणहरू बताउनुहोस्",
+      "fields": {
+        "province": {
+          "label": "प्रदेश",
+          "errors": {
+            "required": "प्रदेश आवश्यक छ"
+          }
+        },
+        "district": {
+          "label": "जिल्ला",
+          "errors": {
+            "required": "जिल्ला आवश्यक छ"
+          }
+        },
+        "municipality": {
+          "label": "नगरपालिका",
+          "errors": {
+            "required": "नगरपालिका आवश्यक छ"
+          }
+        },
+        "ward": {
+          "label": "वडा नं.",
+          "errors": {
+            "required": "वडा नं. आवश्यक छ"
+          }
+        },
+        "officeSection": {
+          "label": "कार्यालय शाखा",
+          "errors": {
+            "required": "कार्यालय शाखा आवश्यक छ"
+          }
+        },
+        "isWardOffice": {
+          "label": "वडा कार्यालयमा कार्यरत"
+        },
+        "position": {
+          "label": "पद",
+          "errors": {
+            "required": "पद आवश्यक छ"
+          }
+        }
+      }
+    },
     "userTypes": {
       "citizen": "नागरिक",
       "localLevelEmployee": "स्थानीय तह कर्मचारी",
@@ -92,6 +137,23 @@
       "mediaAndPublicCommunication": "सञ्चार तथा जनसम्पर्क",
       "communityContributor": "समुदाय योगदानकर्ता",
       "other": "अन्य"
+    },
+    "officeSection": {
+      "generalAdmin": "सामान्य प्रशासन",
+      "revenueFinancial": "राजस्व तथा आर्थिक प्रशासन",
+      "infrastructure": "पूर्वाधार विकास",
+      "socialDev": "सामाजिक विकास",
+      "economicDev": "आर्थिक विकास",
+      "planningDev": "योजना तथा विकास",
+      "envDisaster": "वातावरण तथा विपद् व्यवस्थापन",
+      "legalInfo": "कानूनी तथा सूचना",
+      "other": "अन्य"
+    },
+    "electedPosition": {
+      "chairperson": "अध्यक्ष",
+      "viceChairperson": "उपाध्यक्ष",
+      "wardChairperson": "वडा अध्यक्ष",
+      "wardMember": "वडा सदस्य"
     }
   }
 }
