@@ -1,9 +1,8 @@
 import {
   Component,
+  ChangeDetectionStrategy,
   OnInit,
   OnDestroy,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -12,16 +11,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { Subject, takeUntil } from 'rxjs';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatIconModule } from '@angular/material/icon';
+import { MatError } from '@angular/material/form-field';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { BaseStepComponent } from '../base-step.component';
-import { OfficePost } from '../../../../../core/models/office-post.enum';
-import { RegisterFormActions } from '@app/features/auth/store/register-form.actions';
+import {
+  UserType,
+  USER_TYPE_TRANSLATION_KEYS,
+} from '@app/core/models/user-type.enum';
+import { Subject, takeUntil } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { selectStepFormData } from '../../../store/register-form.selectors';
-import { filter, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register-step-two',
@@ -32,10 +33,10 @@ import { filter, distinctUntilChanged, debounceTime } from 'rxjs/operators';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatCheckboxModule,
+    MatRadioModule,
+    MatIconModule,
+    MatError,
+    TranslocoPipe,
   ],
 })
 export class StepTwoComponent
@@ -44,66 +45,24 @@ export class StepTwoComponent
 {
   override stepForm!: FormGroup;
   override stepNumber = 2;
-  private destroy$ = new Subject<void>();
-  officePosts = Object.values(OfficePost);
-  wardNumbers = Array.from({ length: 5 }, (_, i) => i + 1);
 
-  constructor(
-    private fb: FormBuilder,
-    public cdr: ChangeDetectorRef
-  ) {
+  readonly userTypes = Object.values(UserType);
+  readonly userTypeTranslationKeys = USER_TYPE_TRANSLATION_KEYS;
+  private destroy$ = new Subject<void>();
+
+  constructor(private fb: FormBuilder) {
     super();
     this.initForm();
   }
 
   private initForm(): void {
     this.stepForm = this.fb.group({
-      isFromWard: [false],
-      wardNumber: [{ value: null, disabled: true }],
-      officePost: ['', [Validators.required]],
-    });
-
-    // Optimize ward checkbox changes
-    this.stepForm
-      .get('isFromWard')
-      ?.valueChanges.pipe(
-        takeUntil(this.destroy$),
-        distinctUntilChanged() // Add this operator
-      )
-      .subscribe((isFromWard: boolean) => {
-        const wardControl = this.stepForm.get('wardNumber');
-        if (isFromWard) {
-          wardControl?.enable();
-          wardControl?.setValidators([Validators.required]);
-        } else {
-          wardControl?.disable();
-          wardControl?.clearValidators();
-          wardControl?.setValue(null);
-        }
-        wardControl?.updateValueAndValidity({ emitEvent: false });
-      });
-  }
-
-  // Add a dedicated method for ward number change
-  onWardNumberChange(): void {
-    this.cdr.detectChanges();
-    // Defer the form update to avoid change detection cycles
-    setTimeout(() => {
-      this.updateFormData();
-    });
-  }
-
-  // Add this method
-  onWardCheckboxChange(): void {
-    this.cdr.detectChanges();
-    // Defer the form update to avoid change detection cycles
-    setTimeout(() => {
-      const formValue = this.stepForm.getRawValue();
-      this.updateFormData();
+      userType: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
+    // Load saved form data
     this.store
       .select(selectStepFormData(2))
       .pipe(
@@ -112,38 +71,17 @@ export class StepTwoComponent
       )
       .subscribe((data) => {
         if (data) {
-          if (data.isFromWard) {
-            this.stepForm.get('wardNumber')?.enable();
-          }
           this.stepForm.patchValue(data, { emitEvent: false });
-          this.cdr.markForCheck();
         }
       });
 
-    // Optimize form value changes
-    this.stepForm.valueChanges
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(100) // Add debounce time
-      )
-      .subscribe(() => {
-        this.updateStepValidity();
-        if (this.stepForm.valid) {
-          const formValue = this.stepForm.getRawValue();
-          const dataToUpdate = {
-            isFromWard: formValue.isFromWard,
-            officePost: formValue.officePost,
-            wardNumber: formValue.isFromWard ? formValue.wardNumber : null,
-          };
-          this.store.dispatch(
-            RegisterFormActions.updateFormData({ formData: dataToUpdate })
-          );
-        }
-      });
-  }
-
-  trackByValue(index: number, value: any): any {
-    return value;
+    // Monitor form changes
+    this.stepForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.updateStepValidity();
+      if (this.stepForm.valid) {
+        this.updateFormData();
+      }
+    });
   }
 
   ngOnDestroy(): void {

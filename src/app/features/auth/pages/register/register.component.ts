@@ -10,7 +10,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { StepOneComponent } from '../../components/register-steps/step-one/step-one.component';
 import { StepTwoComponent } from '../../components/register-steps/step-two/step-two.component';
-import { StepThreeComponent } from '../../components/register-steps/step-three/step-three.component';
+import { StepThreeComponent } from '../../components/register-steps/step-four/step-four.component';
 import { RegisterFormActions } from '../../store/register-form.actions';
 import {
   selectCurrentStep,
@@ -68,9 +68,17 @@ export class RegisterComponent implements OnInit, OnDestroy {
       valid: false,
     },
     {
-      label: 'Location',
-      description: 'Geographical Location',
+      label: 'Role',
+      description: 'User Role',
       icon: 'apartment',
+      completed: false,
+      current: false,
+      valid: false,
+    },
+    {
+      label: 'Details',
+      description: 'User Details',
+      icon: 'lock',
       completed: false,
       current: false,
       valid: false,

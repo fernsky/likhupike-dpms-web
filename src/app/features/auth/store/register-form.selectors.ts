@@ -44,11 +44,9 @@ export const selectStepFormData = (step: number) =>
         };
       case 2:
         return {
-          isFromWard: formData.isFromWard,
-          wardNumber: formData.wardNumber,
-          officePost: formData.officePost,
+          userType: formData.userType,
         };
-      case 3:
+      case 4:
         return {
           email: formData.email,
           password: formData.password,

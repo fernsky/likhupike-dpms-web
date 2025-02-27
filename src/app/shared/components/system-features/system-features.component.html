@@ -1,14 +1,24 @@
 <div class="features-container">
-  <h2>Integrated Municipal Information System</h2>
+  <h2>{{ "systemFeatures.title" | transloco }}</h2>
   <p class="subtitle">
-    Streamline your municipal services with integrated digital solutions
+    {{ "systemFeatures.subtitle" | transloco }}
   </p>
 
   <div class="features-grid">
     <div class="feature-card" *ngFor="let feature of features">
       <mat-icon [fontIcon]="feature.icon"></mat-icon>
-      <h3>{{ feature.title }}</h3>
-      <p>{{ feature.description }}</p>
+      <h3>
+        {{
+          "systemFeatures.features." + feature.translationKey + ".title"
+            | transloco
+        }}
+      </h3>
+      <p>
+        {{
+          "systemFeatures.features." + feature.translationKey + ".description"
+            | transloco
+        }}
+      </p>
     </div>
   </div>
 </div>

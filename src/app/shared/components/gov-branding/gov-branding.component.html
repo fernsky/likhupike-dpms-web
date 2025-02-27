@@ -1,13 +1,15 @@
 <div class="gov-branding" [class.horizontal]="mode === 'horizontal'">
-  <img
-    src="assets/images/nepal-government-logo.png"
-    alt="Nepal Government Logo"
-    class="gov-logo"
-  />
-  <div class="titles">
-    <h2 class="system-title">एकीकृत नगरपालिका सूचना प्रणाली</h2>
-    <h3 class="system-title-en" *ngIf="showEnglishTitle">
-      Integrated Municipal Information System
-    </h3>
+  <div class="branding-content">
+    <img
+      src="assets/images/nepal-government-logo.png"
+      [alt]="'govBranding.logoAlt' | transloco"
+      class="gov-logo"
+    />
+    <div class="titles">
+      <h2 class="system-title">{{ "govBranding.systemTitle" | transloco }}</h2>
+    </div>
+  </div>
+  <div class="controls">
+    <app-language-switcher></app-language-switcher>
   </div>
 </div>

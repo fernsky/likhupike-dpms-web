@@ -14,6 +14,8 @@ import { nepaliNameValidator } from '../../../../../shared/validators/nepali-nam
 import { nepaliPhoneNumberValidator } from '../../../../../shared/validators/phone-number.validator';
 import { selectStepFormData } from '../../../store/register-form.selectors';
 import { filter } from 'rxjs/operators';
+import { MatIconModule } from '@angular/material/icon';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-register-step-one',
@@ -25,6 +27,8 @@ import { filter } from 'rxjs/operators';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
+    TranslocoPipe,
   ],
 })
 export class StepOneComponent

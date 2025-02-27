@@ -1,3 +1,5 @@
+import { UserType } from '@app/core/models/user-type.enum';
+
 export interface RegisterFormState {
   currentStep: number;
   totalSteps: number;
@@ -6,8 +8,7 @@ export interface RegisterFormState {
     fullName: string;
     phoneNumber: string;
     isFromWard: boolean;
-    wardNumber: number | null;
-    officePost: string;
+    userType: UserType;
     email: string;
     password: string;
   };
@@ -31,8 +32,7 @@ export const initialRegisterFormState: RegisterFormState = {
     fullName: '',
     phoneNumber: '',
     isFromWard: false,
-    wardNumber: null,
-    officePost: '',
+    userType: UserType.CITIZEN,
     email: '',
     password: '',
   },

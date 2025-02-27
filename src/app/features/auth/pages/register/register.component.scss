@@ -17,16 +17,17 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 70vh;
+    height: 80vh;
     background: linear-gradient(160deg,
-      #004D40 0%,  // Deep teal
-      #00796B 40%, // Rich teal
-      #009688 100% // Bright teal
+      #0B1F42 0%,    // Deep navy
+      #123772 40%,   // Rich navy
+      #1A4894 100%   // Bright navy
     );
     clip-path: ellipse(170% 100% at 50% 0%);
     z-index: 0;
     opacity: 0.95; // Slightly more transparent to show particles better
   }
+
 
   // Enhanced overlay patterns
   &::after {
@@ -38,6 +39,12 @@
       radial-gradient(ellipse at bottom, rgba(13, 71, 161, 0.05) 0%, transparent 70%);
     z-index: 0;
     pointer-events: none;
+  }
+
+  @media screen and (max-width: 1250px) and (min-width: 1024px) {
+    &::before {
+      height: 100%;
+    }
   }
 }
 
@@ -71,7 +78,7 @@
   .curved-line {
     position: absolute;
     width: 100%;
-    height: 1000px;
+    height: 100vh;
     top: 30%;
     opacity: 0.1;
     background: linear-gradient(
@@ -274,7 +281,7 @@ form {
     transition: all 0.3s ease;
 
     &[color="primary"] {
-      background: linear-gradient(135deg, #123772, #1A4894);
+      background: linear-gradient(135deg, #0B1F42, #123772);
       color: white;
       box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
       border-radius: 12px;
@@ -286,7 +293,7 @@ form {
       &:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 6px 16px rgba(25, 118, 210, 0.3);
-        background: linear-gradient(135deg, #1A4894, #2760AF);
+        background: linear-gradient(135deg, #123772, #1A4894);
       }
 
       &:active:not(:disabled) {
@@ -301,7 +308,7 @@ form {
     }
 
     &:not([color="primary"]) {
-      border: 2px solid #1976d2;
+      border: 2px solid #123772;
       background: transparent;
 
       &:hover:not(:disabled) {
@@ -313,6 +320,75 @@ form {
         color: rgba(0, 0, 0, 0.38);
       }
     }
+  }
+}
+
+.teal-gradient-btn {
+  background: rgba(18, 55, 114, 0.98) !important; // Changed to navy
+  color: white !important;
+  box-shadow: 0 2px 6px rgba(11, 31, 66, 0.12) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(160deg,
+      rgba(11, 31, 66, 0.1) 0%,
+      rgba(18, 55, 114, 0.1) 50%,
+      rgba(26, 72, 148, 0.1) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.05s ease;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.01);
+    background: rgba(18, 55, 114, 1) !important; // Changed from teal to navy
+    box-shadow: 0 4px 12px rgba(11, 31, 66, 0.15) !important;
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+    transition-duration: 0.05s;
+  }
+
+  &:disabled {
+    background: rgba(224, 224, 224, 0.95) !important;
+    color: rgba(158, 158, 158, 0.8) !important;
+    box-shadow: none !important;
+    transform: none;
+  }
+}
+
+.teal-outlined-btn {
+  border: 2px solid #123772 !important; // Changed from teal to navy
+  color: #0B1F42 !important; // Changed from teal to navy
+
+  &:hover:not(:disabled) {
+    background: rgba(18, 55, 114, 0.04) !important; // Changed from teal to navy
+  }
+
+  &:disabled {
+    border-color: rgba(0, 0, 0, 0.12) !important;
+    color: rgba(0, 0, 0, 0.38) !important;
+  }
+}
+
+.teal-text-btn {
+  color: #123772 !important; // Changed from teal to navy
+
+  &:hover {
+    color: #1A4894 !important; // Changed from teal to navy
   }
 }
 
@@ -333,13 +409,13 @@ form {
   }
 
   a {
-    color: #1565C0;
+    color: #123772;
     font-weight: 500;
     font-size: 0.95rem;
     transition: all 0.2s ease;
 
     &:hover {
-      color: #1976d2;
+      color: #1A4894;
       text-decoration: underline;
     }
   }
@@ -403,7 +479,7 @@ mat-card {
 
     .form-scroll-container {
       flex: 1;
-      padding: 2rem 2.5rem;
+      padding: 0.5rem 2rem;
       padding-bottom: 1rem; // Reduced bottom padding
       overflow-y: auto;
       min-height: 350px;
@@ -483,9 +559,12 @@ mat-card {
             gap: 0.5rem;
           }
 
-          &.submit-btn {
+          .submit-btn {
             min-width: 140px;
+
+
           }
+
 
           mat-icon {
             font-size: 18px;
@@ -505,6 +584,14 @@ mat-card {
   }
 }
 
+.submit-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: 0.5rem;
+}
+
+
 @media (max-width: 599px) {
 
   mat-card {
@@ -522,9 +609,6 @@ mat-card {
       }
     }
 
-    mat-card-content {
-      padding: 0 1.5rem;
-    }
   }
 }
 
@@ -770,8 +854,8 @@ app-system-features {
 }
 
 :host {
-  --primary-dark: #004D40;   // Deepest navy
-  --primary-main: #00796B;   // Rich navy
-  --primary-light: #009688;  // Bright navy
-  --accent-color: #26A69A;   // Accent navy
+  --primary-dark: #0B1F42;   // Deepest navy
+  --primary-main: #123772;   // Rich navy
+  --primary-light: #1A4894;  // Bright navy
+  --accent-color: #1A4894;   // Accent navy
 }

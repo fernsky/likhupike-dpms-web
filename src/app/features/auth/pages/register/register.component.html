@@ -11,12 +11,6 @@
     <app-system-features></app-system-features>
     <mat-card>
       <mat-card-header>
-        <div class="header-content">
-          <mat-card-title>Welcome to Digital Governance</mat-card-title>
-          <mat-card-subtitle>
-            Join us in building a better community through digital governance
-          </mat-card-subtitle>
-        </div>
         <app-step-indicator
           [steps]="steps$ | async"
           [currentStepIndex]="(currentStep$ | async)! - 1"
@@ -40,8 +34,7 @@
           <div class="nav-buttons">
             <button
               mat-stroked-button
-              color="primary"
-              class="prev-btn"
+              class="prev-btn teal-outlined-btn"
               *ngIf="(currentStep$ | async)! > 1"
               (click)="handlePreviousStep()"
               [disabled]="loading"
@@ -53,8 +46,7 @@
             <ng-container *ngIf="!(isLastStep$ | async); else submitButton">
               <button
                 mat-flat-button
-                color="primary"
-                class="next-btn"
+                class="next-btn teal-gradient-btn"
                 (click)="handleNextStep()"
                 [disabled]="!(canProceedToNextStep$ | async) || loading"
               >
@@ -66,8 +58,7 @@
             <ng-template #submitButton>
               <button
                 mat-flat-button
-                color="accent"
-                class="submit-btn"
+                class="submit-btn teal-gradient-btn"
                 (click)="onSubmit()"
                 [disabled]="!(canProceedToNextStep$ | async) || loading"
               >
@@ -82,7 +73,9 @@
 
         <div class="form-footer">
           <span>Already have an account?</span>
-          <a mat-button routerLink="/auth/login">Sign in</a>
+          <a mat-button class="teal-text-btn" routerLink="/auth/login"
+            >Sign in</a
+          >
         </div>
       </mat-card-content>
     </mat-card>

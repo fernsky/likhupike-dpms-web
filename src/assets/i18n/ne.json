@@ -1,0 +1,97 @@
+{
+  "languages": {
+    "en": {
+      "name": "अंग्रेजी",
+      "localName": "English"
+    },
+    "ne": {
+      "name": "नेपाली",
+      "localName": "नेपाली"
+    }
+  },
+  "languageSwitcher": {
+    "chooseLanguage": "भाषा छान्नुहोस्",
+    "selectLanguageAria": "भाषा छान्नुहोस्"
+  },
+  "common": {
+    "actions": {
+      "select": "छान्नुहोस्",
+      "cancel": "रद्द गर्नुहोस्",
+      "save": "सुरक्षित गर्नुहोस्"
+    }
+  },
+  "govBranding": {
+    "systemTitle": "एकीकृत नगरपालिका सूचना प्रणाली",
+    "logoAlt": "नेपाल सरकारको लोगो"
+  },
+  "systemFeatures": {
+    "title": "एकीकृत नगरपालिका सूचना प्रणाली",
+    "subtitle": "एकीकृत डिजिटल समाधानहरूको साथ आफ्नो नगरपालिका सेवाहरू सुव्यवस्थित गर्नुहोस्",
+    "features": {
+      "municipalServices": {
+        "title": "नगरपालिका सेवाहरू",
+        "description": "एउटै प्लेटफर्मबाट सबै नगरपालिका सेवाहरूमा पहुँच"
+      },
+      "quickProcessing": {
+        "title": "द्रुत प्रसोधन",
+        "description": "छिटो र प्रभावकारी नगरपालिका सेवा वितरण"
+      },
+      "dataIntegration": {
+        "title": "डाटा एकीकरण",
+        "description": "एकीकृत नगरपालिका डाटा व्यवस्थापन प्रणाली"
+      },
+      "citizenPortal": {
+        "title": "नागरिक पोर्टल",
+        "description": "नागरिकहरूका लागि नगरपालिका सेवाहरूमा सजिलो पहुँच"
+      }
+    }
+  },
+  "registration": {
+    "stepOne": {
+      "title": "व्यक्तिगत जानकारी",
+      "subtitle": "तपाईंको आधारभूत विवरणबाट सुरु गरौं",
+      "fields": {
+        "fullName": {
+          "label": "पूरा नाम (अंग्रेजीमा)",
+          "errors": {
+            "required": "पूरा नाम आवश्यक छ",
+            "minlength": "नाम कम्तिमा २ अक्षरको हुनुपर्छ"
+          }
+        },
+        "fullNameNepali": {
+          "label": "पूरा नाम",
+          "errors": {
+            "required": "पूरा नाम आवश्यक छ",
+            "nepaliName": "कृपया नेपाली अक्षरहरू मात्र प्रयोग गर्नुहोस्"
+          }
+        },
+        "phoneNumber": {
+          "label": "फोन नम्बर",
+          "placeholder": "98XXXXXXXX",
+          "errors": {
+            "required": "फोन नम्बर आवश्यक छ",
+            "nepaliPhone": "कृपया मान्य नेपाली फोन नम्बर हाल्नुहोस् (98XXXXXXXX)"
+          }
+        }
+      }
+    },
+    "stepTwo": {
+      "title": "आफ्नो भूमिका छान्नुहोस्",
+      "subtitle": "सिस्टम कसरी प्रयोग गर्नुहुन्छ छान्नुहोस्",
+      "errors": {
+        "required": "कृपया प्रयोगकर्ता प्रकार छान्नुहोस्"
+      }
+    },
+    "userTypes": {
+      "citizen": "नागरिक",
+      "localLevelEmployee": "स्थानीय तह कर्मचारी",
+      "electedRepresentative": "निर्वाचित प्रतिनिधि",
+      "governmentInstitutional": "सरकारी तथा संस्थागत प्रतिनिधि",
+      "specialUser": "विशेष प्रयोगकर्ता",
+      "specialServiceProvider": "विशेष सेवा प्रदायक",
+      "mediaAndPublicCommunication": "सञ्चार तथा जनसम्पर्क",
+      "communityContributor": "समुदाय योगदानकर्ता",
+      "other": "अन्य"
+    }
+  }
+}

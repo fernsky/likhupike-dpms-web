@@ -1,1 +1,96 @@
-{}
+{
+  "languages": {
+    "en": {
+      "name": "English",
+      "localName": "English"
+    },
+    "ne": {
+      "name": "Nepali",
+      "localName": "Nepali"
+    }
+  },
+  "languageSwitcher": {
+    "chooseLanguage": "Choose Language",
+    "selectLanguageAria": "Select language"
+  },
+  "common": {
+    "actions": {
+      "select": "Select",
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "govBranding": {
+    "systemTitle": "Integrated Municipal Information System",
+    "logoAlt": "Nepal Government Logo"
+  },
+  "systemFeatures": {
+    "title": "Integrated Municipal Information System",
+    "subtitle": "Streamline your municipal services with integrated digital solutions",
+    "features": {
+      "municipalServices": {
+        "title": "Municipal Services",
+        "description": "Access all municipal services from one platform"
+      },
+      "quickProcessing": {
+        "title": "Quick Processing",
+        "description": "Fast and efficient municipal service delivery"
+      },
+      "dataIntegration": {
+        "title": "Data Integration",
+        "description": "Integrated municipal data management system"
+      },
+      "citizenPortal": {
+        "title": "Citizen Portal",
+        "description": "Easy access to municipal services for citizens"
+      }
+    }
+  },
+  "registration": {
+    "stepOne": {
+      "title": "Personal Information",
+      "subtitle": "Let's start with your basic details",
+      "fields": {
+        "fullName": {
+          "label": "Full Name",
+          "errors": {
+            "required": "Full name is required",
+            "minlength": "Name must be at least 2 characters"
+          }
+        },
+        "fullNameNepali": {
+          "label": "Full Name in Nepali",
+          "errors": {
+            "required": "Full name in Nepali is required",
+            "nepaliName": "Please use Nepali characters only"
+          }
+        },
+        "phoneNumber": {
+          "label": "Phone Number",
+          "errors": {
+            "required": "Phone number is required",
+            "nepaliPhone": "Please enter a valid Nepali phone number (98XXXXXXXX)"
+          }
+        }
+      }
+    },
+    "stepTwo": {
+      "title": "Choose Your Role",
+      "subtitle": "Select how you'll be using the system to get started",
+      "errors": {
+        "required": "Please select a user type"
+      }
+    },
+    "userTypes": {
+      "citizen": "Citizen",
+      "localLevelEmployee": "Local Level Employee",
+      "electedRepresentative": "Elected Representative",
+      "governmentInstitutional": "Government & Institutional Representative",
+      "specialUser": "Special User",
+      "specialServiceProvider": "Special Service Provider",
+      "mediaAndPublicCommunication": "Media & Public Communication",
+      "communityContributor": "Community Contributor",
+      "other": "Other"
+    }
+  }
+}

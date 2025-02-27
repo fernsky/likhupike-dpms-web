@@ -1,5 +1,6 @@
 import { RoleType } from './role.enum';
 import { User } from './user.interface';
+import { UserType } from './user-type.enum';
 
 export interface LoginRequest {
   email: string;
@@ -12,8 +13,7 @@ export interface RegisterRequest {
   fullName: string;
   fullNameNepali: string;
   phoneNumber: string;
-  officePost: string;
-  wardNumber?: number;
+  userType: UserType;
 }
 
 export interface AuthResponse {

@@ -61,7 +61,10 @@ body {
 .mat-mdc-plain-tooltip,
 .mat-mdc-plain-tooltip-text,
 .mat-mdc-plain-tooltip-supporting-text,
-.mdc-text-field__input {
+.mdc-text-field__input,
+.mat-mdc-menu-item-text,
+.mat-mdc-menu-item
+{
   font-family: var(--font-family-base) !important;
   letter-spacing: -0.01rem;
 }

@@ -1,48 +1,37 @@
 <form [formGroup]="stepForm">
+  <div class="step-header">
+    <div class="step-icon">
+      <mat-icon>how_to_reg</mat-icon>
+    </div>
+    <div class="step-intro">
+      <h2>{{ "registration.stepTwo.title" | transloco }}</h2>
+      <p>{{ "registration.stepTwo.subtitle" | transloco }}</p>
+    </div>
+  </div>
+
   <div class="form-fields">
-    <mat-form-field appearance="outline">
-      <mat-label>Office Position</mat-label>
-      <mat-select formControlName="officePost">
-        <mat-option
-          *ngFor="let post of officePosts; trackBy: trackByValue"
-          [value]="post"
-        >
-          {{ post | titlecase }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="stepForm.get('officePost')?.hasError('required')">
-        Please select your office position
+    <div class="user-type-selection">
+      <mat-error
+        *ngIf="
+          stepForm.get('userType')?.errors?.['required'] &&
+          stepForm.get('userType')?.touched
+        "
+      >
+        {{ "registration.stepTwo.errors.required" | transloco }}
       </mat-error>
-    </mat-form-field>
-
-    <div class="ward-section">
-      <mat-checkbox
-        formControlName="isFromWard"
-        (change)="onWardCheckboxChange()"
+      <mat-radio-group
+        formControlName="userType"
+        class="user-type-group"
+        color="primary"
       >
-        I am a ward office user.
-      </mat-checkbox>
-
-      <mat-form-field
-        *ngIf="stepForm.get('isFromWard')?.value"
-        appearance="outline"
-      >
-        <mat-label>Ward Number</mat-label>
-        <mat-select
-          formControlName="wardNumber"
-          (selectionChange)="onWardNumberChange()"
+        <mat-radio-button
+          *ngFor="let type of userTypes"
+          [value]="type"
+          class="user-type-option"
         >
-          <mat-option
-            *ngFor="let number of wardNumbers; trackBy: trackByValue"
-            [value]="number"
-          >
-            Ward {{ number }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="stepForm.get('wardNumber')?.hasError('required')">
-          Please select a ward number
-        </mat-error>
-      </mat-form-field>
+          {{ userTypeTranslationKeys[type] | transloco }}
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
   </div>
 </form>

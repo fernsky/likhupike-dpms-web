@@ -1,35 +1,37 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslocoPipe } from '@jsverse/transloco';
+
+interface Feature {
+  icon: string;
+  translationKey: string;
+}
 
 @Component({
   selector: 'app-system-features',
   templateUrl: './system-features.component.html',
   styleUrls: ['./system-features.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, TranslocoPipe],
 })
 export class SystemFeaturesComponent {
-  features = [
+  features: Feature[] = [
     {
       icon: 'account_balance',
-      title: 'Municipal Services',
-      description: 'Access all municipal services from one platform',
+      translationKey: 'municipalServices',
     },
     {
       icon: 'speed',
-      title: 'Quick Processing',
-      description: 'Fast and efficient municipal service delivery',
+      translationKey: 'quickProcessing',
     },
     {
       icon: 'analytics',
-      title: 'Data Integration',
-      description: 'Integrated municipal data management system',
+      translationKey: 'dataIntegration',
     },
     {
       icon: 'public',
-      title: 'Citizen Portal',
-      description: 'Easy access to municipal services for citizens',
+      translationKey: 'citizenPortal',
     },
   ];
 }

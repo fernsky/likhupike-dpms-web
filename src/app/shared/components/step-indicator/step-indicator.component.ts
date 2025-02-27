@@ -57,8 +57,4 @@ export class StepIndicatorComponent {
         : 'pending';
     return `Step ${index + 1}: ${step.label} - ${step.description}. Status: ${status}`;
   }
-
-  getTooltipContent(step: Step): string {
-    return `${step.label}: ${step.description}${step.valid ? ' ✓' : ''}`;
-  }
 }

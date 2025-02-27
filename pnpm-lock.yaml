@@ -29,6 +29,9 @@ importers:
       '@angular/material':
         specifier: ^19.1.4
         version: 19.1.4(39e0b8558b9404228f22388017d0fcb2)
+      '@angular/material-experimental':
+        specifier: ^19.1.5
+        version: 19.1.5(43a669a2a6485629d2e5111772a66c68)
       '@angular/platform-browser':
         specifier: ^19.1.6
         version: 19.1.6(@angular/animations@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))
@@ -68,6 +71,9 @@ importers:
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
+      zod:
+        specifier: ^3.24.2
+        version: 3.24.2
       zone.js:
         specifier: ^0.15.0
         version: 0.15.0
@@ -452,6 +458,17 @@ packages:
       '@angular/core': 19.1.6
       '@angular/platform-browser': 19.1.6
       rxjs: ^6.5.3 || ^7.4.0
+
+  '@angular/material-experimental@19.1.5':
+    resolution: {integrity: sha512-ag8sSSV+PYOTW+SPvrxfRhW7UGk7kbQdLQFdPIddgFUKKtofPSwHokQmiTdwOnegd+RFDqBplM4mCGW9CmgjQw==}
+    peerDependencies:
+      '@angular/animations': ^19.0.0 || ^20.0.0
+      '@angular/cdk': 19.1.5
+      '@angular/common': ^19.0.0 || ^20.0.0
+      '@angular/core': ^19.0.0 || ^20.0.0
+      '@angular/forms': ^19.0.0 || ^20.0.0
+      '@angular/material': 19.1.5
+      '@angular/platform-browser': ^19.0.0 || ^20.0.0
 
   '@angular/material@19.1.4':
     resolution: {integrity: sha512-bqliTnUnMiTG6Quvk16epiQPZQB0zV/L2ctPinFcP6NhahcQFfahjabUlgMlfBk5qObolJArJr5HCMiOmpOGIQ==}
@@ -7595,6 +7612,9 @@ packages:
     resolution: {integrity: sha512-cYVsTjKl8b+FrnidjibDWskAv7UKOfcwaVZdp/it9n1s9fU3IkgDbhdIRKCW4JDsAlECJY0ytoVPT3sK6kideA==}
     engines: {node: '>=18'}
 
+  zod@3.24.2:
+    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
+
   zone.js@0.15.0:
     resolution: {integrity: sha512-9oxn0IIjbCZkJ67L+LkhYWRyAy7axphb3VgE2MBDlOqnmHMPWGYMxJxBYFueFq/JGY2GMwS0rU+UCLunEmy5UA==}
 
@@ -8020,6 +8040,17 @@ snapshots:
       '@angular/core': 19.1.6(rxjs@7.8.1)(zone.js@0.15.0)
       '@angular/platform-browser': 19.1.6(@angular/animations@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))
       rxjs: 7.8.1
+      tslib: 2.8.1
+
+  '@angular/material-experimental@19.1.5(43a669a2a6485629d2e5111772a66c68)':
+    dependencies:
+      '@angular/animations': 19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))
+      '@angular/cdk': 19.1.4(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
+      '@angular/common': 19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
+      '@angular/core': 19.1.6(rxjs@7.8.1)(zone.js@0.15.0)
+      '@angular/forms': 19.1.6(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(@angular/platform-browser@19.1.6(@angular/animations@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0)))(rxjs@7.8.1)
+      '@angular/material': 19.1.4(39e0b8558b9404228f22388017d0fcb2)
+      '@angular/platform-browser': 19.1.6(@angular/animations@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0)))(@angular/common@19.1.6(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.1.6(rxjs@7.8.1)(zone.js@0.15.0))
       tslib: 2.8.1
 
   '@angular/material@19.1.4(39e0b8558b9404228f22388017d0fcb2)':
@@ -16601,5 +16632,7 @@ snapshots:
   yocto-queue@1.1.1: {}
 
   yoctocolors-cjs@2.1.2: {}
+
+  zod@3.24.2: {}
 
   zone.js@0.15.0: {}
