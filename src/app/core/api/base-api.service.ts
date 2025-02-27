@@ -51,7 +51,13 @@ export class BaseApiService {
       .pipe(
         timeout(this.config.timeout),
         retry(this.config.retryAttempts),
-        map((response) => ApiResponseSchema(schema).parse(response).data),
+        map((response) => {
+          const validated = ApiResponseSchema(schema).parse(response);
+          if (!validated.success) {
+            throw new Error(validated.message || 'Request failed');
+          }
+          return validated.data;
+        }),
         catchError((error) => {
           console.error('API Error:', error);
           return throwError(() => error);

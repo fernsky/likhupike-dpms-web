@@ -3,6 +3,10 @@ import { provideState } from '@ngrx/store';
 import { registerFormReducer } from './store/register-form.reducer';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { authReducer } from '@app/core/store/auth/auth.reducer'; // Make sure to import your auth reducer
+import {
+  API_CONFIG,
+  DEFAULT_API_CONFIG,
+} from '@app/core/api/config/api.config';
 
 export const AUTH_ROUTES: Routes = [
   {
@@ -18,6 +22,10 @@ export const AUTH_ROUTES: Routes = [
       ),
     providers: [
       provideState({ name: 'auth', reducer: authReducer }), // Add this line
+      {
+        provide: API_CONFIG,
+        useValue: DEFAULT_API_CONFIG,
+      },
       provideState({ name: 'registerForm', reducer: registerFormReducer }),
       provideNativeDateAdapter(),
     ],

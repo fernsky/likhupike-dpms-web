@@ -8,6 +8,7 @@ import { provideEffects } from '@ngrx/effects';
 import { provideClientHydration } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoConfig } from './core/config/transloco.config';
+import { API_CONFIG, DEFAULT_API_CONFIG } from './core/api/config/api.config';
 
 const FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
@@ -28,6 +29,10 @@ export const appConfig: ApplicationConfig = {
           fontFamily: FONT_FAMILY,
         },
       },
+    },
+    {
+      provide: API_CONFIG,
+      useValue: DEFAULT_API_CONFIG,
     },
     ...provideTranslocoConfig(), // Add Transloco configuration
   ],
