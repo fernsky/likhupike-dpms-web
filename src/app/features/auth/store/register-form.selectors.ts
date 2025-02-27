@@ -44,17 +44,16 @@ export const selectStepFormData = (step: number) =>
           phoneNumber: formData.phoneNumber,
         };
       case 2:
-        return {
-          userType: formData.userType,
-        };
+        return { userType: formData.userType };
       case 3:
+        const baseLocation = formData.location || {};
         switch (formData.userType) {
           case UserType.LOCAL_LEVEL_EMPLOYEE:
-            return formData.employeeInfo;
+            return formData.employeeInfo || baseLocation;
           case UserType.ELECTED_REPRESENTATIVE:
-            return formData.electedRepInfo;
+            return formData.electedRepInfo || baseLocation;
           default:
-            return formData.location;
+            return baseLocation;
         }
       case 4:
         return {
@@ -113,4 +112,13 @@ export const selectLocationValidationErrors = createSelector(
     }
     return errors;
   }
+);
+
+export const selectStepTwoData = createSelector(selectFormData, (formData) => ({
+  userType: formData.userType,
+}));
+
+export const selectUserType = createSelector(
+  selectFormData,
+  (formData) => formData.userType
 );

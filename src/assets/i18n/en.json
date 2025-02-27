@@ -126,6 +126,42 @@
         }
       }
     },
+    "stepFour": {
+      "title": "Account Security",
+      "subtitle": "Set up your login credentials",
+      "fields": {
+        "email": {
+          "label": "Email Address",
+          "placeholder": "e.g., your.name@nepal.gov.np",
+          "errors": {
+            "required": "Email is required",
+            "invalid": "Please enter a valid email address",
+            "governmentEmail": "Please use a valid government email address"
+          }
+        },
+        "password": {
+          "label": "Password",
+          "errors": {
+            "required": "Password is required",
+            "weak": "Password is too weak",
+            "mismatch": "Passwords do not match"
+          },
+          "strength": {
+            "weak": "Weak",
+            "medium": "Medium",
+            "strong": "Strong",
+            "label": "Password Strength"
+          }
+        },
+        "confirmPassword": {
+          "label": "Confirm Password",
+          "errors": {
+            "required": "Please confirm your password",
+            "mismatch": "Passwords do not match"
+          }
+        }
+      }
+    },
     "userTypes": {
       "citizen": "Citizen",
       "localLevelEmployee": "Local Level Employee",

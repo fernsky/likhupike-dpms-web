@@ -10,7 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { StepOneComponent } from '../../components/register-steps/step-one/step-one.component';
 import { StepTwoComponent } from '../../components/register-steps/step-two/step-two.component';
-import { StepThreeComponent } from '../../components/register-steps/step-four/step-four.component';
+import { StepThreeComponent } from '../../components/register-steps/step-three/step-three.component';
+import { StepFourComponent } from '../../components/register-steps/step-four/step-four.component';
 import { RegisterFormActions } from '../../store/register-form.actions';
 import {
   selectCurrentStep,
@@ -42,6 +43,7 @@ import { RouterModule } from '@angular/router';
     StepOneComponent,
     StepTwoComponent,
     StepThreeComponent,
+    StepFourComponent,
     StepIndicatorComponent,
     GovBrandingComponent,
     SystemFeaturesComponent,
@@ -61,7 +63,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   steps: Step[] = [
     {
       label: 'Personal',
-      description: 'Personal Information',
+      description: 'Basic Information',
       icon: 'person',
       completed: false,
       current: true,
@@ -69,23 +71,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
     },
     {
       label: 'Role',
-      description: 'User Role',
-      icon: 'apartment',
+      description: 'User Type',
+      icon: 'badge',
       completed: false,
       current: false,
       valid: false,
     },
     {
-      label: 'Details',
-      description: 'User Details',
-      icon: 'lock',
+      label: 'Location',
+      description: 'Address Details',
+      icon: 'location_on',
       completed: false,
       current: false,
       valid: false,
     },
     {
       label: 'Account',
-      description: 'Account Credentials',
+      description: 'Login Credentials',
       icon: 'lock',
       completed: false,
       current: false,
@@ -159,7 +161,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((formData) => {
         if (formData) {
           const registerData: RegisterRequest = {
-            ...formData,
+            fullName: formData.fullName,
+            fullNameNepali: formData.fullNameNepali,
+            phoneNumber: formData.phoneNumber,
+            email: formData.email,
+            password: formData.password,
+            userType: formData.userType,
+            // Location based on user type
+            ...(formData.location && { location: formData.location }),
+            ...(formData.employeeInfo && {
+              employeeInfo: formData.employeeInfo,
+            }),
+            ...(formData.electedRepInfo && {
+              electedRepInfo: formData.electedRepInfo,
+            }),
           };
           this.store.dispatch(AuthActions.register({ userData: registerData }));
         }

@@ -10,14 +10,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Subject, takeUntil } from 'rxjs';
 import { BaseStepComponent } from '../base-step.component';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { selectStepFormData } from '../../../store/register-form.selectors';
 import { filter } from 'rxjs/operators';
 
+interface StepFourFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
 @Component({
-  selector: 'app-register-step-three',
+  selector: 'app-register-step-four',
   templateUrl: './step-four.component.html',
   styleUrls: ['./step-four.component.scss'],
   standalone: true,
@@ -28,9 +35,10 @@ import { filter } from 'rxjs/operators';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
+    TranslocoPipe,
   ],
 })
-export class StepThreeComponent
+export class StepFourComponent
   extends BaseStepComponent
   implements OnInit, OnDestroy
 {
@@ -61,52 +69,40 @@ export class StepThreeComponent
         confirmPassword: ['', Validators.required],
       },
       {
-        validators: this.passwordMatchValidator,
+        validators: this.passwordValidatorService.passwordMatchValidator(
+          'password',
+          'confirmPassword'
+        ),
       }
     );
   }
 
-  private passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
-
-    if (password !== confirmPassword) {
-      form.get('confirmPassword')?.setErrors({ passwordMismatch: true });
-      return { passwordMismatch: true };
-    }
-
-    return null;
-  }
-
   ngOnInit(): void {
-    // Load saved form data
     this.store
-      .select(selectStepFormData(3))
+      .select(selectStepFormData(4))
       .pipe(
-        filter((data) => !!data),
+        filter((data): data is Partial<StepFourFormData> => !!data),
         takeUntil(this.destroy$)
       )
       .subscribe((data) => {
-        if (data) {
-          // Don't include password in persistence for security
-          const { password, ...safeData } = data;
-          this.stepForm.patchValue(safeData, { emitEvent: false });
-        }
+        const { password, ...safeData } = data;
+        this.stepForm.patchValue(safeData, { emitEvent: false });
       });
 
-    // Form changes subscription
     this.stepForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateStepValidity();
       if (this.stepForm.valid) {
-        const { confirmPassword, ...formData } = this.stepForm.value;
-        this.updateFormData();
+        const formValue = this.stepForm.value as StepFourFormData;
+        const { confirmPassword, ...formData } = formValue;
+        this.updateStepFormData(formData);
       }
     });
   }
 
+  // Password strength and validation methods
   get showPasswordStrength(): boolean {
     const password = this.stepForm.get('password')?.value;
-    return password && password.length > 0 && !this.isPasswordFullyValid;
+    return Boolean(password?.length > 0 && !this.isPasswordFullyValid);
   }
 
   get isPasswordFullyValid(): boolean {
@@ -117,33 +113,53 @@ export class StepThreeComponent
   }
 
   getPasswordStrength(): number {
-    const password = this.stepForm.get('password')?.value;
-    return this.passwordValidatorService.calculateStrength(password);
+    return this.passwordValidatorService.calculateStrength(
+      this.stepForm.get('password')?.value
+    );
   }
 
   getPasswordErrors(): string[] {
     const control = this.stepForm.get('password');
-    if (!control?.errors) return [];
+    return control?.errors
+      ? this.passwordValidatorService.getPasswordErrorMessages(control.errors)
+      : [];
+  }
 
-    const errors: string[] = [];
-    const errorMap = {
-      minLength: 'Password must be at least 12 characters',
-      uppercase: 'Include at least one uppercase letter',
-      lowercase: 'Include at least one lowercase letter',
-      number: 'Include at least one number',
-      specialChar: 'Include at least one special character',
-      commonWord: 'Password contains common words',
-      sequential: 'Password contains sequential patterns',
-      repeating: 'Password contains repeating characters',
-    };
+  getPasswordStrengthLabel(): string {
+    const strength = this.getPasswordStrength();
+    return strength < 50
+      ? 'registration.stepFour.fields.password.strength.weak'
+      : strength < 75
+        ? 'registration.stepFour.fields.password.strength.medium'
+        : 'registration.stepFour.fields.password.strength.strong';
+  }
 
-    Object.keys(control.errors).forEach((key) => {
-      if (errorMap[key as keyof typeof errorMap]) {
-        errors.push(errorMap[key as keyof typeof errorMap]);
-      }
-    });
+  getPasswordIconName(): string {
+    const strength = this.getPasswordStrength();
+    return strength < 50
+      ? 'error_outline'
+      : strength < 75
+        ? 'security'
+        : 'verified';
+  }
 
-    return errors;
+  getStrengthClass(): string {
+    const strength = this.getPasswordStrength();
+    return strength < 50 ? 'weak' : strength < 75 ? 'medium' : 'strong';
+  }
+
+  override updateFormData(): void {
+    if (this.stepForm.valid) {
+      const formValue = this.stepForm.value as StepFourFormData;
+      const { confirmPassword, ...formData } = formValue;
+      this.updateStepFormData(formData);
+    }
+  }
+
+  private updateStepFormData(
+    formData: Omit<StepFourFormData, 'confirmPassword'>
+  ): void {
+    super.updateFormData();
   }
 
   ngOnDestroy(): void {

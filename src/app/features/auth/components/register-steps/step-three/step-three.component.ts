@@ -23,7 +23,10 @@ import {
 } from '@app/core/models/office.enum';
 import { Observable, Subject, combineLatest } from 'rxjs';
 import { map, startWith, takeUntil, switchMap, filter } from 'rxjs/operators';
-import { selectStepFormData } from '../../../store/register-form.selectors';
+import {
+  selectStepFormData,
+  selectUserType,
+} from '../../../store/register-form.selectors';
 import {
   Province,
   District,
@@ -92,11 +95,10 @@ export class StepThreeComponent
       { validators: locationFormValidator() }
     );
 
-    const userType$ = this.store
-      .select(selectStepFormData(2))
-      .pipe(map((data) => data?.userType));
+    // Update this section to use the correct selector
+    const userType$ = this.store.select(selectUserType);
 
-    // Control visibility based on user type and position
+    // Rest remains the same
     this.showWardSelection$ = combineLatest([
       userType$,
       this.stepForm.get('position')!.valueChanges.pipe(startWith('')),

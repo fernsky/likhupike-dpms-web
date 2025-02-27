@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { PASSWORD_RULES } from '../../core/constants/validation.constants';
 
 @Injectable({
@@ -96,7 +96,7 @@ export class PasswordValidatorService {
 
   private containsSequentialPattern(password: string): boolean {
     return this.sequentialPatterns.some((pattern) =>
-      password.toLowerCase().includes(pattern),
+      password.toLowerCase().includes(pattern)
     );
   }
 
@@ -123,5 +123,48 @@ export class PasswordValidatorService {
     });
 
     return Math.min(100, strength);
+  }
+
+  getPasswordErrorMessages(errors: ValidationErrors): string[] {
+    if (!errors) return [];
+
+    const messages: string[] = [];
+    const errorMap = {
+      minLength: 'Password must be at least 12 characters',
+      maxLength: 'Password must be less than 128 characters',
+      uppercase: 'Include at least one uppercase letter',
+      lowercase: 'Include at least one lowercase letter',
+      number: 'Include at least one number',
+      specialChar: 'Include at least one special character',
+      commonWord: 'Avoid common words or patterns',
+      sequential: 'Avoid sequential patterns',
+      repeating: 'Avoid repeating characters',
+    };
+
+    Object.keys(errors).forEach((key) => {
+      if (errorMap[key as keyof typeof errorMap]) {
+        messages.push(errorMap[key as keyof typeof errorMap]);
+      }
+    });
+
+    return messages;
+  }
+
+  passwordMatchValidator(passwordKey: string, confirmPasswordKey: string) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control) return null;
+
+      const form = control as FormGroup;
+      const password = form.get(passwordKey)?.value;
+      const confirmPassword = form.get(confirmPasswordKey)?.value;
+
+      if (password !== confirmPassword) {
+        form.get(confirmPasswordKey)?.setErrors({ passwordMismatch: true });
+        return { passwordMismatch: true };
+      }
+
+      form.get(confirmPasswordKey)?.setErrors(null);
+      return null;
+    };
   }
 }
