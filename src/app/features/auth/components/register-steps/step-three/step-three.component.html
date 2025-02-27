@@ -101,29 +101,31 @@
         }}</mat-label>
         <mat-select formControlName="officeSection">
           <mat-option *ngFor="let section of officeSections" [value]="section">
-            {{ section | transloco }}
+            {{ getTranslationKey(section) | transloco }}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-checkbox formControlName="isWardOffice">
+      <mat-checkbox formControlName="isWardOffice" class="ward-office-checkbox">
         {{ "registration.stepThree.fields.isWardOffice.label" | transloco }}
       </mat-checkbox>
     </ng-container>
 
     <!-- Position Selection (Conditional) -->
-    <mat-form-field *ngIf="showPosition$ | async" appearance="outline">
-      <mat-label>{{
-        "registration.stepThree.fields.position.label" | transloco
-      }}</mat-label>
-      <mat-select formControlName="position">
-        <mat-option
-          *ngFor="let position of electedPositions"
-          [value]="position"
-        >
-          {{ position | transloco }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <ng-container *ngIf="showPosition$ | async">
+      <mat-form-field appearance="outline">
+        <mat-label>{{
+          "registration.stepThree.fields.position.label" | transloco
+        }}</mat-label>
+        <mat-select formControlName="position">
+          <mat-option
+            *ngFor="let position of electedPositions"
+            [value]="position"
+          >
+            {{ getTranslationKey(position) | transloco }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
   </div>
 </form>

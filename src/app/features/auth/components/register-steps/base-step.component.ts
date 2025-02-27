@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { RegisterFormActions } from '../../store/register-form.actions';
@@ -8,6 +8,7 @@ export abstract class BaseStepComponent {
   protected store = inject(Store);
   abstract stepForm: FormGroup;
   abstract stepNumber: number;
+  @Output() stepValid = new EventEmitter<boolean>();
 
   protected updateStepValidity(): void {
     this.store.dispatch(

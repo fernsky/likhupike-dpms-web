@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { BaseStepComponent } from '../base-step.component';
 import { LocationService } from '@app/core/services/location.service';
@@ -22,7 +23,14 @@ import {
   ELECTED_POSITION_TRANSLATION_KEYS,
 } from '@app/core/models/office.enum';
 import { Observable, Subject, combineLatest } from 'rxjs';
-import { map, startWith, takeUntil, switchMap, filter } from 'rxjs/operators';
+import {
+  map,
+  startWith,
+  takeUntil,
+  switchMap,
+  filter,
+  tap,
+} from 'rxjs/operators';
 import {
   selectStepFormData,
   selectUserType,
@@ -46,6 +54,7 @@ import {
     MatSelectModule,
     MatIconModule,
     MatCheckboxModule,
+    MatOptionModule,
     TranslocoPipe,
   ],
 })
@@ -81,6 +90,14 @@ export class StepThreeComponent
     this.setupLocationCascading();
   }
 
+  // Helper method for translations
+  getTranslationKey(type: OfficeSection | ElectedPosition): string {
+    if (Object.values(OfficeSection).includes(type as OfficeSection)) {
+      return this.officeSectionTranslationKeys[type as OfficeSection];
+    }
+    return this.electedPositionTranslationKeys[type as ElectedPosition];
+  }
+
   private initForm(): void {
     this.stepForm = this.fb.group(
       {
@@ -95,10 +112,8 @@ export class StepThreeComponent
       { validators: locationFormValidator() }
     );
 
-    // Update this section to use the correct selector
     const userType$ = this.store.select(selectUserType);
 
-    // Rest remains the same
     this.showWardSelection$ = combineLatest([
       userType$,
       this.stepForm.get('position')!.valueChanges.pipe(startWith('')),
@@ -122,13 +137,16 @@ export class StepThreeComponent
 
   private setupLocationCascading(): void {
     // Load initial provinces
-    this.provinces$ = this.locationService.getProvinces({
-      fields: ['CODE', 'NAME'],
-      limit: 100,
-    });
+    this.provinces$ = this.locationService
+      .getProvinces({
+        fields: ['CODE', 'NAME'],
+        limit: 100,
+      })
+      .pipe(tap((provinces) => console.log('Loaded provinces:', provinces)));
 
-    // Districts based on selected province
+    // Set up cascading selects
     this.districts$ = this.stepForm.get('provinceCode')!.valueChanges.pipe(
+      tap((value) => console.log('Province selected:', value)),
       filter((provinceCode) => !!provinceCode),
       switchMap((provinceCode) =>
         this.locationService.getDistricts({
@@ -136,10 +154,10 @@ export class StepThreeComponent
           provinceCode,
           limit: 100,
         })
-      )
+      ),
+      tap((districts) => console.log('Loaded districts:', districts))
     );
 
-    // Municipalities based on selected district
     this.municipalities$ = this.stepForm.get('districtCode')!.valueChanges.pipe(
       filter((districtCode) => !!districtCode),
       switchMap((districtCode) =>
@@ -151,7 +169,6 @@ export class StepThreeComponent
       )
     );
 
-    // Wards based on selected municipality
     this.wards$ = this.stepForm.get('municipalityCode')!.valueChanges.pipe(
       filter((municipalityCode) => !!municipalityCode),
       switchMap((municipalityCode) =>
