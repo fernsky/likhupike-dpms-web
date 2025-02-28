@@ -36,6 +36,7 @@ export interface RegisterFormState {
     step1: boolean;
     step2: boolean;
     step3: boolean;
+    step4: boolean;
   };
   security: {
     persistSensitiveData: boolean;
@@ -46,7 +47,7 @@ export interface RegisterFormState {
 
 export const initialRegisterFormState: RegisterFormState = {
   currentStep: 1,
-  totalSteps: 3,
+  totalSteps: 4,
   formData: {
     fullNameNepali: '',
     fullName: '',
@@ -63,6 +64,7 @@ export const initialRegisterFormState: RegisterFormState = {
     step1: false,
     step2: false,
     step3: false,
+    step4: false,
   },
   security: {
     persistSensitiveData: false,

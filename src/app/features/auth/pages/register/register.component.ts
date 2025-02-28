@@ -29,6 +29,7 @@ import { SystemFeaturesComponent } from '@app/shared/components/system-features/
 import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
 import { MatIcon } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-register',
@@ -49,6 +50,7 @@ import { RouterModule } from '@angular/router';
     SystemFeaturesComponent,
     BackgroundParticlesComponent,
     MatIcon,
+    TranslocoPipe,
   ],
 })
 export class RegisterComponent implements OnInit, OnDestroy {
@@ -62,32 +64,32 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   steps: Step[] = [
     {
-      label: 'Personal',
-      description: 'Basic Information',
+      label: 'registration.steps.personal.label',
+      description: 'registration.steps.personal.description',
       icon: 'person',
       completed: false,
       current: true,
       valid: false,
     },
     {
-      label: 'Role',
-      description: 'User Type',
+      label: 'registration.steps.role.label',
+      description: 'registration.steps.role.description',
       icon: 'badge',
       completed: false,
       current: false,
       valid: false,
     },
     {
-      label: 'Location',
-      description: 'Address Details',
+      label: 'registration.steps.location.label',
+      description: 'registration.steps.location.description',
       icon: 'location_on',
       completed: false,
       current: false,
       valid: false,
     },
     {
-      label: 'Account',
-      description: 'Login Credentials',
+      label: 'registration.steps.account.label',
+      description: 'registration.steps.account.description',
       icon: 'lock',
       completed: false,
       current: false,

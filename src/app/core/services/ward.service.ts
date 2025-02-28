@@ -22,13 +22,16 @@ export class WardService extends BaseApiService {
   }
 
   searchWards(params: LocationSearchParams): Observable<Ward[]> {
+    // Keep fields in UPPERCASE for API request
+    const fields = params.fields.map((field) => field.toUpperCase());
+
     return this.createRequest<Ward[]>(
       'GET',
       '/wards/search',
       z.array(WardSchema),
       {
         params: {
-          fields: params.fields,
+          fields,
           ...(params.page && { page: params.page.toString() }),
           ...(params.limit && { limit: params.limit.toString() }),
           ...(params.municipalityCode && {

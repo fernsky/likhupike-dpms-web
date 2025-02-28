@@ -41,23 +41,13 @@
               [disabled]="loading"
             >
               <mat-icon>arrow_back</mat-icon>
-              Previous
+              {{ "registration.navigation.previous" | transloco }}
             </button>
 
-            <ng-container *ngIf="!(isLastStep$ | async); else submitButton">
+            <ng-container [ngSwitch]="currentStep$ | async">
+              <!-- Show Create Account only on step 4 -->
               <button
-                mat-flat-button
-                class="next-btn teal-gradient-btn"
-                (click)="handleNextStep()"
-                [disabled]="!(canProceedToNextStep$ | async) || loading"
-              >
-                Next
-                <mat-icon>arrow_forward</mat-icon>
-              </button>
-            </ng-container>
-
-            <ng-template #submitButton>
-              <button
+                *ngSwitchCase="4"
                 mat-flat-button
                 class="submit-btn teal-gradient-btn"
                 (click)="onSubmit()"
@@ -65,18 +55,34 @@
               >
                 <span class="submit-content">
                   <mat-icon>login</mat-icon>
-                  {{ loading ? "Creating Account..." : "Create Account" }}
+                  {{
+                    loading
+                      ? ("registration.navigation.creatingAccount" | transloco)
+                      : ("registration.navigation.createAccount" | transloco)
+                  }}
                 </span>
               </button>
-            </ng-template>
+
+              <!-- Show Next button for all other steps -->
+              <button
+                *ngSwitchDefault
+                mat-flat-button
+                class="next-btn teal-gradient-btn"
+                (click)="handleNextStep()"
+                [disabled]="!(canProceedToNextStep$ | async) || loading"
+              >
+                {{ "registration.navigation.next" | transloco }}
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </ng-container>
           </div>
         </div>
 
         <div class="form-footer">
-          <span>Already have an account?</span>
-          <a mat-button class="teal-text-btn" routerLink="/auth/login"
-            >Sign in</a
-          >
+          <span>{{ "registration.navigation.haveAccount" | transloco }}</span>
+          <a mat-button class="teal-text-btn" routerLink="/auth/login">
+            {{ "registration.navigation.login" | transloco }}
+          </a>
         </div>
       </mat-card-content>
     </mat-card>

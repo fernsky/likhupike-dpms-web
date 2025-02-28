@@ -1,58 +1,35 @@
 import { Injectable, Inject } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { BaseApiService } from '../api/base-api.service';
+import { Observable } from 'rxjs';
 import {
   LocationSearchParams,
   Province,
   ProvinceSchema,
 } from '../models/location.model';
-import { TranslocoService } from '@jsverse/transloco';
+import { BaseLocationService } from './base-location-service';
 import { HttpClient } from '@angular/common/http';
 import { API_CONFIG, ApiConfig } from '../api/config/api.config';
 import { CacheService } from '../cache/cache.service';
-import * as z from 'zod';
 
 @Injectable({ providedIn: 'root' })
-export class ProvinceService extends BaseApiService {
+export class ProvinceService extends BaseLocationService {
   constructor(
-    private translocoService: TranslocoService,
-    protected http: HttpClient,
-    @Inject(API_CONFIG) protected config: ApiConfig,
-    protected cacheService: CacheService
+    protected override http: HttpClient,
+    @Inject(API_CONFIG) protected override config: ApiConfig,
+    protected override cacheService: CacheService
   ) {
     super(http, config, cacheService);
   }
 
   searchProvinces(params: LocationSearchParams): Observable<Province[]> {
-    const currentLang = this.translocoService.getActiveLang();
-    const fields = params.fields.map((field) => {
-      if (field === 'NAME' && currentLang === 'ne') {
-        return 'NAME_NEPALI';
-      }
-      return field;
-    });
-
-    return this.createRequest<Province[]>(
-      'GET',
+    return this.searchLocation(
       '/provinces/search',
-      z.array(ProvinceSchema),
-      {
-        params: {
-          fields: fields,
-          ...(params.page && { page: params.page.toString() }),
-          ...(params.limit && { limit: params.limit.toString() }),
-          ...(params.search && { search: params.search }),
-        },
-        cache: true,
-        cacheKey: `provinces:${currentLang}:${JSON.stringify(params)}`,
-      }
-    ).pipe(
-      map((provinces) =>
-        provinces.map((province) => ({
-          ...province,
-          NAME: currentLang === 'ne' ? province.NAME_NEPALI : province.NAME,
-        }))
-      )
+      ProvinceSchema,
+      params,
+      'provinces'
     );
+  }
+
+  clearProvinceCache(): void {
+    this.clearCache(/^provinces:/);
   }
 }

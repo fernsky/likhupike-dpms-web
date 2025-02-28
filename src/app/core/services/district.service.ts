@@ -25,12 +25,9 @@ export class DistrictService extends BaseApiService {
 
   searchDistricts(params: LocationSearchParams): Observable<District[]> {
     const currentLang = this.translocoService.getActiveLang();
-    const fields = params.fields.map((field) => {
-      if (field === 'NAME' && currentLang === 'ne') {
-        return 'NAME_NEPALI';
-      }
-      return field;
-    });
+
+    // Keep fields in UPPERCASE for API request
+    const fields = params.fields.map((field) => field.toUpperCase());
 
     return this.createRequest<District[]>(
       'GET',
@@ -51,7 +48,7 @@ export class DistrictService extends BaseApiService {
       map((districts) =>
         districts.map((district) => ({
           ...district,
-          NAME: currentLang === 'ne' ? district.NAME_NEPALI : district.NAME,
+          name: currentLang === 'ne' ? district.nameNepali : district.name,
         }))
       )
     );

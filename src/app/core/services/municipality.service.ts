@@ -27,12 +27,7 @@ export class MunicipalityService extends BaseApiService {
     params: LocationSearchParams
   ): Observable<Municipality[]> {
     const currentLang = this.translocoService.getActiveLang();
-    const fields = params.fields.map((field) => {
-      if (field === 'NAME' && currentLang === 'ne') {
-        return 'NAME_NEPALI';
-      }
-      return field;
-    });
+    const fields = params.fields.map((field) => field.toUpperCase());
 
     return this.createRequest<Municipality[]>(
       'GET',
@@ -53,8 +48,8 @@ export class MunicipalityService extends BaseApiService {
       map((municipalities) =>
         municipalities.map((municipality) => ({
           ...municipality,
-          NAME:
-            currentLang === 'ne' ? municipality.NAME_NEPALI : municipality.NAME,
+          name:
+            currentLang === 'ne' ? municipality.nameNepali : municipality.name,
         }))
       )
     );

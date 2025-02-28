@@ -10,16 +10,18 @@ export function locationFormValidator(): ValidatorFn {
     const districtCode = control.get('districtCode')?.value;
     const municipalityCode = control.get('municipalityCode')?.value;
     const wardNumber = control.get('wardNumber')?.value;
+    const isWardOffice = control.get('isWardOffice')?.value;
 
     if (!provinceCode || !districtCode || !municipalityCode) {
       return { locationRequired: true };
     }
 
-    // Ward number is required for citizens and ward-level positions
+    // Ward number is required for citizens, ward-level positions, and ward office employees
     if (
       userType === UserType.CITIZEN ||
       position === ElectedPosition.WARD_CHAIRPERSON ||
-      position === ElectedPosition.WARD_MEMBER
+      position === ElectedPosition.WARD_MEMBER ||
+      isWardOffice
     ) {
       if (!wardNumber) {
         return { wardRequired: true };

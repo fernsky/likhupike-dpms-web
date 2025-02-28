@@ -16,11 +16,18 @@ import { BaseStepComponent } from '../base-step.component';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { selectStepFormData } from '../../../store/register-form.selectors';
 import { filter } from 'rxjs/operators';
+import { PASSWORD_RULES } from '@app/core/constants/validation.constants';
 
 interface StepFourFormData {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+interface PasswordValidation {
+  message: string;
+  isValid: boolean;
+  params?: { [key: string]: any };
 }
 
 @Component({
@@ -146,6 +153,42 @@ export class StepFourComponent
   getStrengthClass(): string {
     const strength = this.getPasswordStrength();
     return strength < 50 ? 'weak' : strength < 75 ? 'medium' : 'strong';
+  }
+
+  get showPasswordValidation(): boolean {
+    return this.stepForm.get('password')?.dirty || false;
+  }
+
+  get passwordValidations(): PasswordValidation[] {
+    const password = this.stepForm.get('password')?.value || '';
+    const validations: PasswordValidation[] = [
+      {
+        message: 'registration.stepFour.fields.password.validations.minLength',
+        isValid: password.length >= PASSWORD_RULES.minLength,
+        params: { length: PASSWORD_RULES.minLength },
+      },
+      {
+        message: 'registration.stepFour.fields.password.validations.uppercase',
+        isValid: /[A-Z]/.test(password),
+      },
+      {
+        message: 'registration.stepFour.fields.password.validations.lowercase',
+        isValid: /[a-z]/.test(password),
+      },
+      {
+        message: 'registration.stepFour.fields.password.validations.number',
+        isValid: /[0-9]/.test(password),
+      },
+      {
+        message:
+          'registration.stepFour.fields.password.validations.specialChar',
+        isValid: new RegExp(`[${PASSWORD_RULES.allowedSpecialChars}]`).test(
+          password
+        ),
+      },
+    ];
+
+    return validations;
   }
 
   override updateFormData(): void {

@@ -1,35 +1,25 @@
 import { z } from 'zod';
 
 export const ProvinceSchema = z.object({
-  CODE: z.string(),
-  NAME: z.string().optional(),
-  NAME_NEPALI: z.string().optional(),
+  code: z.string(),
+  name: z.string().optional(),
+  nameNepali: z.string().optional(),
 });
 
 export const DistrictSchema = z.object({
-  CODE: z.string(),
-  PROVINCE_CODE: z.string(),
-  NAME: z.string().optional(),
-  NAME_NEPALI: z.string().optional(),
+  code: z.string(),
+  name: z.string().optional(),
+  nameNepali: z.string().optional(),
 });
 
 export const MunicipalitySchema = z.object({
-  CODE: z.string(),
-  DISTRICT_CODE: z.string(),
-  NAME: z.string().optional(),
-  NAME_NEPALI: z.string().optional(),
-  TYPE: z.enum([
-    'MUNICIPALITY',
-    'SUB_METROPOLITAN',
-    'METROPOLITAN',
-    'RURAL_MUNICIPALITY',
-  ]),
+  code: z.string(),
+  name: z.string().optional(),
+  nameNepali: z.string().optional(),
 });
 
 export const WardSchema = z.object({
-  CODE: z.string(),
-  MUNICIPALITY_CODE: z.string(),
-  NUMBER: z.number(),
+  wardNumber: z.number(),
 });
 
 export type Province = z.infer<typeof ProvinceSchema>;

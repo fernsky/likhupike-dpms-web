@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 export interface Step {
   label: string;
@@ -17,7 +18,7 @@ export interface Step {
   templateUrl: './step-indicator.component.html',
   styleUrls: ['./step-indicator.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, TranslocoPipe],
 })
 export class StepIndicatorComponent {
   @Input() steps: Step[] = [];
@@ -50,11 +51,12 @@ export class StepIndicatorComponent {
   }
 
   getStepAriaLabel(step: Step, index: number): string {
-    const status = step.completed
+    const statusKey = step.completed
       ? 'completed'
       : step.current
-        ? 'current'
-        : 'pending';
-    return `Step ${index + 1}: ${step.label} - ${step.description}. Status: ${status}`;
+      ? 'current'
+      : 'pending';
+    
+    return `${step.label} - ${step.description}`;
   }
 }

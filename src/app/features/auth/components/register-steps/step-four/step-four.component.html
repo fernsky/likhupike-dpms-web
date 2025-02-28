@@ -59,43 +59,21 @@
         </button>
       </mat-form-field>
 
-      <!-- Only show strength indicator when password is not empty and not fully valid -->
-      <ng-container *ngIf="showPasswordStrength">
-        <div class="password-strength-container">
-          <div class="password-strength">
-            <div class="strength-meter">
-              <div class="strength-label" [ngClass]="getStrengthClass()">
-                <mat-icon>{{ getPasswordIconName() }}</mat-icon>
-                <span>
-                  {{
-                    "registration.stepFour.fields.password.strength.label"
-                      | transloco
-                  }}:
-                  {{ getPasswordStrengthLabel() | transloco }}
-                </span>
-              </div>
-
-              <div class="strength-bar">
-                <div
-                  class="strength-progress"
-                  [style.width.%]="getPasswordStrength()"
-                  [ngClass]="getStrengthClass()"
-                ></div>
-              </div>
-            </div>
-
-            <div class="strength-requirements">
-              <div
-                class="requirement"
-                *ngFor="let error of getPasswordErrors()"
-              >
-                <mat-icon class="unmet">info</mat-icon>
-                <span>{{ error }}</span>
-              </div>
-            </div>
-          </div>
+      <div class="password-validation" *ngIf="showPasswordValidation">
+        <div
+          class="validation-item"
+          *ngFor="let validation of passwordValidations"
+          [class.valid]="validation.isValid"
+        >
+          <mat-icon
+            [class.valid]="validation.isValid"
+            [class.invalid]="!validation.isValid"
+          >
+            {{ validation.isValid ? "check_circle" : "radio_button_unchecked" }}
+          </mat-icon>
+          <span>{{ validation.message | transloco: validation.params }}</span>
         </div>
-      </ng-container>
+      </div>
 
       <mat-form-field appearance="outline">
         <mat-label>{{
@@ -129,7 +107,7 @@
           *ngIf="stepForm.get('confirmPassword')?.hasError('passwordMismatch')"
         >
           {{
-            "registration.stepFour.fields.confirmPassword.errors.passwordMismatch"
+            "registration.stepFour.fields.confirmPassword.errors.mismatch"
               | transloco
           }}
         </mat-error>

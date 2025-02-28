@@ -1,4 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -11,9 +17,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { BaseStepComponent } from '../base-step.component';
 import { LocationService } from '@app/core/services/location.service';
+import { LocationFormService } from '@app/core/services/location-form.service';
+import { LoadingOverlayComponent } from '@app/shared/components/loading-overlay/loading-overlay.component';
 import { locationFormValidator } from '@app/shared/validators/location-form.validator';
 import { UserType } from '@app/core/models/user-type.enum';
 import {
@@ -22,7 +31,7 @@ import {
   OFFICE_SECTION_TRANSLATION_KEYS,
   ELECTED_POSITION_TRANSLATION_KEYS,
 } from '@app/core/models/office.enum';
-import { Observable, Subject, combineLatest } from 'rxjs';
+import { Observable, Subject, combineLatest, of, BehaviorSubject } from 'rxjs';
 import {
   map,
   startWith,
@@ -30,6 +39,9 @@ import {
   switchMap,
   filter,
   tap,
+  catchError,
+  take,
+  shareReplay,
 } from 'rxjs/operators';
 import {
   selectStepFormData,
@@ -41,6 +53,10 @@ import {
   Municipality,
   Ward,
 } from '@app/core/models/location.model';
+import { Store } from '@ngrx/store';
+import { RegisterFormActions } from '@app/features/auth/store/register-form.actions';
+import { NepaliNumberPipe } from '@app/shared/pipes/nepali-number.pipe';
+import { LocationInfo } from '@app/features/auth/store/register-form.state';
 
 @Component({
   selector: 'app-register-step-three',
@@ -55,7 +71,10 @@ import {
     MatIconModule,
     MatCheckboxModule,
     MatOptionModule,
+    MatProgressSpinnerModule,
     TranslocoPipe,
+    NepaliNumberPipe,
+    LoadingOverlayComponent,
   ],
 })
 export class StepThreeComponent
@@ -64,6 +83,7 @@ export class StepThreeComponent
 {
   override stepForm!: FormGroup;
   override stepNumber = 3;
+  @Output() override stepValid = new EventEmitter<boolean>();
 
   provinces$!: Observable<Province[]>;
   districts$!: Observable<District[]>;
@@ -81,9 +101,27 @@ export class StepThreeComponent
 
   private destroy$ = new Subject<void>();
 
+  // Loading states
+  loading = {
+    provinces: new BehaviorSubject<boolean>(false),
+    districts: new BehaviorSubject<boolean>(false),
+    municipalities: new BehaviorSubject<boolean>(false),
+    wards: new BehaviorSubject<boolean>(false),
+  };
+
+  // Error states
+  errors = {
+    provinces: new BehaviorSubject<string | null>(null),
+    districts: new BehaviorSubject<string | null>(null),
+    municipalities: new BehaviorSubject<string | null>(null),
+    wards: new BehaviorSubject<string | null>(null),
+  };
+
   constructor(
     private fb: FormBuilder,
-    private locationService: LocationService
+    private locationService: LocationService,
+    public locationForm: LocationFormService,
+    protected override store: Store
   ) {
     super();
     this.initForm();
@@ -112,19 +150,59 @@ export class StepThreeComponent
       { validators: locationFormValidator() }
     );
 
+    // Clear dependent fields when parent selection changes
+    this.stepForm
+      .get('provinceCode')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.stepForm.patchValue(
+          {
+            districtCode: '',
+            municipalityCode: '',
+            wardNumber: '',
+          },
+          { emitEvent: false }
+        );
+      });
+
+    this.stepForm
+      .get('districtCode')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.stepForm.patchValue(
+          {
+            municipalityCode: '',
+            wardNumber: '',
+          },
+          { emitEvent: false }
+        );
+      });
+
+    this.stepForm
+      .get('municipalityCode')
+      ?.valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.stepForm.patchValue(
+          {
+            wardNumber: '',
+          },
+          { emitEvent: false }
+        );
+      });
+
     const userType$ = this.store.select(selectUserType);
 
-    this.showWardSelection$ = combineLatest([
-      userType$,
-      this.stepForm.get('position')!.valueChanges.pipe(startWith('')),
-    ]).pipe(
-      map(
-        ([userType, position]) =>
-          userType === UserType.CITIZEN ||
-          position === ElectedPosition.WARD_CHAIRPERSON ||
-          position === ElectedPosition.WARD_MEMBER
-      )
-    );
+    this.showWardSelection$ = this.locationForm
+      .shouldShowWardSelection(this.stepForm)
+      .pipe(
+        tap((shouldShow) => {
+          if (!shouldShow) {
+            this.locationForm.resetWardSelection(this.stepForm);
+          }
+          this.locationForm.updateWardValidation(this.stepForm, shouldShow);
+        }),
+        shareReplay(1)
+      );
 
     this.showOfficeSection$ = userType$.pipe(
       map((userType) => userType === UserType.LOCAL_LEVEL_EMPLOYEE)
@@ -136,70 +214,149 @@ export class StepThreeComponent
   }
 
   private setupLocationCascading(): void {
-    // Load initial provinces
-    this.provinces$ = this.locationService
-      .getProvinces({
-        fields: ['CODE', 'NAME'],
-        limit: 100,
-      })
-      .pipe(tap((provinces) => console.log('Loaded provinces:', provinces)));
+    // Initialize the location form service
+    this.locationForm.initializeForm(this.stepForm);
 
-    // Set up cascading selects
-    this.districts$ = this.stepForm.get('provinceCode')!.valueChanges.pipe(
-      tap((value) => console.log('Province selected:', value)),
-      filter((provinceCode) => !!provinceCode),
-      switchMap((provinceCode) =>
-        this.locationService.getDistricts({
-          fields: ['CODE', 'NAME'],
-          provinceCode,
-          limit: 100,
-        })
-      ),
-      tap((districts) => console.log('Loaded districts:', districts))
-    );
+    // The rest of the cascading logic can be simplified since LocationFormService handles it
+    this.provinces$ = this.locationForm
+      .getState()
+      .pipe(map((state) => state.provinces));
 
-    this.municipalities$ = this.stepForm.get('districtCode')!.valueChanges.pipe(
-      filter((districtCode) => !!districtCode),
-      switchMap((districtCode) =>
-        this.locationService.getMunicipalities({
-          fields: ['CODE', 'NAME'],
-          districtCode,
-          limit: 100,
-        })
-      )
-    );
+    this.districts$ = this.locationForm
+      .getState()
+      .pipe(map((state) => state.districts));
 
-    this.wards$ = this.stepForm.get('municipalityCode')!.valueChanges.pipe(
-      filter((municipalityCode) => !!municipalityCode),
-      switchMap((municipalityCode) =>
-        this.locationService.getWards({
-          fields: ['NUMBER'],
-          municipalityCode,
-          limit: 100,
-        })
-      )
-    );
+    this.municipalities$ = this.locationForm
+      .getState()
+      .pipe(map((state) => state.municipalities));
+
+    this.wards$ = this.locationForm
+      .getState()
+      .pipe(map((state) => state.wards));
   }
 
   ngOnInit(): void {
-    // Load saved form data
+    // Trigger provinces load immediately
+    this.provinces$.pipe(take(1)).subscribe();
+
+    // Load saved form data first
     this.store
       .select(selectStepFormData(3))
       .pipe(
         filter((data) => !!data),
+        take(1),
         takeUntil(this.destroy$)
       )
-      .subscribe((data) => {
+      .subscribe(async (data: LocationInfo) => {
         if (data) {
-          this.stepForm.patchValue(data, { emitEvent: false });
+          // Load provinces
+          await this.provinces$.pipe(take(1)).toPromise();
+
+          // If province is selected, load districts
+          if (data.provinceCode) {
+            await this.locationService
+              .getDistricts({
+                fields: ['CODE', 'NAME', 'NAME_NEPALI'],
+                provinceCode: data.provinceCode,
+                limit: 100,
+              })
+              .pipe(take(1))
+              .toPromise();
+          }
+
+          // If district is selected, load municipalities
+          if (data.districtCode) {
+            await this.locationService
+              .getMunicipalities({
+                fields: ['CODE', 'NAME', 'NAME_NEPALI'],
+                districtCode: data.districtCode,
+                limit: 100,
+              })
+              .pipe(take(1))
+              .toPromise();
+          }
+
+          // If municipality is selected, load wards
+          if (data.municipalityCode) {
+            await this.locationService
+              .getWards({
+                fields: ['WARD_NUMBER'],
+                municipalityCode: data.municipalityCode,
+                limit: 100,
+              })
+              .pipe(take(1))
+              .toPromise();
+          }
+
+          // Now patch all the form values at once
+          this.stepForm.patchValue(data);
         }
       });
 
     // Monitor form changes
     this.stepForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
       this.updateStepValidity();
-      if (this.stepForm.valid) {
-        this.updateFormData();
+      // Update form data regardless of validity
+      this.updateFormData();
+    });
+  }
+
+  protected updateStepValidity(): void {
+    const isValid = this.stepForm.valid;
+
+    // Update store with form data regardless of validity
+    this.updateFormData();
+
+    this.store.dispatch(
+      RegisterFormActions.updateStepValidity({
+        step: this.stepNumber,
+        isValid,
+      })
+    );
+    this.stepValid.emit(isValid);
+  }
+
+  protected override updateFormData(): void {
+    const formValue = this.stepForm.value;
+    const userType$ = this.store.select(selectUserType);
+
+    userType$.pipe(take(1)).subscribe((userType) => {
+      if (userType === UserType.LOCAL_LEVEL_EMPLOYEE) {
+        this.store.dispatch(
+          RegisterFormActions.updateEmployeeInfo({
+            employeeInfo: {
+              provinceCode: formValue.provinceCode,
+              districtCode: formValue.districtCode,
+              municipalityCode: formValue.municipalityCode,
+              wardNumber: formValue.wardNumber,
+              officeSection: formValue.officeSection,
+              isWardOffice: formValue.isWardOffice,
+            },
+          })
+        );
+      } else if (userType === UserType.ELECTED_REPRESENTATIVE) {
+        this.store.dispatch(
+          RegisterFormActions.updateElectedRepInfo({
+            electedRepInfo: {
+              provinceCode: formValue.provinceCode,
+              districtCode: formValue.districtCode,
+              municipalityCode: formValue.municipalityCode,
+              wardNumber: formValue.wardNumber,
+              position: formValue.position,
+            },
+          })
+        );
+      } else {
+        this.store.dispatch(
+          RegisterFormActions.updateLocationInfo({
+            locationInfo: {
+              provinceCode: formValue.provinceCode,
+              districtCode: formValue.districtCode,
+              municipalityCode: formValue.municipalityCode,
+              wardNumber: formValue.wardNumber,
+            },
+          })
+        );
       }
     });
   }
@@ -207,5 +364,6 @@ export class StepThreeComponent
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.locationForm.clearState();
   }
 }

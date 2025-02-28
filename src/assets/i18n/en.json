@@ -105,6 +105,7 @@
         },
         "ward": {
           "label": "Ward Number",
+          "numberPrefix": "Ward No.",
           "errors": {
             "required": "Ward number is required"
           }
@@ -151,6 +152,17 @@
             "medium": "Medium",
             "strong": "Strong",
             "label": "Password Strength"
+          },
+          "validations": {
+            "minLength": "Must be at least {{length}} characters",
+            "maxLength": "Must be less than {{length}} characters",
+            "uppercase": "Include at least one uppercase letter",
+            "lowercase": "Include at least one lowercase letter",
+            "number": "Include at least one number",
+            "specialChar": "Include at least one special character",
+            "commonWord": "Avoid common words or patterns",
+            "sequential": "Avoid sequential patterns",
+            "repeating": "Avoid repeating characters"
           }
         },
         "confirmPassword": {
@@ -160,6 +172,32 @@
             "mismatch": "Passwords do not match"
           }
         }
+      }
+    },
+    "navigation": {
+      "previous": "Previous",
+      "next": "Next",
+      "createAccount": "Create Account",
+      "creatingAccount": "Creating Account...",
+      "login": "Sign in",
+      "haveAccount": "Already have an account?"
+    },
+    "steps": {
+      "personal": {
+        "label": "Personal",
+        "description": "Basic Information"
+      },
+      "role": {
+        "label": "Role",
+        "description": "User Type"
+      },
+      "location": {
+        "label": "Location",
+        "description": "Address Details"
+      },
+      "account": {
+        "label": "Account",
+        "description": "Login Credentials"
       }
     },
     "userTypes": {
