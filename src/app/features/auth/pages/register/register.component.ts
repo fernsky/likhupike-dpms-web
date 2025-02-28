@@ -30,6 +30,7 @@ import { BackgroundParticlesComponent } from '@app/shared/components/background-
 import { MatIcon } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 
 @Component({
   selector: 'app-register',
@@ -51,9 +52,13 @@ import { TranslocoPipe } from '@jsverse/transloco';
     BackgroundParticlesComponent,
     MatIcon,
     TranslocoPipe,
+    BaseAuthComponent,
   ],
 })
-export class RegisterComponent implements OnInit, OnDestroy {
+export class RegisterComponent
+  extends BaseAuthComponent
+  implements OnInit, OnDestroy
+{
   private destroy$ = new Subject<void>();
   currentStep$ = this.store.select(selectCurrentStep).pipe(
     map((step) => step || 1) // Provide default value
@@ -111,7 +116,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
     )
   );
 
-  constructor(private store: Store) {}
+  constructor(private store: Store) {
+    super();
+  }
 
   ngOnInit(): void {
     // Reset form state when component initializes

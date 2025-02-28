@@ -19,9 +19,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
-import { GovBrandingComponent } from '@app/shared/components/gov-branding/gov-branding.component';
-import { SystemFeaturesComponent } from '@app/shared/components/system-features/system-features.component';
-import { BackgroundParticlesComponent } from '@app/shared/components/background-particles/background-particles.component';
+import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
 
 @Component({
   selector: 'app-login',
@@ -39,12 +37,13 @@ import { BackgroundParticlesComponent } from '@app/shared/components/background-
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatDividerModule,
-    GovBrandingComponent,
-    SystemFeaturesComponent,
-    BackgroundParticlesComponent,
+    BaseAuthComponent,
   ],
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent
+  extends BaseAuthComponent
+  implements OnInit, OnDestroy
+{
   loginForm: FormGroup;
   hidePassword = true;
   loading = false;
@@ -54,6 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private store: Store
   ) {
+    super();
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
