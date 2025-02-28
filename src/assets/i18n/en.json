@@ -205,11 +205,6 @@
       "citizen": "Citizen",
       "localLevelEmployee": "Local Level Employee",
       "electedRepresentative": "Elected Representative",
-      "governmentInstitutional": "Government & Institutional Representative",
-      "specialUser": "Special User",
-      "specialServiceProvider": "Special Service Provider",
-      "mediaAndPublicCommunication": "Media & Public Communication",
-      "communityContributor": "Community Contributor",
       "other": "Other"
     },
     "officeSection": {

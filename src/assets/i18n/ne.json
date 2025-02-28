@@ -206,11 +206,6 @@
       "citizen": "नागरिक",
       "localLevelEmployee": "स्थानीय तह कर्मचारी",
       "electedRepresentative": "निर्वाचित प्रतिनिधि",
-      "governmentInstitutional": "सरकारी तथा संस्थागत प्रतिनिधि",
-      "specialUser": "विशेष प्रयोगकर्ता",
-      "specialServiceProvider": "विशेष सेवा प्रदायक",
-      "mediaAndPublicCommunication": "सञ्चार तथा जनसम्पर्क",
-      "communityContributor": "समुदाय योगदानकर्ता",
       "other": "अन्य"
     },
     "officeSection": {
