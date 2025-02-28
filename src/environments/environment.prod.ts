@@ -2,9 +2,13 @@ import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   production: true,
-  allowedOrigins: ['https://dpms.gov.np', 'https://admin.dpms.gov.np'],
+  allowedOrigins: [
+    'https://dpms.gov.np',
+    'https://admin.dpms.gov.np',
+    'https://likhupike-admin.intensivestudy.com.np',
+  ],
   version: process.env['APP_VERSION'] || '1.0.0', // Add version with environment variable support
-  apiUrl: 'https://api.dpms.gov.np/api',
+  apiUrl: 'https://likhupike-api.intensivestudy.com.np/api/v1',
   baseUrl: '/dpms', // Production base URL for assets
   auth: {
     loginEndpoint: '/auth/login',

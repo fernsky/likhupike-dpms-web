@@ -2,7 +2,11 @@ import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   production: false,
-  allowedOrigins: ['http://localhost:4200', 'http://localhost:3000'],
+  allowedOrigins: [
+    'http://localhost:4200',
+    'http://localhost:3000',
+    'https://likhupike-admin.intensivestudy.com.np',
+  ],
   version: '1.0.0-dev', // Add version
   apiUrl: 'https://likhupike-api.intensivestudy.com.np/api/v1',
   baseUrl: '', // Empty string for development as assets are served from root
