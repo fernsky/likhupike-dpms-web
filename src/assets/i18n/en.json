@@ -84,6 +84,7 @@
     "stepThree": {
       "title": "Location Details",
       "subtitle": "Tell us about your location and role-specific details",
+      "loading": "Loading ...",
       "fields": {
         "province": {
           "label": "Province",
@@ -117,7 +118,7 @@
           }
         },
         "isWardOffice": {
-          "label": "Works at Ward Office"
+          "label": "I am working on a Ward Office."
         },
         "position": {
           "label": "Position",
