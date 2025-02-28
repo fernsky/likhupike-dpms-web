@@ -1,9 +1,12 @@
-FROM node:20-slim AS base
+FROM node:23-alpine AS base
+# Node 23 is not available yet - latest LTS is 20
+
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
-COPY . /app
+
 WORKDIR /app
+COPY . .
 
 FROM base AS prod-deps
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
