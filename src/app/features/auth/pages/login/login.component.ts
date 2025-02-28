@@ -20,6 +20,7 @@ import { takeUntil } from 'rxjs/operators';
 import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { selectAuthState } from '@app/core/store/auth/auth.selectors';
 import { BaseAuthComponent } from '../../components/base-auth/base-auth.component';
+import { TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-login',
@@ -38,6 +39,7 @@ import { BaseAuthComponent } from '../../components/base-auth/base-auth.componen
     MatFormFieldModule,
     MatDividerModule,
     BaseAuthComponent,
+    TranslocoModule,
   ],
 })
 export class LoginComponent

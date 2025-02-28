@@ -123,29 +123,36 @@ input, select, textarea, button {
   }
 }
 
-// Select Panel/Dropdown Styles (simplified)
-.mat-mdc-select-panel {
+// Shared Menu/Select Panel Styles
+.mat-mdc-select-panel,
+.mat-mdc-menu-panel {
   background: rgba(255, 255, 255, 0.98) !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
   border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 6px !important;
   margin-top: 4px !important;
+  min-width: 220px !important;
 
-  .mat-mdc-option {
+  .mat-mdc-option,
+  .mat-mdc-menu-item {
     min-height: 40px;
     border-radius: 4px;
     margin: 2px 0;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
 
     &:hover:not(.mat-mdc-option-disabled) {
       background: rgba(18, 55, 114, 0.04) !important;
     }
 
-    &.mat-mdc-option-active {
+    &.mat-mdc-option-active,
+    &:focus {
       background: rgba(18, 55, 114, 0.08) !important;
     }
 
-    &.mat-selected:not(.mat-mdc-option-disabled) {
+    &.mat-selected:not(.mat-mdc-option-disabled),
+    &.active {
       background: rgba(18, 55, 114, 0.12) !important;
       color: #123772;
 
@@ -153,10 +160,34 @@ input, select, textarea, button {
         color: #123772;
       }
     }
+  }
+}
 
-    .mdc-list-item__primary-text {
-      font-size: 0.9rem;
-      letter-spacing: -0.01em;
-    }
+// Custom styles for menu panels
+.mat-mdc-menu-panel {
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+  }
+
+  // Style for menu headers if needed
+  .menu-header {
+    padding: 16px 20px;  // Increased padding
+    background: linear-gradient(
+      135deg,
+      rgba(18, 55, 114, 0.03),
+      rgba(26, 72, 148, 0.06)
+    );
+    border-bottom: 1px solid rgba(18, 55, 114, 0.06);
+    font-size: 0.875rem;
+    color: #123772;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  // Add more breathing room for menu items
+  .mat-mdc-menu-item {
+    height: 56px !important;  // Taller menu items
+    line-height: 56px !important;
+    padding: 0 20px !important;  // More horizontal padding
   }
 }

@@ -1,34 +1,34 @@
 <app-base-auth>
   <mat-card-header>
-    <mat-card-title>Welcome Back</mat-card-title>
-    <mat-card-subtitle>Sign in to your account</mat-card-subtitle>
+    <mat-card-title>{{ "login.title" | transloco }}</mat-card-title>
+    <mat-card-subtitle>{{ "login.subtitle" | transloco }}</mat-card-subtitle>
   </mat-card-header>
 
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
     <mat-form-field appearance="outline">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ "login.fields.email.label" | transloco }}</mat-label>
       <input
         matInput
         formControlName="email"
         type="email"
-        placeholder="Enter your email"
+        [placeholder]="'login.fields.email.placeholder' | transloco"
       />
       <mat-icon matPrefix>email</mat-icon>
       <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
-        Email is required
+        {{ "login.fields.email.errors.required" | transloco }}
       </mat-error>
       <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
-        Please enter a valid email address
+        {{ "login.fields.email.errors.invalid" | transloco }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Password</mat-label>
+      <mat-label>{{ "login.fields.password.label" | transloco }}</mat-label>
       <input
         matInput
         formControlName="password"
         [type]="hidePassword ? 'password' : 'text'"
-        placeholder="Enter your password"
+        [placeholder]="'login.fields.password.placeholder' | transloco"
       />
       <mat-icon matPrefix>lock</mat-icon>
       <button
@@ -42,7 +42,7 @@
         }}</mat-icon>
       </button>
       <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-        Password is required
+        {{ "login.fields.password.errors.required" | transloco }}
       </mat-error>
     </mat-form-field>
 
@@ -61,14 +61,20 @@
       >
         <span class="submit-content">
           <mat-icon>login</mat-icon>
-          {{ loading ? "Signing in..." : "Sign in" }}
+          {{
+            loading
+              ? ("login.actions.submitting" | transloco)
+              : ("login.actions.submit" | transloco)
+          }}
         </span>
       </button>
     </div>
 
     <div class="form-footer">
-      <span>Don't have an account?</span>
-      <a mat-button color="primary" routerLink="/auth/register">Create one</a>
+      <span>{{ "login.actions.noAccount" | transloco }}</span>
+      <a mat-button color="primary" routerLink="/auth/register">
+        {{ "login.actions.register" | transloco }}
+      </a>
     </div>
   </form>
 </app-base-auth>
