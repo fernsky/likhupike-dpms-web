@@ -16,5 +16,5 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 FROM nginx:alpine
-COPY --from=build /app/dist/angular-starter/ /usr/share/nginx/html
+COPY --from=build /app/dist/angular-starter/browser/ /usr/share/nginx/html
 EXPOSE 80
