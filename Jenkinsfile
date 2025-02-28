@@ -7,10 +7,6 @@ pipeline {
         NODE_VERSION = '20'
     }
 
-    tools {
-        nodejs "Node ${NODE_VERSION}"
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -18,23 +14,7 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                    corepack enable
-                    pnpm install --frozen-lockfile
-                '''
-            }
-        }
 
-        stage('Build and Test') {
-            steps {
-                sh '''
-                    pnpm run build --configuration=production
-                    pnpm test --configuration=production
-                '''
-            }
-        }
 
         stage('Docker Test') {
             steps {
