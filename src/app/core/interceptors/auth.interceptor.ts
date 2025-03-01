@@ -6,13 +6,22 @@ import { catchError, throwError } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as AuthActions from '../store/auth/auth.actions';
 
+const PUBLIC_ENDPOINTS = [
+  '/auth/login',
+  '/auth/register',
+  '/districts',
+  '/municipalities',
+  '/wards',
+  '/locations'
+];
+
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const storageService = inject(StorageService);
   const router = inject(Router);
   const store = inject(Store);
 
-  // Skip for auth endpoints
-  if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
+  // Skip for public endpoints
+  if (PUBLIC_ENDPOINTS.some(endpoint => req.url.includes(endpoint))) {
     return next(req);
   }
 
