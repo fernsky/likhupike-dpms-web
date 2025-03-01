@@ -19,7 +19,9 @@ export interface RegisterRequest {
 export interface AuthResponse {
   token: string;
   refreshToken: string;
-  user: User;
+  email: string;
+  roles: RoleType[];
+  userId: string;
   expiresIn: number;
 }
 

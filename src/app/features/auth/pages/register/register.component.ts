@@ -130,7 +130,7 @@ export class RegisterComponent
       .pipe(takeUntil(this.destroy$))
       .subscribe((authState) => {
         if (authState) {
-          this.loading = authState.loading;
+          this.loading = authState.isLoading;
         }
       });
   }

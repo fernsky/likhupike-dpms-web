@@ -86,13 +86,13 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
       .select(selectAuthState)
       .pipe(takeUntil(this.destroy$))
       .subscribe((authState) => {
-        this.loading = authState.loading;
+        this.loading = authState.isLoading;
         if (authState.error) {
           this.forgotPasswordForm.setErrors({ serverError: authState.error });
         }
         // Check if password reset request was successful
         if (
-          !authState.loading &&
+          !authState.isLoading &&
           !authState.error &&
           this.forgotPasswordForm.dirty
         ) {

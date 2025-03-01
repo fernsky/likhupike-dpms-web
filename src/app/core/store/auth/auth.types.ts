@@ -1,19 +1,24 @@
-import { User } from '@app/core/models/user.interface';
+import { RoleType } from '@app/core/models/role.enum';
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  roles: RoleType[];
+}
 
 export interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   token: string | null;
-  refreshToken: string | null;
-  loading: boolean;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   error: string | null;
-  lastAuthTime: Date | null;
 }
 
 export const initialAuthState: AuthState = {
   user: null,
   token: null,
-  refreshToken: null,
-  loading: false,
+  isAuthenticated: false,
+  isLoading: false,
   error: null,
-  lastAuthTime: null,
 };

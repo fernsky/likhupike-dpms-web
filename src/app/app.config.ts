@@ -1,25 +1,29 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideClientHydration } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
 import { provideTranslocoConfig } from './core/config/transloco.config';
 import { API_CONFIG, DEFAULT_API_CONFIG } from './core/api/config/api.config';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { AuthEffects } from './core/store/auth/auth.effects';
+import { authReducer } from './core/store/auth/auth.reducer';
+import { AuthFacade } from './core/facades/auth.facade';
 
 const FONT_FAMILY =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideAnimations(),
-    provideHttpClient(),
-    provideStore(),
-    provideEffects(),
+    provideHttpClient(withInterceptors([authInterceptor])),
+    provideStore({ auth: authReducer }),
+    provideEffects([AuthEffects]),
     provideClientHydration(),
     importProvidersFrom(MatIconModule),
     {
@@ -35,5 +39,6 @@ export const appConfig: ApplicationConfig = {
       useValue: DEFAULT_API_CONFIG,
     },
     ...provideTranslocoConfig(), // Add Transloco configuration
+    AuthFacade, // Add AuthFacade to providers
   ],
 };

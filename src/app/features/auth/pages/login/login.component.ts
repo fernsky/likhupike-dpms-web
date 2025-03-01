@@ -67,7 +67,7 @@ export class LoginComponent
       .select(selectAuthState)
       .pipe(takeUntil(this.destroy$))
       .subscribe((authState) => {
-        this.loading = authState.loading;
+        this.loading = authState.isLoading;
         if (authState.error) {
           this.loginForm.setErrors({ serverError: authState.error });
         }

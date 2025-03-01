@@ -1,49 +1,41 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageService } from '../services/storage.service';
+import { catchError, throwError } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { catchError, switchMap, throwError } from 'rxjs';
-import * as AuthSelectors from '../store/auth/auth.selectors';
 import * as AuthActions from '../store/auth/auth.actions';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const store = inject(Store);
+  const storageService = inject(StorageService);
   const router = inject(Router);
-
-  const addToken = (token: string) => {
-    return req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  };
-
-  const isAuthEndpoint = (url: string): boolean => {
-    return ['/auth/login', '/auth/register', '/auth/refresh-token'].some(
-      (endpoint) => url.includes(endpoint)
-    );
-  };
+  const store = inject(Store);
 
   // Skip for auth endpoints
-  if (isAuthEndpoint(req.url)) {
+  if (req.url.includes('/auth/login') || req.url.includes('/auth/register')) {
     return next(req);
   }
 
-  return store.select(AuthSelectors.selectToken).pipe(
-    switchMap((token) => {
-      // Add token if exists
-      const authReq = token ? addToken(token) : req;
+  const token = storageService.getToken();
 
-      return next(authReq).pipe(
-        catchError((error) => {
-          if (error instanceof HttpErrorResponse && error.status === 401) {
-            // Handle 401 error
-            store.dispatch(AuthActions.logout());
-            router.navigate(['/auth/login']);
-          }
-          return throwError(() => error);
-        })
-      );
+  if (!token) {
+    store.dispatch(AuthActions.logout());
+    router.navigate(['/auth/login']);
+    return next(req);
+  }
+
+  const authReq = req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${token}`),
+  });
+
+  return next(authReq).pipe(
+    catchError((error) => {
+      if (error.status === 401) {
+        storageService.clearAuth();
+        store.dispatch(AuthActions.logout());
+        router.navigate(['/auth/login']);
+      }
+      return throwError(() => error);
     })
   );
 };

@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { AuthUser } from './auth.types';
 import {
   LoginRequest,
   RegisterRequest,
@@ -7,20 +8,28 @@ import {
   ResetPasswordRequest,
 } from '../../models/auth.interface';
 
+export const initializeAuth = createAction('[Auth] Initialize');
+export const authInitialized = createAction(
+  '[Auth] Initialized',
+  props<{ token: string | null; user: AuthUser | null }>()
+);
+
 export const login = createAction(
   '[Auth] Login',
-  props<{ credentials: LoginRequest }>()
+  props<{ credentials: { email: string; password: string } }>()
 );
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ response: AuthResponse }>()
+  props<{ token: string; user: AuthUser }>()
 );
 
 export const loginFailure = createAction(
   '[Auth] Login Failure',
   props<{ error: string }>()
 );
+
+export const logout = createAction('[Auth] Logout');
 
 export const register = createAction(
   '[Auth] Register',
@@ -37,7 +46,6 @@ export const registerFailure = createAction(
   props<{ error: string }>()
 );
 
-export const logout = createAction('[Auth] Logout');
 export const logoutSuccess = createAction('[Auth] Logout Success');
 
 export const refreshToken = createAction(

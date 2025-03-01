@@ -2,26 +2,29 @@ import { Routes } from '@angular/router';
 import { provideState } from '@ngrx/store';
 import { registerFormReducer } from './store/register-form.reducer';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { authReducer } from '@app/core/store/auth/auth.reducer'; // Make sure to import your auth reducer
+import { authReducer } from '@app/core/store/auth/auth.reducer';
 import {
   API_CONFIG,
   DEFAULT_API_CONFIG,
 } from '@app/core/api/config/api.config';
+import { publicGuard } from '@app/core/guards/public.guard';
 
 export const AUTH_ROUTES: Routes = [
   {
     path: 'login',
+    canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'register',
+    canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/register/register.component').then(
         (m) => m.RegisterComponent
       ),
     providers: [
-      provideState({ name: 'auth', reducer: authReducer }), // Add this line
+      provideState({ name: 'auth', reducer: authReducer }),
       {
         provide: API_CONFIG,
         useValue: DEFAULT_API_CONFIG,
@@ -32,16 +35,15 @@ export const AUTH_ROUTES: Routes = [
   },
   {
     path: 'forgot-password',
+    canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/forgot-password/forgot-password.component').then(
         (m) => m.ForgotPasswordComponent
       ),
   },
   {
-    path: 'reset-password',
-    loadComponent: () =>
-      import('./pages/reset-password/reset-password.component').then(
-        (m) => m.ResetPasswordComponent
-      ),
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
   },
 ];
