@@ -7,6 +7,7 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideClientHydration } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideTranslocoConfig } from './core/config/transloco.config';
 import { API_CONFIG, DEFAULT_API_CONFIG } from './core/api/config/api.config';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -26,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideEffects([AuthEffects]),
     provideClientHydration(),
     importProvidersFrom(MatIconModule),
+    importProvidersFrom(MatSnackBarModule),
     {
       provide: 'MAT_DEFAULT_OPTIONS',
       useValue: {

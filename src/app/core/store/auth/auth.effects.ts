@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { StorageService } from '../../services/storage.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as AuthActions from './auth.actions';
 import { AuthUser } from './auth.types';
 
@@ -70,26 +71,15 @@ export class AuthEffects {
             if (!response.token || !response.userId) {
               throw new Error('Invalid registration response');
             }
-
-            const authUser: AuthUser = {
-              id: response.userId,
-              email: response.email,
-              name: userData.fullName,
-              roles: response.roles || [],
-            };
-
-            this.storageService.setToken(response.token);
-            this.storageService.setUser(authUser);
-
             return AuthActions.registerSuccess({ response });
           }),
           catchError((error) => {
-            console.error('Registration error:', error);
-            return of(
-              AuthActions.registerFailure({
-                error: error.error?.message || 'Registration failed',
-              })
-            );
+            const errorMessage = error.error?.message || 'Registration failed';
+            this.snackBar.open(errorMessage, 'Close', {
+              duration: 5000,
+              panelClass: ['error-snackbar'],
+            });
+            return of(AuthActions.registerFailure({ error: errorMessage }));
           })
         )
       )
@@ -100,20 +90,16 @@ export class AuthEffects {
     () =>
       this.actions$.pipe(
         ofType(AuthActions.registerSuccess),
-        tap(({ response }) => {
-          // Auto login after successful registration
-          const authUser: AuthUser = {
-            id: response.userId,
-            email: response.email,
-            name: '',
-            roles: response.roles || [],
-          };
-          this.store.dispatch(
-            AuthActions.loginSuccess({
-              token: response.token,
-              user: authUser,
-            })
+        tap(() => {
+          this.snackBar.open(
+            'Registration successful! Please login.',
+            'Close',
+            {
+              duration: 5000,
+              panelClass: ['success-snackbar'],
+            }
           );
+          this.router.navigate(['/auth/login']);
         })
       ),
     { dispatch: false }
@@ -144,6 +130,7 @@ export class AuthEffects {
     private authService: AuthService,
     private storageService: StorageService,
     private router: Router,
-    private store: Store
+    private store: Store,
+    private snackBar: MatSnackBar
   ) {}
 }

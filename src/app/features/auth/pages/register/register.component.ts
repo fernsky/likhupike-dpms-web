@@ -180,6 +180,8 @@ export class RegisterComponent
             ...formData.employeeInfo,
             ...formData.electedRepInfo,
             address: 'Not available',
+            dateOfBirth: '1800-01-01',
+            officePost: 'Other',
           };
           this.store.dispatch(AuthActions.register({ userData: registerData }));
         }
