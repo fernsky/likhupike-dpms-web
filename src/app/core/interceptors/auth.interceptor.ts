@@ -29,7 +29,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = storageService.getToken();
 
   if (!token) {
-    store.dispatch(AuthActions.logout());
+    // store.dispatch(AuthActions.logout());
     router.navigate(['/auth/login']);
     return next(req);
   }
