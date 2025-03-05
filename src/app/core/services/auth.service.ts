@@ -124,13 +124,13 @@ export class AuthService {
   private handleAuthResponse(response: AuthResponse): void {
     if (!this.isBrowser) return;
 
-    if (response.token) {
-      localStorage.setItem('token', response.token);
-      if (response.refreshToken) {
-        localStorage.setItem('refreshToken', response.refreshToken);
-      }
-      this.tokenSubject.next(response.token);
-    }
+    // if (response.token) {
+    //   localStorage.setItem('token', response.token);
+    //   if (response.refreshToken) {
+    //     localStorage.setItem('refreshToken', response.refreshToken);
+    //   }
+    //   this.tokenSubject.next(response.token);
+    // }
   }
 
   private handleError(error: any) {

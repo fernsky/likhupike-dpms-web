@@ -17,7 +17,8 @@
     "actions": {
       "select": "Select",
       "cancel": "Cancel",
-      "save": "Save"
+      "save": "Save",
+      "close": "Close"
     }
   },
   "govBranding": {
@@ -239,7 +240,7 @@
         }
       },
       "password": {
-        "label": "Password", 
+        "label": "Password",
         "placeholder": "Enter your password",
         "errors": {
           "required": "Password is required"
@@ -251,6 +252,24 @@
       "submitting": "Signing in...",
       "register": "Create Account",
       "noAccount": "Don't have an account?"
+    }
+  },
+  "auth": {
+    "notifications": {
+      "loginSuccess": "Welcome back! Successfully logged in.",
+      "logoutSuccess": "You have been successfully logged out.",
+      "registerSuccess": "Account created successfully! Please log in.",
+      "passwordResetEmailSent": "Password reset instructions have been sent to your email.",
+      "passwordResetSuccess": "Your password has been successfully reset."
+    },
+    "errors": {
+      "invalidResponse": "Invalid server response.",
+      "loginFailed": "Login failed. Please check your credentials and try again.",
+      "registrationFailed": "Registration failed. Please try again.",
+      "passwordResetFailed": "Password reset failed. Please try again.",
+      "sessionExpired": "Your session has expired. Please log in again.",
+      "unauthorized": "You are not authorized to perform this action.",
+      "networkError": "Network error. Please check your connection."
     }
   }
 }
