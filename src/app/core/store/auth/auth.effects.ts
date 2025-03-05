@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
@@ -60,6 +61,64 @@ export class AuthEffects {
     )
   );
 
+  register$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.register),
+      switchMap(({ userData }) =>
+        this.authService.register(userData).pipe(
+          map((response) => {
+            if (!response.token || !response.userId) {
+              throw new Error('Invalid registration response');
+            }
+
+            const authUser: AuthUser = {
+              id: response.userId,
+              email: response.email,
+              name: userData.fullName,
+              roles: response.roles || [],
+            };
+
+            this.storageService.setToken(response.token);
+            this.storageService.setUser(authUser);
+
+            return AuthActions.registerSuccess({ response });
+          }),
+          catchError((error) => {
+            console.error('Registration error:', error);
+            return of(
+              AuthActions.registerFailure({
+                error: error.error?.message || 'Registration failed',
+              })
+            );
+          })
+        )
+      )
+    )
+  );
+
+  registerSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.registerSuccess),
+        tap(({ response }) => {
+          // Auto login after successful registration
+          const authUser: AuthUser = {
+            id: response.userId,
+            email: response.email,
+            name: '',
+            roles: response.roles || [],
+          };
+          this.store.dispatch(
+            AuthActions.loginSuccess({
+              token: response.token,
+              user: authUser,
+            })
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
   loginSuccess$ = createEffect(
     () =>
       this.actions$.pipe(
@@ -80,11 +139,11 @@ export class AuthEffects {
       ),
     { dispatch: false }
   );
-
   constructor(
     private actions$: Actions,
     private authService: AuthService,
     private storageService: StorageService,
-    private router: Router
+    private router: Router,
+    private store: Store
   ) {}
 }

@@ -57,6 +57,11 @@ export class AuthService {
   }
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
+    // Remove undefined fields
+    Object.keys(userData).forEach(
+      (key) => userData[key] === undefined && delete userData[key]
+    );
+
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}${environment.auth.registerEndpoint}`,
@@ -64,7 +69,15 @@ export class AuthService {
       )
       .pipe(
         tap((response) => this.handleAuthResponse(response)),
-        catchError(this.handleError)
+        catchError((error) => {
+          // Enhanced error handling for registration validation
+          if (error.status === 400) {
+            return throwError(
+              () => new Error(error.error?.message || 'Validation failed')
+            );
+          }
+          return this.handleError(error);
+        })
       );
   }
 

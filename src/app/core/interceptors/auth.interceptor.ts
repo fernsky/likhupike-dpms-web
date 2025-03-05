@@ -9,10 +9,11 @@ import * as AuthActions from '../store/auth/auth.actions';
 const PUBLIC_ENDPOINTS = [
   '/auth/login',
   '/auth/register',
+  '/provinces',
   '/districts',
   '/municipalities',
   '/wards',
-  '/locations'
+  '/locations',
 ];
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -21,7 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const store = inject(Store);
 
   // Skip for public endpoints
-  if (PUBLIC_ENDPOINTS.some(endpoint => req.url.includes(endpoint))) {
+  if (PUBLIC_ENDPOINTS.some((endpoint) => req.url.includes(endpoint))) {
     return next(req);
   }
 

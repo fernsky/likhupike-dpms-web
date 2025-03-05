@@ -166,24 +166,20 @@ export class RegisterComponent
   onSubmit(): void {
     this.store
       .select(selectFormData)
-      .pipe(takeUntil(this.destroy$))
+      .pipe(take(1), takeUntil(this.destroy$))
       .subscribe((formData) => {
         if (formData) {
           const registerData: RegisterRequest = {
             fullName: formData.fullName,
             fullNameNepali: formData.fullNameNepali,
-            phoneNumber: formData.phoneNumber,
             email: formData.email,
             password: formData.password,
             userType: formData.userType,
             // Location based on user type
-            ...(formData.location && { location: formData.location }),
-            ...(formData.employeeInfo && {
-              employeeInfo: formData.employeeInfo,
-            }),
-            ...(formData.electedRepInfo && {
-              electedRepInfo: formData.electedRepInfo,
-            }),
+            ...formData.location,
+            ...formData.employeeInfo,
+            ...formData.electedRepInfo,
+            address: 'Not available',
           };
           this.store.dispatch(AuthActions.register({ userData: registerData }));
         }
