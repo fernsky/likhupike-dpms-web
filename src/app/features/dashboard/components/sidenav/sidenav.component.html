@@ -95,6 +95,16 @@
     </a>
 
     <button
+      class="nav-item"
+      (click)="onLogout()"
+      role="menuitem"
+      aria-label="Logout"
+    >
+      <mat-icon aria-hidden="true">logout</mat-icon>
+      <span>Logout</span>
+    </button>
+
+    <button
       class="collapse-toggle"
       (click)="collapsed = !collapsed"
       [attr.aria-label]="collapsed ? 'Expand' : 'Collapse'"

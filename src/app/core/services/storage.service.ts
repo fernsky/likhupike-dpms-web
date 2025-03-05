@@ -47,10 +47,18 @@ export class StorageService {
     }
   }
 
-  clearAuth(): void {
+  removeToken(): void {
     localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
     localStorage.removeItem(this.TOKEN_EXPIRY_KEY);
+  }
+
+  removeUser(): void {
+    localStorage.removeItem(this.USER_KEY);
+  }
+
+  clearAuth(): void {
+    this.removeToken();
+    this.removeUser();
   }
 
   hasStoredAuth(): boolean {

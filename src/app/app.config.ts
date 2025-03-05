@@ -7,7 +7,10 @@ import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideClientHydration } from '@angular/platform-browser';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {
+  MatSnackBarModule,
+  MAT_SNACK_BAR_DEFAULT_OPTIONS,
+} from '@angular/material/snack-bar';
 import { provideTranslocoConfig } from './core/config/transloco.config';
 import { API_CONFIG, DEFAULT_API_CONFIG } from './core/api/config/api.config';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
@@ -40,7 +43,15 @@ export const appConfig: ApplicationConfig = {
       provide: API_CONFIG,
       useValue: DEFAULT_API_CONFIG,
     },
-    ...provideTranslocoConfig(), // Add Transloco configuration
-    AuthFacade, // Add AuthFacade to providers
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+      },
+    },
+    AuthFacade,
+    ...provideTranslocoConfig(),
   ],
 };

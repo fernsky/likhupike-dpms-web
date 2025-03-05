@@ -11,6 +11,7 @@ import { Store } from '@ngrx/store';
 import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Subject, of } from 'rxjs';
 import * as AuthSelectors from '@app/core/store/auth/auth.selectors';
+import * as AuthActions from '@app/core/store/auth/auth.actions';
 import { filter, takeUntil, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
@@ -250,6 +251,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
           requiredRoles.some((role) => userRoles.includes(role))
         )
       );
+  }
+
+  onLogout(): void {
+    this.store.dispatch(AuthActions.logout());
   }
 
   ngOnDestroy(): void {

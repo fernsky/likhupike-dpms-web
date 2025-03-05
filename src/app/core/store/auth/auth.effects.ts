@@ -51,10 +51,16 @@ export class AuthEffects {
 
             this.storageService.setToken(token);
             this.storageService.setUser(authUser);
+            this.snackBar.open('Successfully logged in', 'Close', {
+              duration: 3000,
+            });
             return AuthActions.loginSuccess({ token, user: authUser });
           }),
           catchError((error) => {
             const errorMessage = error.message || 'Login failed';
+            this.snackBar.open(errorMessage, 'Close', {
+              duration: 5000,
+            });
             return of(AuthActions.loginFailure({ error: errorMessage }));
           })
         )
@@ -74,10 +80,9 @@ export class AuthEffects {
             return AuthActions.registerSuccess({ response });
           }),
           catchError((error) => {
-            const errorMessage = error.error?.message || 'Registration failed';
+            const errorMessage = error.error?.message || 'Registration failed.';
             this.snackBar.open(errorMessage, 'Close', {
               duration: 5000,
-              panelClass: ['error-snackbar'],
             });
             return of(AuthActions.registerFailure({ error: errorMessage }));
           })
@@ -91,14 +96,9 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.registerSuccess),
         tap(() => {
-          this.snackBar.open(
-            'Registration successful! Please login.',
-            'Close',
-            {
-              duration: 5000,
-              panelClass: ['success-snackbar'],
-            }
-          );
+          this.snackBar.open('Registration successful.', 'Close', {
+            duration: 5000,
+          });
           this.router.navigate(['/auth/login']);
         })
       ),
@@ -120,11 +120,83 @@ export class AuthEffects {
         ofType(AuthActions.logout),
         tap(() => {
           this.storageService.clearAuth();
+          this.snackBar.open('Logout successfull.', 'Close', {
+            duration: 3000,
+          });
           this.router.navigate(['/auth/login']);
         })
       ),
     { dispatch: false }
   );
+
+  // Show error messages for auth failures
+  authFailures$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(
+          AuthActions.loginFailure,
+          AuthActions.refreshTokenFailure,
+          AuthActions.terminateSessionFailure
+        ),
+        tap(({ error }) => {
+          this.snackBar.open(error, 'Close', {
+            duration: 5000,
+          });
+        })
+      ),
+    { dispatch: false }
+  );
+
+  // Handle session termination
+  terminateSession$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.terminateSession),
+        tap(({ reason }) => {
+          this.storageService.clearAuth();
+          this.snackBar.open(reason, 'Close', {
+            duration: 5000,
+          });
+          this.router.navigate(['/auth/login']);
+        })
+      ),
+    { dispatch: false }
+  );
+
+  // Password reset request notifications
+  requestPasswordResetSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.requestPasswordResetSuccess),
+        tap(() => {
+          this.snackBar.open(
+            'Password reset instructions sent to your email',
+            'Close',
+            {
+              duration: 5000,
+            }
+          );
+        })
+      ),
+    { dispatch: false }
+  );
+
+  // Password reset success notification
+  resetPasswordSuccess$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(AuthActions.resetPasswordSuccess),
+        tap(() => {
+          this.snackBar.open('Password successfully reset', 'Close', {
+            duration: 5000,
+            panelClass: ['success-snackbar'],
+          });
+          this.router.navigate(['/auth/login']);
+        })
+      ),
+    { dispatch: false }
+  );
+
   constructor(
     private actions$: Actions,
     private authService: AuthService,
