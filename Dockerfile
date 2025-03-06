@@ -25,15 +25,16 @@ WORKDIR /usr/app
 COPY --from=builder /app/dist/angular-starter/server ./server
 COPY --from=builder /app/dist/angular-starter/browser ./browser
 COPY --from=builder /app/package.json .
+COPY --from=builder /app/yarn.lock .
 
 # Install production dependencies only
 RUN yarn install --production --frozen-lockfile
 
 # Set ownership to non-root user
-RUN chown -R appuser:appgroup /usr/app
+# RUN chown -R appuser:appgroup /usr/app
 
 # Switch to non-root user
-USER appuser
+# USER appuser
 
 # Health check
 # HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
