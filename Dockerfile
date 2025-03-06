@@ -16,7 +16,7 @@ FROM node:23-alpine AS production
 RUN apk add --no-cache curl
 
 # Create non-root user
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+# RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 # Set working directory
 WORKDIR /usr/app
