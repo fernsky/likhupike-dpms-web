@@ -110,7 +110,7 @@ export class StepTwoComponent
     });
   }
 
-  protected updateStepValidity(): void {
+  protected override updateStepValidity(): void {
     const isValid = this.stepForm.valid && this.stepForm.get('userType')?.value;
     this.store.dispatch(
       RegisterFormActions.updateStepValidity({

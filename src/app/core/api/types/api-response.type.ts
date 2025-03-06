@@ -1,32 +1,42 @@
 import { z } from 'zod';
 
-export const PaginationMetaSchema = z.object({
-  total: z.number(),
-  page: z.number(),
-  size: z.number(),
-  hasMore: z.boolean(),
-  hasPrevious: z.boolean(),
-  totalPages: z.number(),
-  numberOfElements: z.number(),
-  isFirst: z.boolean(),
-  isLast: z.boolean(),
-  isEmpty: z.boolean(),
-});
+export const MetaSchema = z
+  .object({
+    total: z.number(),
+    perPage: z.number(),
+    currentPage: z.number(),
+    lastPage: z.number(),
+    firstItem: z.number().nullable(),
+    lastItem: z.number().nullable(),
+    hasPages: z.boolean(),
+    hasMorePages: z.boolean(),
+    isEmpty: z.boolean(),
+  })
+  .partial();
 
-export const ApiResponseSchema = <T extends z.ZodType>(dataSchema: T) =>
+export const createApiResponseSchema = <T extends z.ZodType>(dataSchema: T) =>
   z.object({
     success: z.boolean(),
     message: z.string().optional(),
     data: dataSchema,
-    meta: PaginationMetaSchema.optional(),
+    meta: MetaSchema.optional(),
     timestamp: z.string(),
   });
 
-export type PaginationMeta = z.infer<typeof PaginationMetaSchema>;
 export type ApiResponse<T> = {
   success: boolean;
   message?: string;
   data: T;
-  meta?: PaginationMeta;
+  meta?: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+    firstItem: number | null;
+    lastItem: number | null;
+    hasPages: boolean;
+    hasMorePages: boolean;
+    isEmpty: boolean;
+  };
   timestamp: string;
 };

@@ -46,50 +46,39 @@ import { SidenavComponent } from '../../components/sidenav/sidenav.component';
 })
 export class DashboardComponent implements OnInit {
   currentYear = new Date().getFullYear();
+
   // Layout observables
-  sidenavMode$: Observable<MatDrawerMode>;
-  sidenavOpened$: Observable<boolean>;
-  isHandset$: Observable<boolean>;
+  sidenavMode$: Observable<MatDrawerMode> = this.breakpointObserver
+    .observe([Breakpoints.Handset])
+    .pipe(map((result) => (result.matches ? 'over' : 'side')));
+
+  sidenavOpened$: Observable<boolean> = this.breakpointObserver
+    .observe([Breakpoints.Handset])
+    .pipe(map((result) => !result.matches));
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe([Breakpoints.Handset])
+    .pipe(map((result) => result.matches));
 
   // Dashboard data observables
-  systemStats$: Observable<SystemStats | null>;
-  recentActivities$: Observable<RecentActivity[]>;
-  quickActions$: Observable<QuickAction[]>;
-  isLoading$: Observable<boolean>;
-  errors$: Observable<Record<string, string | null>>;
-  sidenavState$: Observable<boolean>;
-  currentView$: Observable<string>;
+  systemStats$: Observable<SystemStats | null> =
+    this.store.select(selectSystemStats);
+  recentActivities$: Observable<RecentActivity[]> = this.store.select(
+    selectRecentActivities
+  );
+  quickActions$: Observable<QuickAction[]> =
+    this.store.select(selectQuickActions);
+  isLoading$: Observable<boolean> = this.store.select(selectDashboardLoading);
+  errors$: Observable<Record<string, string | null>> = this.store.select(
+    selectDashboardErrors
+  );
+  sidenavState$: Observable<boolean> = this.store.select(selectSidenavState);
+  currentView$: Observable<string> = this.store.select(selectCurrentView);
 
   constructor(
     private store: Store,
     private breakpointObserver: BreakpointObserver
-  ) {
-    // Initialize all observables in constructor
-    this.setupResponsiveLayout();
-    this.setupDashboardData();
-  }
-
-  private setupResponsiveLayout(): void {
-    this.isHandset$ = this.breakpointObserver
-      .observe([Breakpoints.Handset])
-      .pipe(map((result) => result.matches));
-
-    this.sidenavMode$ = this.isHandset$.pipe(
-      map((isHandset) => (isHandset ? 'over' : 'side'))
-    );
-
-    this.sidenavOpened$ = this.isHandset$.pipe(map((isHandset) => !isHandset));
-  }
-
-  private setupDashboardData(): void {
-    this.systemStats$ = this.store.select(selectSystemStats);
-    this.recentActivities$ = this.store.select(selectRecentActivities);
-    this.quickActions$ = this.store.select(selectQuickActions);
-    this.isLoading$ = this.store.select(selectDashboardLoading);
-    this.errors$ = this.store.select(selectDashboardErrors);
-    this.sidenavState$ = this.store.select(selectSidenavState);
-    this.currentView$ = this.store.select(selectCurrentView);
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadDashboardData();

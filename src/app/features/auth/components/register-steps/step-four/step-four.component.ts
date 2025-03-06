@@ -5,6 +5,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -66,10 +67,9 @@ export class StepFourComponent
       {
         email: ['', [Validators.required, Validators.email]],
         password: [
-          '',
           [
             Validators.required,
-            (control) =>
+            (control: AbstractControl) =>
               this.passwordValidatorService.validatePassword(control),
           ],
         ],
@@ -114,7 +114,7 @@ export class StepFourComponent
 
   get isPasswordFullyValid(): boolean {
     return (
-      this.stepForm.get('password')?.valid &&
+      (this.stepForm.get('password')?.valid ?? false) &&
       this.getPasswordErrors().length === 0
     );
   }

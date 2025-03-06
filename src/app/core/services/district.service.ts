@@ -16,9 +16,9 @@ import * as z from 'zod';
 export class DistrictService extends BaseApiService {
   constructor(
     private translocoService: TranslocoService,
-    protected http: HttpClient,
-    @Inject(API_CONFIG) protected config: ApiConfig,
-    protected cacheService: CacheService
+    protected override http: HttpClient,
+    @Inject(API_CONFIG) protected override config: ApiConfig,
+    protected override cacheService: CacheService
   ) {
     super(http, config, cacheService);
   }

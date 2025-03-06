@@ -243,7 +243,7 @@ export class StepThreeComponent
     this.store
       .select(selectStepFormData(3))
       .pipe(
-        filter((data) => !!data),
+        filter((data): data is LocationInfo => !!data),
         take(1),
         takeUntil(this.destroy$)
       )
@@ -301,7 +301,7 @@ export class StepThreeComponent
     });
   }
 
-  protected updateStepValidity(): void {
+  protected override updateStepValidity(): void {
     const isValid = this.stepForm.valid;
 
     // Update store with form data regardless of validity

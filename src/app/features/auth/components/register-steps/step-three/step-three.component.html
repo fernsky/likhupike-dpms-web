@@ -39,8 +39,8 @@
       <mat-select
         formControlName="districtCode"
         [disabled]="
-          !stepForm.get('provinceCode')?.value ||
-          (locationForm.isLoading('districts') | async)
+          (!stepForm.get('provinceCode')?.value ||
+          (locationForm.isLoading('districts') | async)) ?? false
         "
       >
         <mat-option *ngIf="locationForm.isLoading('districts') | async">
@@ -66,8 +66,8 @@
       <mat-select
         formControlName="municipalityCode"
         [disabled]="
-          !stepForm.get('districtCode')?.value ||
-          (locationForm.isLoading('municipalities') | async)
+          (!stepForm.get('districtCode')?.value ||
+          (locationForm.isLoading('municipalities') | async)) ?? false
         "
       >
         <mat-option *ngIf="locationForm.isLoading('municipalities') | async">
@@ -132,8 +132,8 @@
         <mat-select
           formControlName="wardNumber"
           [disabled]="
-            !stepForm.get('municipalityCode')?.value ||
-            (locationForm.isLoading('wards') | async)
+            (!stepForm.get('municipalityCode')?.value ||
+            (locationForm.isLoading('wards') | async)) ?? false
           "
         >
           <mat-option *ngIf="locationForm.isLoading('wards') | async">
@@ -158,7 +158,7 @@
 
 <!-- Global Loading Overlay -->
 <app-loading-overlay
-  [isLoading]="locationForm.isAnyLoading() | async"
+  [isLoading]="(locationForm.isAnyLoading() | async) ?? false"
   [message]="'registration.stepThree.loading' | transloco"
 >
 </app-loading-overlay>

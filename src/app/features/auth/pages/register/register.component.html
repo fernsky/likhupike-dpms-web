@@ -12,7 +12,7 @@
     <mat-card>
       <mat-card-header>
         <app-step-indicator
-          [steps]="steps$ | async"
+          [steps]="(steps$ | async) ?? []"
           [currentStepIndex]="(currentStep$ | async)! - 1"
           (stepChange)="onNextStep($event + 1)"
         ></app-step-indicator>

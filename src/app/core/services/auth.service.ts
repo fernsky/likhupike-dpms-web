@@ -57,11 +57,6 @@ export class AuthService {
   }
 
   register(userData: RegisterRequest): Observable<AuthResponse> {
-    // Remove undefined fields
-    Object.keys(userData).forEach(
-      (key) => userData[key] === undefined && delete userData[key]
-    );
-
     return this.http
       .post<AuthResponse>(
         `${environment.apiUrl}${environment.auth.registerEndpoint}`,

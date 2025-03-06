@@ -14,9 +14,9 @@ import * as z from 'zod';
 @Injectable({ providedIn: 'root' })
 export class WardService extends BaseApiService {
   constructor(
-    protected http: HttpClient,
-    @Inject(API_CONFIG) protected config: ApiConfig,
-    protected cacheService: CacheService
+    protected override http: HttpClient,
+    @Inject(API_CONFIG) protected override config: ApiConfig,
+    protected override cacheService: CacheService
   ) {
     super(http, config, cacheService);
   }

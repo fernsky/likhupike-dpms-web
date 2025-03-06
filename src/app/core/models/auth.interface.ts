@@ -15,9 +15,9 @@ export interface RegisterRequest {
   dateOfBirth?: string;
   address: string;
   userType: UserType;
-  provinceCode: string;
-  districtCode: string;
-  municipalityCode: string;
+  provinceCode?: string;
+  districtCode?: string;
+  municipalityCode?: string;
   wardNumber?: number;
   officeSection?: OfficeSection;
   electedPosition?: ElectedPosition;

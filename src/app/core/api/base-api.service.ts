@@ -5,7 +5,10 @@ import { catchError, timeout, retry, map } from 'rxjs/operators';
 import { API_CONFIG, ApiConfig } from './config/api.config';
 import { CacheService } from '../cache/cache.service';
 import { z } from 'zod';
-import { ApiResponse, ApiResponseSchema } from './types/api-response.type';
+import {
+  ApiResponse,
+  createApiResponseSchema,
+} from './types/api-response.type';
 
 @Injectable({ providedIn: 'root' })
 export class BaseApiService {
@@ -46,17 +49,19 @@ export class BaseApiService {
       });
     }
 
+    const responseSchema = createApiResponseSchema(schema);
+
     const request$ = this.http
       .request<ApiResponse<T>>(method, url, { params, body: options.body })
       .pipe(
         timeout(this.config.timeout),
         retry(this.config.retryAttempts),
         map((response) => {
-          const validated = ApiResponseSchema(schema).parse(response);
+          const validated = responseSchema.parse(response);
           if (!validated.success) {
             throw new Error(validated.message || 'Request failed');
           }
-          return validated.data;
+          return validated.data as T;
         }),
         catchError((error) => {
           console.error('API Error:', error);
