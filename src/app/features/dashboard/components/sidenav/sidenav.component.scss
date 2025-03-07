@@ -1,54 +1,287 @@
-
 // Variables
-$sidenav-width: 280px;
-$sidenav-collapsed-width: 72px;
+$sidenav-width: 290px;
+$sidenav-collapsed-width: 80px;
 $transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 $nepali-font: var(--font-nepali);
+$navy-dark: #1A2942;    // Lighter deep navy
+$navy-medium: #233B72;   // Lighter rich navy
+$navy-light: #2A4894;    // Lighter bright navy
+$gold-accent: #D4AF37;   // Royal gold accent
 
-// Mixins
+// Premium Sidenav Mixins
 @mixin hover-effect {
   &:hover {
-    background: var(--hover-light);
+    background: linear-gradient(
+      to right,
+      rgba(11, 31, 66, 0.04) 0%,
+      rgba(11, 31, 66, 0.08) 100%
+    );
     transform: translateX(4px);
   }
 }
 
 @mixin focus-visible {
   &:focus-visible {
-    outline: 2px solid var(--primary-color);
+    outline: 2px solid $navy-light;
     outline-offset: -2px;
-    background: var(--hover-light);
   }
 }
 
-// Main Container
+// Main Container with premium styling
 .sidenav-container {
   width: $sidenav-width;
   height: 100%;
-  background: var(--surface-primary);
-  border-right: 1px solid var(--border-color);
+  background: linear-gradient(
+    to bottom,
+    $navy-dark 0%,
+    $navy-medium 100%
+  );
+  color: #ffffff;
   display: flex;
   flex-direction: column;
   transition: width 0.3s $transition-timing;
   position: relative;
   overflow-x: hidden;
   overflow-y: auto;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  border-radius: 0; // Reset to 0 to remove container rounded corners
+  border-right: none; // Remove border
 
+  // Decorative pattern overlay
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg,
+      rgba(41, 98, 255, 0.05) 0%,
+      transparent 60%),
+      radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.12) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Enhanced Premium Government Logo/Header Section
+  .sidenav-header {
+    padding: 1.25rem 0.75rem 1.5rem;
+    background: linear-gradient(135deg,
+      rgba(26, 41, 66, 0.95) 0%,
+      rgba(35, 59, 114, 0.95) 100%
+    );
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+
+    // Decorative elements
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.05) 0%,
+        transparent 60%
+      );
+      pointer-events: none;
+    }
+
+    // Enhanced Branding Container
+    .branding-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      // Logo with premium effects
+      .logo-container {
+        position: relative;
+        margin-bottom: 1rem;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -12px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 40px;
+          height: 2px;
+          background: $gold-accent;
+          border-radius: 1px;
+          box-shadow: 0 0 6px rgba($gold-accent, 0.5);
+          transition: none;
+        }
+
+        // Remove logo shine/animation
+        .logo-shine {
+          display: none; // Hide the shine effect
+        }
+      }
+
+      .gov-logo {
+        height: 50px;
+        width: auto;
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+        transition: transform 0.3s $transition-timing, filter 0.3s $transition-timing;
+
+        &:hover {
+          transform: scale(1.05);
+          filter: drop-shadow(0 6px 8px rgba(0, 0, 0, 0.35));
+        }
+      }
+
+      .header-titles {
+        text-align: center;
+        transition: all 0.3s $transition-timing;
+        overflow: hidden;
+        max-width: 100%;
+
+        &.hidden {
+          opacity: 0;
+          transform: translateY(-10px);
+          height: 0;
+          overflow: hidden;
+        }
+
+        .system-name {
+          margin: 0.5rem 0 0;
+          color: white;
+          font-weight: 600;
+          font-size: 1rem;
+          line-height: 1.3;
+          letter-spacing: 0.01em;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+          white-space: normal;
+          overflow-wrap: break-word;
+          word-wrap: break-word;
+          position: relative;
+          padding: 0 0.5rem;
+
+          // Text gradient for premium look
+          background: linear-gradient(
+            to bottom,
+            #ffffff 0%,
+            #e0e0e0 100%
+          );
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+      }
+    }
+  }
+
+  // Collapsed state styles
   &.collapsed {
     width: $sidenav-collapsed-width;
 
-    .nav-label,
-    .help-text {
+    .sidenav-header {
+      padding: 1rem 0.5rem;
+
+      .branding-container {
+        .logo-container {
+          margin-bottom: 0;
+
+          &::after {
+            display: none;
+          }
+        }
+
+        .gov-logo {
+          height: 40px;
+          transition: all 0.3s $transition-timing;
+        }
+      }
+    }
+
+    .hidden {
       opacity: 0;
       width: 0;
+      height: 0;
+      overflow: hidden;
     }
 
     .submenu {
       display: none;
     }
 
-    .expand-icon {
+    .nav-icon {
+      margin-right: 0;
+    }
+
+    .badge {
       opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+  }
+
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  @media (max-width: 1199px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: $sidenav-width !important; // Force full width on mobile
+    transition: transform 0.3s $transition-timing;
+    transform: translateX(-100%);
+
+    &.mobile-open {
+      transform: translateX(0);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    &.collapsed {
+      width: $sidenav-width !important; // Keep full width on mobile
+    }
+  }
+}
+
+// Navigation sections
+.nav-section {
+  padding: 0.75rem 0.5rem;
+  position: relative;
+  z-index: 2;
+
+  .menu-subtitle {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.7); // Brighter text
+    padding: 0.75rem 1.25rem 0.5rem;
+    margin-top: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s $transition-timing;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &.hidden {
+      opacity: 0;
+      width: 0;
+      height: 0;
     }
   }
 }
@@ -56,23 +289,31 @@ $nepali-font: var(--font-nepali);
 // Navigation List
 .nav-list {
   flex: 1;
-  padding: var(--spacing-md) 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem 0.25rem;
+  position: relative;
+  z-index: 2;
 }
 
 // Navigation Item Wrapper
 .nav-item-wrapper {
   position: relative;
-  margin: var(--spacing-xs) 0;
+  margin: 0.25rem 0;
 
   &.has-children {
     > .nav-item {
-      padding-right: var(--spacing-xl);
+      padding-right: 2.75rem;
     }
   }
 
   &.expanded {
     > .nav-item .expand-icon {
       transform: rotate(180deg);
+    }
+
+    > .nav-item {
+      background: rgba(255, 255, 255, 0.08);
     }
 
     > .submenu {
@@ -85,75 +326,112 @@ $nepali-font: var(--font-nepali);
 // Navigation Item
 .nav-item {
   display: flex;
-  align-items: center;
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text-primary);
+  align-items: flex-start; // Align to top for multiline text
+  padding: 0.75rem 1.25rem;
+  color: rgba(255, 255, 255, 0.9); // Increased contrast
   text-decoration: none;
   transition: all 0.3s $transition-timing;
-  border-radius: 0 var(--radius-xl) var(--radius-xl) 0;
-  margin-right: var(--spacing-md);
+  border-radius: 12px; // Full rounded corners for menu items
+  margin: 0 0.75rem; // Equal margin on both sides
   cursor: pointer;
   border: none;
   background: transparent;
-  width: 100%;
+  width: calc(100% - 1.5rem); // Adjust width to accommodate the margin change
   text-align: left;
   position: relative;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 
   @include hover-effect;
   @include focus-visible;
 
   &.active {
-    background: var(--primary-light);
-    color: var(--primary-color);
-    font-weight: 500;
+    background: rgba(255, 255, 255, 0.15); // Lighter active state
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 
     &::before {
       content: '';
       position: absolute;
       left: 0;
-      top: 0;
-      bottom: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 60%;
       width: 4px;
-      background: var(--primary-color);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      background: #ffffff;
+      border-radius: 0 2px 2px 0;
     }
 
     .nav-icon {
-      color: var(--primary-color);
+      color: #ffffff;
     }
   }
 
   &.parent-item {
     width: 100%;
   }
+
+  // Ensure icon is vertically centered when text wraps
+  .nav-icon {
+    margin-top: 0.15rem; // Slight adjustment to align with first line of text
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1); // Lighter hover state
+  }
 }
 
 // Icons
 .nav-icon {
-  margin-right: var(--spacing-md);
-  color: var(--text-secondary);
+  margin-right: 1rem;
+  color: rgba(255, 255, 255, 0.85); // Brighter icons
   transition: all 0.3s $transition-timing;
   flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .expand-icon {
   position: absolute;
-  right: var(--spacing-sm);
+  right: 1rem;
   transition: transform 0.3s $transition-timing;
-  font-size: 20px;
-  color: var(--text-secondary);
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.5);
+
+  &.hidden {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
 }
 
 // Labels
 .nav-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal; // Allow text to wrap
+  overflow-wrap: break-word;
+  word-wrap: break-word; // Legacy support
+  hyphens: auto; // Optional: add hyphens for better readability
+  overflow: visible; // Show overflow text
+  text-overflow: inherit; // Don't use ellipsis
   transition: all 0.3s $transition-timing;
+  flex: 1;
+  line-height: 1.3; // Increase line height for better readability on multiple lines
+  padding-right: 4px; // Small padding to prevent text touching the edge
 
   &.nepali {
     font-family: $nepali-font;
     font-size: 1.1rem;
+  }
+
+  &.hidden {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
   }
 }
 
@@ -163,105 +441,137 @@ $nepali-font: var(--font-nepali);
   opacity: 0;
   overflow: hidden;
   transition: all 0.3s $transition-timing;
-  background: var(--background-secondary);
+  margin-left: 1rem;
+  margin-right: 0.5rem;
 
   .nav-item {
-    padding-left: calc(var(--spacing-xl) + var(--spacing-md));
+    padding: 0.65rem 0.75rem 0.65rem 1.5rem;
     font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.85); // Brighter submenu text
+    margin: 0 0.5rem; // Slightly smaller margin for submenu items
+    border-left: 1px solid rgba(255, 255, 255, 0.15); // More visible border
+    border-radius: 8px; // Rounded corners for submenu items too
 
-    &::before {
-      left: var(--spacing-xl);
+    &.active {
+      background: rgba(255, 255, 255, 0.12); // Lighter active state
+
+      &::before {
+        height: 40%;
+      }
+    }
+
+    // Adjust expand icon position for wrapped text
+    .expand-icon {
+      align-self: flex-start;
+      margin-top: 0.2rem;
     }
   }
 }
 
 // Badge
 .badge {
-  position: absolute;
-  right: var(--spacing-md);
-  top: 50%;
-  transform: translateY(-50%);
   min-width: 20px;
   height: 20px;
   border-radius: 10px;
-  background: var(--primary-color);
+  background: rgba(255, 255, 255, 0.2);
   color: white;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--spacing-xs);
+  padding: 0 0.35rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  transition: all 0.3s $transition-timing;
 
   &.warn {
-    background: var(--error-color);
+    background: #ff4d4f;
+    animation: pulse 2s infinite;
+  }
+
+  &.primary {
+    background: $navy-light;
+  }
+
+  &.accent {
+    background: #1890ff;
   }
 }
 
 // Secondary Actions
 .secondary-actions {
-  padding: var(--spacing-md);
-  border-top: 1px solid var(--border-color);
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+  margin-top: auto; // Push to bottom of the sidenav
+
+  mat-divider {
+    border-top-color: rgba(255, 255, 255, 0.1);
+    margin: 0.75rem 0;
+  }
 }
 
-// Help Section
-.help-section {
-  margin-bottom: var(--spacing-md);
+// Animation for badges
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
 
-  .help-link {
-    display: flex;
-    align-items: center;
-    padding: var(--spacing-sm);
-    color: var(--text-secondary);
-    text-decoration: none;
-    border-radius: var(--radius-md);
-    transition: all 0.3s $transition-timing;
+// Remove shine animation
+@keyframes shine {
+  0% { opacity: 0; }
+  100% { opacity: 0; }
+}
 
-    @include hover-effect;
-    @include focus-visible;
+// Responsive hover effects
+@media (hover: hover) {
+  .sidenav-container .sidenav-header .branding-container .gov-logo:hover {
+    transform: translateY(-3px) scale(1.05);
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.4));
+  }
+}
 
-    .help-text {
-      margin-left: var(--spacing-sm);
-      transition: all 0.3s $transition-timing;
+// Improved Responsive Design
+@media (max-width: 1199px) {
+  // For tablet and smaller screens, sidenav starts hidden and appears as overlay
+  .sidenav-container {
+    position: fixed;
+    top: 0;
+    left: -$sidenav-width; // Start off-screen
+    bottom: 0;
+    z-index: 1000;
+    width: $sidenav-width;
+    transition: left 0.3s $transition-timing;
+
+    &.mobile-open {
+      left: 0; // Slide in from left when open
+      box-shadow: 5px 0 25px rgba(0, 0, 0, 0.4);
+    }
+
+    // When collapsed in mobile, hide it completely
+    &.collapsed:not(.mobile-open) {
+      left: -$sidenav-width;
     }
   }
-}
 
-// Collapse Toggle
-.collapse-toggle {
-  width: 100%;
-  padding: var(--spacing-sm);
-  border: none;
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: all 0.3s $transition-timing;
+  // Mobile backdrop
+  .sidenav-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 
-  @include hover-effect;
-  @include focus-visible;
-
-  mat-icon {
-    transition: transform 0.3s $transition-timing;
-  }
-}
-
-// Responsive Design
-@media (max-width: 1200px) {
-  .sidenav-container {
-    width: $sidenav-collapsed-width;
-
-    &:hover:not(.collapsed) {
-      width: $sidenav-width;
-      position: absolute;
-      height: 100%;
-      z-index: 100;
-      box-shadow: var(--shadow-lg);
-
-      .nav-label,
-      .help-text {
-        opacity: 1;
-        width: auto;
-      }
+    &.visible {
+      opacity: 1;
+      visibility: visible;
     }
   }
 }
@@ -269,7 +579,8 @@ $nepali-font: var(--font-nepali);
 // High Contrast Mode
 @media (prefers-contrast: more) {
   .sidenav-container {
-    border-right: 2px solid var(--text-primary);
+    background: #000;
+    border-right: 2px solid #fff;
   }
 
   .nav-item.active::before {
@@ -286,11 +597,39 @@ $nepali-font: var(--font-nepali);
   .expand-icon {
     transition: none !important;
   }
+
+  .badge.warn {
+    animation: none !important;
+  }
 }
 
 // Print Styles
 @media print {
   .sidenav-container {
     display: none;
+  }
+}
+
+// Backdrop
+.sidenav-backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 1199px) {
+    display: block;
   }
 }

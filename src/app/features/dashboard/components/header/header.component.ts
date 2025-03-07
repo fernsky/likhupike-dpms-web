@@ -22,6 +22,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,16 +31,26 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 
 import * as HeaderSelectors from '../../store/header/header.selectors';
 import * as HeaderActions from '../../store/header/header.actions';
+import * as AuthActions from '@app/core/store/auth/auth.actions';
 import {
   HeaderViewModel,
   NotificationPriority,
   NotificationType,
   SearchParams,
 } from './header.interface';
-import { MatDivider } from '@angular/material/divider';
+import { LanguageSwitcherComponent } from '@app/shared/components/language-switcher/language-switcher.component';
+import { HeaderService } from './header.service';
+import { LanguageService } from '@app/core/services/language.service';
 
 @Component({
   selector: 'app-header',
@@ -56,12 +67,26 @@ import { MatDivider } from '@angular/material/divider';
     MatFormFieldModule,
     MatInputModule,
     MatBadgeModule,
-    MatDivider,
+    MatDividerModule,
+    MatTooltipModule,
+    TranslocoModule,
+    LanguageSwitcherComponent,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'header',
+      alias: 'header',
+    }),
   ],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() menuToggled = new EventEmitter<void>();
   @Input() isSidenavOpen = false;
+
+  // User info (can be replaced with actual user from auth store)
+  userName = 'Administrator';
+  userRole = 'Municipality Admin';
+  currentLang = 'en';
 
   // View Model combining multiple selectors
   readonly vm$: Observable<HeaderViewModel> = this.store.select(
@@ -100,29 +125,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private store: Store,
+    private router: Router,
     private fb: FormBuilder,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private headerService: HeaderService,
+    private translocoService: TranslocoService,
+    private languageService: LanguageService
   ) {}
 
   ngOnInit(): void {
     this.setupSearchListener();
     this.setupNotificationsPolling();
     this.setupErrorHandling();
+    this.setupLanguageListener();
     this.startClock();
   }
 
-  private loadUserPreferences(): Observable<any> {
-    return this.store.select(HeaderSelectors.selectHeaderConfig).pipe(
-      take(1),
-      tap((config) => {
-        // Apply user preferences
-        this.searchForm.patchValue({
-          filters: {
-            type: config.defaultSearchTypes || [],
-          },
-        });
-      })
-    );
+  private setupLanguageListener(): void {
+    this.translocoService.langChanges$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((lang) => {
+        this.currentLang = lang;
+      });
   }
 
   private setupSearchListener(): void {
@@ -179,11 +203,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe((error) => {
         if (error) {
+          console.error('Header error:', error);
         }
       });
   }
 
-  // Action Handlers
+  markAllNotificationsAsRead(): void {
+    this.store.dispatch(HeaderActions.markAllNotificationsRead());
+  }
+
+  logout(): void {
+    this.store.dispatch(AuthActions.logout());
+  }
 
   // Utility Methods
   getNotificationIcon(type: NotificationType): string {
@@ -195,12 +226,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       WARNING: 'error_outline',
     };
     return iconMap[type] || 'notifications';
-  }
-
-  private announceMenuState(): void {
-    const message = this.isSidenavOpen
-      ? 'accessibility.menuClosed'
-      : 'accessibility.menuOpened';
   }
 
   private startClock(): void {

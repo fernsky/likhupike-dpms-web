@@ -4,6 +4,8 @@ import {
   OnDestroy,
   Input,
   ChangeDetectionStrategy,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -16,7 +18,8 @@ import { filter, takeUntil, map } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatDivider, MatDividerModule } from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
 import {
   animate,
   state,
@@ -24,15 +27,20 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import {
+  provideTranslocoScope,
+  TranslocoModule,
+  TranslocoService,
+} from '@jsverse/transloco';
 
 import { RoleType } from '@app/core/models/role.enum';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface NavItem {
   id: string;
@@ -73,7 +81,7 @@ interface NavItem {
         })
       ),
       transition('collapsed <=> expanded', [
-        animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
       ]),
     ]),
   ],
@@ -82,7 +90,6 @@ interface NavItem {
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
@@ -90,13 +97,30 @@ interface NavItem {
     MatInputModule,
     MatBadgeModule,
     MatDividerModule,
+    MatTooltipModule,
+    TranslocoModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'sidenav',
+      alias: 'sidenav',
+    }),
+    provideTranslocoScope({
+      scope: 'government-branding',
+      alias: 'govBranding',
+    }),
   ],
 })
 export class SidenavComponent implements OnInit, OnDestroy {
-  @Input() collapsed = false;
+  @Input() collapsed = false; // Now controlled from header
+  @Input() mobileOpen = false;
+  @Output() mobileClose = new EventEmitter<void>();
+  @Output() mobileToggle = new EventEmitter<void>();
+
   isHandset$: Observable<boolean>;
   currentUrl = '';
   expandedItems = new Set<string>();
+  currentLang = 'en';
   private destroy$ = new Subject<void>();
 
   readonly navigationItems: NavItem[] = [
@@ -171,7 +195,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private router: Router,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private translocoService: TranslocoService
   ) {
     this.isHandset$ = this.breakpointObserver
       .observe(Breakpoints.Handset)
@@ -180,18 +205,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setupRouteListener();
+    this.setupLanguageListener();
   }
 
-  private setupRouteListener(): void {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((event: any) => {
-        this.currentUrl = event.url;
-        this.expandParentItems(this.currentUrl);
-        this.announceCurrentPage();
+  private setupLanguageListener(): void {
+    this.translocoService.langChanges$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((lang) => {
+        this.currentLang = lang;
       });
   }
 
@@ -211,6 +232,19 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return this.currentUrl.startsWith(route);
   }
 
+  private setupRouteListener(): void {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.currentUrl = event.url;
+        this.expandParentItems(this.currentUrl);
+        this.announceCurrentPage();
+      });
+  }
+
   private expandParentItems(url: string): void {
     this.navigationItems.forEach((item) => {
       if (item.children?.some((child) => child.route === url)) {
@@ -222,7 +256,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private announceCurrentPage(): void {
     const currentItem = this.findCurrentNavigationItem(this.navigationItems);
     if (currentItem) {
-      const message = 'Current Page';
+      // Could implement screen reader announcement here if needed
     }
   }
 
@@ -255,6 +289,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.store.dispatch(AuthActions.logout());
+  }
+
+  closeMobileNav(): void {
+    this.mobileClose.emit();
+  }
+
+  toggleMobileNav(): void {
+    this.mobileOpen = !this.mobileOpen;
+    this.mobileToggle.emit();
   }
 
   ngOnDestroy(): void {
