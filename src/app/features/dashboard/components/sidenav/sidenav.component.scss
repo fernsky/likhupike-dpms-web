@@ -300,10 +300,12 @@ $gold-accent: #D4AF37;   // Royal gold accent
 .nav-item-wrapper {
   position: relative;
   margin: 0.25rem 0;
+  padding: 0 0.75rem; // Add consistent padding to wrapper
 
   &.has-children {
     > .nav-item {
       padding-right: 2.75rem;
+      width: 100%; // Ensure full width within padding
     }
   }
 
@@ -326,17 +328,17 @@ $gold-accent: #D4AF37;   // Royal gold accent
 // Navigation Item
 .nav-item {
   display: flex;
-  align-items: flex-start; // Align to top for multiline text
+  align-items: center; // Align to top for multiline text
   padding: 0.75rem 1.25rem;
   color: rgba(255, 255, 255, 0.9); // Increased contrast
   text-decoration: none;
   transition: all 0.3s $transition-timing;
   border-radius: 12px; // Full rounded corners for menu items
-  margin: 0 0.75rem; // Equal margin on both sides
+  margin: 0; // Remove margin since we have padding on wrapper
   cursor: pointer;
   border: none;
   background: transparent;
-  width: calc(100% - 1.5rem); // Adjust width to accommodate the margin change
+  width: 100%; // Full width within wrapper padding
   text-align: left;
   position: relative;
   font-weight: 500;
@@ -435,35 +437,42 @@ $gold-accent: #D4AF37;   // Royal gold accent
   }
 }
 
-// Submenu
+// Submenu - Refined
 .submenu {
   max-height: 0;
   opacity: 0;
   overflow: hidden;
   transition: all 0.3s $transition-timing;
-  margin-left: 1rem;
-  margin-right: 0.5rem;
+  padding: 0.25rem 0; // Add vertical padding
 
   .nav-item {
-    padding: 0.65rem 0.75rem 0.65rem 1.5rem;
+    padding: 0.5rem 1rem 0.5rem 3.5rem; // Increase left padding
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.85); // Brighter submenu text
-    margin: 0 0.5rem; // Slightly smaller margin for submenu items
-    border-left: 1px solid rgba(255, 255, 255, 0.15); // More visible border
-    border-radius: 8px; // Rounded corners for submenu items too
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0.125rem 0.5rem; // Add horizontal margin for nested items
+    border-radius: 8px;
+    background: transparent;
+    width: calc(100% - 1rem); // Account for margin
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: none;
+    }
 
     &.active {
-      background: rgba(255, 255, 255, 0.12); // Lighter active state
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
 
       &::before {
-        height: 40%;
+        display: none;
       }
     }
 
-    // Adjust expand icon position for wrapped text
-    .expand-icon {
-      align-self: flex-start;
-      margin-top: 0.2rem;
+    .nav-icon {
+      font-size: 18px;
+      width: 20px;
+      height: 20px;
+      margin-right: 0.75rem;
     }
   }
 }
@@ -509,6 +518,12 @@ $gold-accent: #D4AF37;   // Royal gold accent
   mat-divider {
     border-top-color: rgba(255, 255, 255, 0.1);
     margin: 0.75rem 0;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 }
 
