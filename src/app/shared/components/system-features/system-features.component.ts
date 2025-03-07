@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 interface Feature {
   icon: string;
@@ -13,7 +14,13 @@ interface Feature {
   templateUrl: './system-features.component.html',
   styleUrls: ['./system-features.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslocoPipe],
+  imports: [CommonModule, MatIconModule, TranslocoPipe, TranslocoModule],
+  providers: [
+    provideTranslocoScope({
+      scope: 'system-features',
+      alias: 'systemFeatures',
+    }),
+  ],
 })
 export class SystemFeaturesComponent {
   features: Feature[] = [

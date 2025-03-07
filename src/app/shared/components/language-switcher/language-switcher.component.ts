@@ -9,6 +9,7 @@ import {
   Language,
   LanguageService,
 } from '../../../core/services/language.service';
+import { provideTranslocoScope, TranslocoModule } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-language-switcher',
@@ -22,6 +23,13 @@ import {
     MatIconModule,
     MatRippleModule,
     TranslocoPipe,
+    TranslocoModule,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'languages',
+      alias: 'languages',
+    }),
   ],
 })
 export class LanguageSwitcherComponent implements OnInit {

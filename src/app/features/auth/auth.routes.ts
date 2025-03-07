@@ -8,6 +8,7 @@ import {
   DEFAULT_API_CONFIG,
 } from '@app/core/api/config/api.config';
 import { publicGuard } from '@app/core/guards/public.guard';
+import { provideTranslocoScope } from '@jsverse/transloco';
 
 export const AUTH_ROUTES: Routes = [
   {
@@ -15,6 +16,12 @@ export const AUTH_ROUTES: Routes = [
     canActivate: [publicGuard],
     loadComponent: () =>
       import('./pages/login/login.component').then((m) => m.LoginComponent),
+    providers: [
+      provideTranslocoScope({
+        scope: 'login',
+        alias: 'login',
+      }),
+    ],
   },
   {
     path: 'register',
@@ -31,6 +38,10 @@ export const AUTH_ROUTES: Routes = [
       },
       provideState({ name: 'registerForm', reducer: registerFormReducer }),
       provideNativeDateAdapter(),
+      provideTranslocoScope({
+        scope: 'registration',
+        alias: 'registration',
+      }),
     ],
   },
   {

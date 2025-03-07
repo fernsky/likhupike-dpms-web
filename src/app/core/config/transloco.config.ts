@@ -1,15 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import {
-  TRANSLOCO_LOADER,
   Translation,
   TranslocoLoader,
-  TRANSLOCO_CONFIG,
-  translocoConfig,
-  TranslocoModule,
   provideTransloco,
-  getBrowserLang,
-  TRANSLOCO_TRANSPILER,
-  DefaultTranspiler,
 } from '@jsverse/transloco';
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -34,8 +27,4 @@ export const provideTranslocoConfig = () => [
     },
     loader: TranslocoHttpLoader,
   }),
-  {
-    provide: TRANSLOCO_TRANSPILER,
-    useClass: DefaultTranspiler,
-  },
 ];

@@ -3,7 +3,7 @@
     mat-button
     class="language-button"
     [matMenuTriggerFor]="menu"
-    [attr.aria-label]="'languageSwitcher.selectLanguageAria' | transloco"
+    [attr.aria-label]="'languages.selectLanguageAria' | transloco"
   >
     <span class="flag">{{ currentLanguage.flag }}</span>
     <span class="language-name">{{
@@ -15,7 +15,7 @@
   <mat-menu #menu="matMenu" class="language-menu" [overlapTrigger]="false">
     <div class="menu-header">
       <span class="menu-title">{{
-        "languageSwitcher.chooseLanguage" | transloco
+        "languages.chooseLanguage" | transloco
       }}</span>
     </div>
 

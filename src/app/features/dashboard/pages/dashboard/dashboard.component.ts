@@ -12,7 +12,6 @@ import {
   selectSystemStats,
   selectRecentActivities,
   selectQuickActions,
-  selectSystemHealth,
   selectDashboardLoading,
   selectDashboardErrors,
   selectSidenavState,
@@ -23,7 +22,6 @@ import {
   RecentActivity,
   QuickAction,
 } from '../../store/dashboard.state';
-import { StatisticsCardComponent } from '../../components/statistics-card/statistics-card.component';
 import { QuickActionsComponent } from '../../components/quick-actions/quick-actions.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
