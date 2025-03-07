@@ -1,0 +1,38 @@
+<nav class="breadcrumb-nav" aria-label="Breadcrumb navigation">
+  <ol class="breadcrumb-list">
+    <li
+      *ngFor="let item of breadcrumbs; let last = last"
+      class="breadcrumb-item"
+      [class.active]="last"
+    >
+      <a
+        *ngIf="!last"
+        [routerLink]="item.url"
+        [queryParams]="item.queryParams"
+        class="breadcrumb-link"
+      >
+        <p *ngIf="config.showIcons && item.icon">
+          <mat-icon class="breadcrumb-icon">
+            {{ item.icon }}
+          </mat-icon>
+        </p>
+        <span class="breadcrumb-text" [class.nepali]="currentLang === 'ne'">
+          {{ currentLang === "ne" && item.labelNp ? item.labelNp : item.label }}
+        </span>
+      </a>
+      <div *ngIf="last" class="breadcrumb-current">
+        <p *ngIf="config.showIcons && item.icon">
+          <mat-icon class="breadcrumb-icon">
+            {{ item.icon }}
+          </mat-icon>
+        </p>
+        <span class="breadcrumb-text" [class.nepali]="currentLang === 'ne'">
+          {{ currentLang === "ne" && item.labelNp ? item.labelNp : item.label }}
+        </span>
+      </div>
+      <span *ngIf="!last" class="breadcrumb-separator" aria-hidden="true">
+        {{ config.separator }}
+      </span>
+    </li>
+  </ol>
+</nav>
