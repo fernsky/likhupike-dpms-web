@@ -256,6 +256,47 @@ $gold-accent: #D4AF37;   // Royal gold accent
 
     &.collapsed {
       width: $sidenav-width !important; // Keep full width on mobile
+
+      // Override collapsed state styles for mobile
+      .hidden {
+        opacity: 1 !important;
+        width: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .nav-icon {
+        margin-right: 1rem !important;
+      }
+
+      .submenu {
+        display: block !important;
+      }
+
+      .badge {
+        opacity: 1 !important;
+        width: auto !important;
+        overflow: visible !important;
+      }
+
+      .expand-icon {
+        opacity: 1 !important;
+        width: auto !important;
+        overflow: visible !important;
+      }
+
+      .nav-label {
+        opacity: 1 !important;
+        width: auto !important;
+        overflow: visible !important;
+      }
+
+      .header-titles {
+        opacity: 1 !important;
+        transform: none !important;
+        height: auto !important;
+        overflow: visible !important;
+      }
     }
   }
 }
