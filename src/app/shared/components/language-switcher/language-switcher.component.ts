@@ -61,13 +61,4 @@ export class LanguageSwitcherComponent implements OnInit {
   getLocalizedLocalName(lang: Language): string {
     return this.translocoService.translate(`languages.${lang.code}.localName`);
   }
-
-  getFlagEmoji(lang: Language): string {
-    const flagEmojis: { [key: string]: string } = {
-      en: '🇬🇧',
-      ne: '🇳🇵',
-      // Add more language codes and their corresponding flag emojis as needed
-    };
-    return flagEmojis[lang.code] || '🌐';
-  }
 }
