@@ -1,11 +1,13 @@
 <div class="language-switcher">
   <button
-    mat-icon-button
-    class="language-toggle"
+    mat-button
+    class="language-button"
     [matMenuTriggerFor]="languageMenu"
     aria-label="Change language"
   >
-    <div class="language-code">{{ currentLanguage.code.toUpperCase() }}</div>
+    <span class="flag">{{ getFlagEmoji(currentLanguage) }}</span>
+    <span class="language-name">{{ currentLanguage.code.toUpperCase() }}</span>
+    <mat-icon>expand_more</mat-icon>
   </button>
 
   <mat-menu #languageMenu="matMenu" class="language-menu">
@@ -19,7 +21,7 @@
       (click)="switchLanguage(language)"
     >
       <div class="language-item">
-        <div class="language-flag" [class]="'flag-' + language.code"></div>
+        <span class="flag">{{ getFlagEmoji(language) }}</span>
         <div class="language-info">
           <span class="language-name">{{ getLocalizedName(language) }}</span>
           <span class="language-local-name">{{

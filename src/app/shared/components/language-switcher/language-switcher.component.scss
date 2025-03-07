@@ -12,43 +12,42 @@
   height: 40px;
   padding: 0 16px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
   font-weight: 500;
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
   }
 
   .flag {
-    font-size: 1.25rem;
-    margin: 0;
+    font-size: 1.2rem;
+    margin-right: 8px;
     width: 24px;
   }
 
   .language-name {
-    margin-left: 4px;
-    font-size: 0.875rem;
+    font-size: 14px;
     font-weight: 500;
-    letter-spacing: 0;
+    letter-spacing: 0.5px;
+    margin-left: 4px;
   }
 
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
-    margin: 0;
+    margin-left: 4px;
     opacity: 0.9;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
   }
 
   &.mat-mdc-menu-trigger-active mat-icon {
@@ -108,7 +107,7 @@
   .language-button {
     height: 36px;
     width: 36px;
-    padding: 0;
+    padding: 0 12px;
     display: flex;
     align-items: center;
     justify-content: center;
