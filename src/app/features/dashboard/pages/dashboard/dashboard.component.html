@@ -24,6 +24,7 @@
       <!-- Add menu toggle button -->
       <app-menu-toggle
         *ngIf="showMenuToggle$ | async"
+        [isOpen]="isMobileOpen"
         (toggleMenu)="onToggleMenu()"
       ></app-menu-toggle>
       <!-- Main Content Area -->
