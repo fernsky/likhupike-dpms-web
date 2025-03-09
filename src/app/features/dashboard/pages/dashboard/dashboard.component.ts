@@ -29,8 +29,7 @@ import {
   RecentActivity,
   QuickAction,
 } from '../../store/dashboard.state';
-import { QuickActionsComponent } from '../../components/quick-actions/quick-actions.component';
-import { HeaderComponent } from '../../components/header/header.component';
+
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
 
 // Import additional Angular Material modules
@@ -59,9 +58,6 @@ import { TranslocoModule } from '@jsverse/transloco';
     MatTooltipModule,
     MatBadgeModule,
     TranslocoModule,
-
-    QuickActionsComponent,
-    HeaderComponent,
     SidenavComponent,
   ],
 })

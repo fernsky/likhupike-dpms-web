@@ -21,21 +21,8 @@
 
     <!-- Main Content -->
     <mat-sidenav-content class="content-container">
-      <!-- Use the shared header component -->
-      <app-header
-        [isSidenavOpen]="sidenav.opened"
-        (menuToggled)="onSidenavToggle()"
-      >
-      </app-header>
-
       <!-- Main Content Area -->
       <main class="main-content" role="main">
-        <!-- System Status Bar -->
-
-        <!-- Quick Actions -->
-        <!-- <app-quick-actions class="quick-actions-section"></app-quick-actions> -->
-
-        <!-- Router Outlet for Child Routes -->
         <div class="router-outlet-container">
           <router-outlet></router-outlet>
         </div>
