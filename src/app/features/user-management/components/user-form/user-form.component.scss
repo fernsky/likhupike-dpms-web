@@ -1,0 +1,212 @@
+.user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  // Profile Picture Section
+  .profile-picture-section {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+
+    .preview-container {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: var(--background-light);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--primary-color);
+      transition: all 0.3s ease;
+
+      &:hover .overlay {
+        opacity: 1;
+      }
+
+      &.has-image {
+        border-color: var(--primary-color);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      mat-icon {
+        font-size: 80px;
+        width: 80px;
+        height: 80px;
+        color: var(--text-hint);
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(2px);
+
+        .file-input {
+          display: none;
+        }
+
+        button {
+          transform: scale(0.9);
+          transition: transform 0.2s ease;
+
+          &:hover {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+  }
+
+  // Form Grid
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-items: start;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    // Full width items
+    .municipality-toggle {
+      grid-column: 1 / -1;
+      padding: 8px 0;
+    }
+
+    // Nepali font input
+    .nepali-font {
+      font-family: var(--font-nepali);
+      font-size: 1.1em;
+    }
+
+    // Password field with icon
+    .mat-form-field-suffix {
+      color: var(--text-hint);
+      cursor: help;
+    }
+  }
+
+  // Form Actions
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+
+    button {
+      min-width: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      mat-spinner {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  // Error States
+  .mat-error {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  // Checkbox Styling
+  .mat-checkbox {
+    font-size: 14px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 960px) {
+  .user-form {
+    padding: 16px;
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .user-form {
+    padding: 12px;
+    gap: 24px;
+
+    .profile-picture-section {
+      .preview-container {
+        width: 120px;
+        height: 120px;
+
+        mat-icon {
+          font-size: 60px;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+
+    .form-actions {
+      flex-direction: column;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: more) {
+  .user-form {
+    .preview-container {
+      border-width: 4px;
+    }
+
+    .form-actions {
+      border-top-width: 2px;
+    }
+  }
+}
+
+// Reduce Motion
+@media (prefers-reduced-motion: reduce) {
+  .user-form {
+    .preview-container,
+    .overlay,
+    button {
+      transition: none !important;
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .user-form {
+    .profile-picture-section .overlay,
+    .form-actions {
+      display: none;
+    }
+  }
+}

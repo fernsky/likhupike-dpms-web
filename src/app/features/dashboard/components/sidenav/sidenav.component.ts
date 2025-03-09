@@ -183,6 +183,29 @@ export class SidenavComponent implements OnInit, OnDestroy {
       ],
     },
     {
+      id: 'user-management',
+      label: 'User Management',
+      labelNp: 'प्रयोगकर्ता व्यवस्थापन',
+      icon: 'people',
+      roles: [RoleType.MUNICIPALITY_ADMIN],
+      children: [
+        {
+          id: 'user-list',
+          label: 'Users',
+          labelNp: 'प्रयोगकर्ताहरू',
+          icon: 'list',
+          route: '/dashboard/users/list',
+        },
+        {
+          id: 'user-create',
+          label: 'Add User',
+          labelNp: 'प्रयोगकर्ता थप्नुहोस्',
+          icon: 'person_add',
+          route: '/dashboard/users/create',
+        },
+      ],
+    },
+    {
       id: 'settings',
       label: 'Settings',
       labelNp: 'सेटिङ्स',
