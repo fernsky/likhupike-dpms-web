@@ -6,17 +6,52 @@ import {
   EventEmitter,
   OnDestroy,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+} from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { TranslocoModule } from '@jsverse/transloco';
+import { provideNativeDateAdapter } from '@angular/material/core';
+
 import { RoleType } from '@app/core/models/role.enum';
 import { CreateUserRequest, UserResponse } from '../../models/user.interface';
-import { passwordValidator } from '@app/shared/validators/password.validator';
+import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    TranslocoModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
+  ],
+  providers: [provideNativeDateAdapter()],
 })
 export class UserFormComponent implements OnInit, OnDestroy {
   @Input() loading = false;
@@ -25,18 +60,29 @@ export class UserFormComponent implements OnInit, OnDestroy {
   @Input() isEdit = false;
 
   @Output() submitForm = new EventEmitter<CreateUserRequest>();
-  @Output() cancel = new EventEmitter<void>();
+  @Output() cancelForm = new EventEmitter<void>();
 
   userForm: FormGroup;
   roleTypes = Object.values(RoleType);
   selectedFile: File | null = null;
   previewUrl: string | null = null;
+  passwordErrors: string[] = [];
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private passwordValidator: PasswordValidatorService
+  ) {
     this.userForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, passwordValidator()]],
+      password: [
+        '',
+        [
+          Validators.required,
+          (control: AbstractControl) =>
+            this.passwordValidator.validatePassword(control),
+        ],
+      ],
       fullName: ['', [Validators.required]],
       fullNameNepali: ['', [Validators.required]],
       dateOfBirth: ['', [Validators.required]],
@@ -105,6 +151,17 @@ export class UserFormComponent implements OnInit, OnDestroy {
       this.submitForm.emit(formData);
     } else {
       this.markFormGroupTouched(this.userForm);
+    }
+  }
+
+  onPasswordChange(): void {
+    const passwordControl = this.userForm.get('password');
+    if (passwordControl?.errors) {
+      this.passwordErrors = this.passwordValidator.getPasswordErrorMessages(
+        passwordControl.errors
+      );
+    } else {
+      this.passwordErrors = [];
     }
   }
 

@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { UserFormModule } from '../../components/user-form/user-form.module';
 import { UserCreateComponent } from './user-create.component';
-import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { UserFormComponent } from '../../components/user-form/user-form.component';
 
 const routes = [
   {
@@ -14,16 +11,6 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [UserCreateComponent],
-  imports: [
-    CommonModule,
-    RouterModule.forChild(routes),
-    UserFormModule,
-    TranslocoModule,
-    MatProgressBarModule,
-    provideTranslocoScope({
-      scope: 'user-management',
-    }),
-  ],
+  imports: [RouterModule.forChild(routes), UserFormComponent],
 })
 export class UserCreateModule {}

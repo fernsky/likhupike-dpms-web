@@ -1,4 +1,5 @@
 import { RoleType } from '@app/core/models/role.enum';
+import { Municipality } from '../../models/municipality.interface';
 
 export interface AuthUser {
   id: string;
@@ -13,6 +14,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  municipality?: Municipality;
 }
 
 export const initialAuthState: AuthState = {

@@ -1,14 +1,20 @@
 <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
   <!-- Profile Picture Section -->
   <div class="profile-picture-section">
-    <div class="preview-container" [class.has-image]="previewUrl">
+    <div
+      class="preview-container"
+      [class.has-image]="previewUrl"
+      (click)="fileInput.click()"
+    >
       <img
         *ngIf="previewUrl"
         [src]="previewUrl"
         alt="Profile Preview"
         class="preview-image"
       />
-      <mat-icon *ngIf="!previewUrl">account_circle</mat-icon>
+      <p *ngIf="!previewUrl">
+        <mat-icon>account_circle</mat-icon>
+      </p>
 
       <div class="overlay">
         <input
@@ -17,12 +23,13 @@
           (change)="onFileSelected($event)"
           accept="image/*"
           class="file-input"
+          hidden
         />
         <button
           type="button"
           mat-mini-fab
-          color="primary"
-          (click)="fileInput.click()"
+          class="upload-btn"
+          (click)="$event.stopPropagation(); fileInput.click()"
         >
           <mat-icon>{{ previewUrl ? "edit" : "add_a_photo" }}</mat-icon>
         </button>
@@ -30,8 +37,8 @@
           type="button"
           *ngIf="previewUrl"
           mat-mini-fab
-          color="warn"
-          (click)="removeImage()"
+          class="remove-btn"
+          (click)="$event.stopPropagation(); removeImage()"
         >
           <mat-icon>delete</mat-icon>
         </button>
@@ -54,17 +61,19 @@
 
     <mat-form-field appearance="outline">
       <mat-label>{{ "user.form.password" | transloco }}</mat-label>
-      <input matInput formControlName="password" type="password" />
+      <input
+        matInput
+        formControlName="password"
+        type="password"
+        (input)="onPasswordChange()"
+      />
       <mat-icon
         matSuffix
         [matTooltip]="'user.form.passwordRequirements' | transloco"
         >info</mat-icon
       >
-      <mat-error *ngIf="userForm.get('password')?.errors?.['required']">
-        {{ "user.form.errors.passwordRequired" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.get('password')?.errors?.['pattern']">
-        {{ "user.form.errors.passwordInvalid" | transloco }}
+      <mat-error *ngFor="let error of passwordErrors">
+        {{ error }}
       </mat-error>
     </mat-form-field>
 
@@ -153,21 +162,27 @@
     <button
       type="button"
       mat-stroked-button
-      (click)="cancel.emit()"
+      (click)="cancelForm.emit()"
       [disabled]="loading"
     >
+      <mat-icon>arrow_back</mat-icon>
       {{ "common.actions.cancel" | transloco }}
     </button>
     <button
+      class="submit-button"
       type="submit"
       mat-raised-button
       color="primary"
       [disabled]="loading"
     >
       <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-      <span>{{
-        (isEdit ? "common.actions.update" : "common.actions.create") | transloco
-      }}</span>
+      <span class="button-content" *ngIf="!loading">
+        <mat-icon>{{ isEdit ? "save" : "add_circle" }}</mat-icon>
+        <span>{{
+          (isEdit ? "common.actions.update" : "common.actions.create")
+            | transloco
+        }}</span>
+      </span>
     </button>
   </div>
 </form>

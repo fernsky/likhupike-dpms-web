@@ -1,16 +1,37 @@
 import { Component, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter } from 'rxjs/operators';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
+import { UserFormComponent } from '../../components/user-form/user-form.component';
 import { UserActions } from '../../store/user.actions';
 import { CreateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
+import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-user-create',
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatProgressBarModule,
+    TranslocoModule,
+    UserFormComponent,
+    MatIcon,
+  ],
+  providers: [
+    provideTranslocoScope({
+      scope: 'user-management',
+      alias: 'user',
+    }),
+    PasswordValidatorService,
+  ],
 })
 export class UserCreateComponent implements OnDestroy {
   loading$ = this.store.select(UserSelectors.selectUserCreating);
@@ -28,14 +49,22 @@ export class UserCreateComponent implements OnDestroy {
   onSubmit(request: CreateUserRequest): void {
     this.store.dispatch(UserActions.createUser({ request }));
 
-    // Navigate back to list on successful creation
     this.store
       .select(UserSelectors.selectUserCreating)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((creating) => {
-        if (!creating) {
-          this.navigateBack();
-        }
+      .pipe(
+        takeUntil(this.destroy$),
+        filter((creating) => !creating)
+      )
+      .subscribe(() => {
+        this.store
+          .select(UserSelectors.selectUserErrors)
+          .pipe(
+            takeUntil(this.destroy$),
+            filter((errors) => !errors || Object.keys(errors).length === 0)
+          )
+          .subscribe(() => {
+            this.navigateBack();
+          });
       });
   }
 

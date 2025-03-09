@@ -61,6 +61,5 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
       alias: 'user',
     }),
   ],
-  declarations: [],
 })
 export class UserManagementModule {}

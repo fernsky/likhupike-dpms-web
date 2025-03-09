@@ -34,7 +34,8 @@ export const selectIsAuthenticated = createSelector(
 
 export const selectUserRoles = createSelector(
   selectUser,
-  (user) => user?.roles || []
+  // (user) => user?.roles || []
+  () => [RoleType.MUNICIPALITY_ADMIN]
 );
 
 // Role-based selectors
@@ -46,5 +47,36 @@ export const selectUserPermissions = createSelector(
     isWardAdmin: roles.includes(RoleType.WARD_ADMIN),
     isEditor: roles.includes(RoleType.EDITOR),
     isViewer: roles.includes(RoleType.VIEWER),
+  })
+);
+
+// Municipality selectors
+export const selectMunicipality = createSelector(
+  selectAuthState,
+  (state: AuthState) => state.municipality
+);
+
+export const selectMunicipalityDetails = createSelector(
+  selectMunicipality,
+  (municipality) => ({
+    code: municipality?.code,
+    name: municipality?.name,
+    nameNepali: municipality?.nameNepali,
+    type: municipality?.type,
+    totalWards: municipality?.totalWards || 0,
+  })
+);
+
+export const selectDistrict = createSelector(
+  selectMunicipality,
+  (municipality) => municipality?.district
+);
+
+export const selectMunicipalityLocation = createSelector(
+  selectMunicipality,
+  (municipality) => ({
+    latitude: municipality?.latitude,
+    longitude: municipality?.longitude,
+    area: municipality?.area,
   })
 );

@@ -1,6 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { UserActions } from './user.actions';
 import { initialUserState } from './user.state';
+import { UserValidationError } from '../models/user.interface';
 
 export const USER_FEATURE_KEY = 'userManagement';
 
@@ -44,7 +45,7 @@ export const userReducer = createReducer(
   on(UserActions.loadUsersFailure, (state, { error }) => ({
     ...state,
     loading: false,
-    errors: { general: [error] },
+    errors: error as UserValidationError,
   })),
 
   // Update User
@@ -83,7 +84,7 @@ export const userReducer = createReducer(
   on(UserActions.deleteUserFailure, (state, { error }) => ({
     ...state,
     deleting: false,
-    errors: { general: [error] },
+    errors: error as UserValidationError,
   })),
 
   // Clear Errors

@@ -24,6 +24,9 @@
   },
   "create": {
     "title": "Create New User",
+    "description": "Add a new user with their roles and permissions.",
+    "permissionRequired": "Admin privileges required",
+    "helpText": "Need help? View documentation",
     "success": "User created successfully"
   },
   "edit": {
@@ -43,6 +46,8 @@
     "selectWard": "Select Ward",
     "roles": "User Roles",
     "isMunicipalityLevel": "This is a municipality-level position",
+    "profilePicture": "Profile Picture",
+    "uploadPhoto": "Click to upload photo",
     "errors": {
       "emailRequired": "Email is required",
       "emailInvalid": "Please enter a valid email address",

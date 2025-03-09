@@ -1,18 +1,23 @@
 .edit-user-container {
-  height: 100%;
+  min-height: 100%;
   background: var(--background-default);
   position: relative;
 
   .page-header {
-    padding: 24px 24px 0;
-    background: white;
-    border-bottom: 1px solid var(--border-color);
+    padding: 32px 32px 0;
+    background: linear-gradient(to right, var(--primary-color), var(--primary-color-light));
+    border-bottom-left-radius: 32px;
+    border-bottom-right-radius: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(var(--primary-color-rgb), 0.15);
 
     h1 {
-      font-size: 24px;
-      font-weight: 500;
+      font-size: 28px;
+      font-weight: 600;
       margin: 0;
-      color: var(--text-primary);
+      padding-bottom: 32px;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
   }
 
@@ -22,6 +27,14 @@
     left: 0;
     right: 0;
     z-index: 10;
+  }
+
+  .loading-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    color: var(--text-secondary);
   }
 }
 

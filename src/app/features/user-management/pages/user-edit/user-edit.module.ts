@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { UserFormModule } from '../../components/user-form/user-form.module';
 import { UserEditComponent } from './user-edit.component';
 import { TranslocoModule, provideTranslocoScope } from '@jsverse/transloco';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -15,14 +14,15 @@ const routes = [
 ];
 
 @NgModule({
-  declarations: [UserEditComponent],
   imports: [
+    UserEditComponent,
     CommonModule,
     RouterModule.forChild(routes),
-    UserFormModule,
     TranslocoModule,
     MatProgressBarModule,
     SharedModule,
+  ],
+  providers: [
     provideTranslocoScope({
       scope: 'user-management',
     }),

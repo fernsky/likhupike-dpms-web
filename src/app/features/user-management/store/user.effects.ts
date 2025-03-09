@@ -2,13 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { of } from 'rxjs';
-import {
-  map,
-  catchError,
-  exhaustMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { map, catchError, exhaustMap, withLatestFrom } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslocoService } from '@jsverse/transloco';
 import { UserActions } from './user.actions';
@@ -20,9 +14,9 @@ export class UserEffects {
   createUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.createUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectUserMunicipality)),
+      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
       exhaustMap(([action, municipality]) =>
-        this.userService.createUser(action.request, municipality?.id).pipe(
+        this.userService.createUser(action.request, municipality?.code).pipe(
           map((user) => {
             this.showSuccess('messages.createSuccess');
             return UserActions.createUserSuccess({ user });
@@ -39,9 +33,9 @@ export class UserEffects {
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.loadUsers),
-      withLatestFrom(this.store.select(AuthSelectors.selectUserMunicipality)),
+      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
       exhaustMap(([action, municipality]) =>
-        this.userService.getUsers(action.filter, municipality?.id).pipe(
+        this.userService.getUsers(action.filter, municipality?.code).pipe(
           map(({ users, total }) =>
             UserActions.loadUsersSuccess({ users, total })
           ),
@@ -57,10 +51,10 @@ export class UserEffects {
   updateUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.updateUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectUserMunicipality)),
+      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
       exhaustMap(([action, municipality]) =>
         this.userService
-          .updateUser(action.id, action.request, municipality?.id)
+          .updateUser(action.id, action.request, municipality?.code)
           .pipe(
             map((user) => {
               this.showSuccess('messages.updateSuccess');
@@ -80,9 +74,9 @@ export class UserEffects {
   deleteUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.deleteUser),
-      withLatestFrom(this.store.select(AuthSelectors.selectUserMunicipality)),
+      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
       exhaustMap(([action, municipality]) =>
-        this.userService.deleteUser(action.id, municipality?.id).pipe(
+        this.userService.deleteUser(action.id, municipality?.code).pipe(
           map(() => {
             this.showSuccess('messages.deleteSuccess');
             return UserActions.deleteUserSuccess({ id: action.id });
@@ -99,10 +93,10 @@ export class UserEffects {
   setUserActiveStatus$ = createEffect(() =>
     this.actions$.pipe(
       ofType(UserActions.setUserActiveStatus),
-      withLatestFrom(this.store.select(AuthSelectors.selectUserMunicipality)),
+      withLatestFrom(this.store.select(AuthSelectors.selectMunicipality)),
       exhaustMap(([action, municipality]) =>
         this.userService
-          .setUserActiveStatus(action.id, action.active, municipality?.id)
+          .setUserActiveStatus(action.id, action.active, municipality?.code)
           .pipe(
             map((user) => {
               this.showSuccess(

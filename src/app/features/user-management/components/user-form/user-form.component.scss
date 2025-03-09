@@ -1,37 +1,60 @@
 .user-form {
   display: flex;
   flex-direction: column;
-  gap: 32px;
-  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 24px auto;
 
-  // Profile Picture Section
   .profile-picture-section {
-    display: flex;
-    justify-content: center;
-    padding: 24px 0;
+    text-align: center;
+    padding: 3rem 2rem 2.5rem;
+    background: #fafafa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 
     .preview-container {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 120px;
+      height: 120px;
       border-radius: 50%;
-      background: var(--background-light);
+      background: white;
       overflow: hidden;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 3px solid var(--primary-color);
-      transition: all 0.3s ease;
+      border: 2px solid #e0e0e0;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      cursor: pointer;
 
-      &:hover .overlay {
-        opacity: 1;
+      &:hover {
+        border-color: #0B1F42;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        .overlay {
+          opacity: 1;
+        }
+
+        mat-icon {
+          color: #0B1F42;
+          opacity: 0.8;
+        }
       }
 
       &.has-image {
-        border-color: var(--primary-color);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        border-color: #0B1F42;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      mat-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        color: #90A4AE;
+        opacity: 0.5;
+        transition: all 0.2s ease;
       }
 
       .preview-image {
@@ -40,87 +63,143 @@
         object-fit: cover;
       }
 
-      mat-icon {
-        font-size: 80px;
-        width: 80px;
-        height: 80px;
-        color: var(--text-hint);
+      .placeholder-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+
+        mat-icon {
+          font-size: 40px;
+          width: 40px;
+          height: 40px;
+          color: #90A4AE;
+        }
+
+        .upload-text {
+          font-size: 11px;
+          color: #90A4AE;
+          font-weight: 400;
+          transition: color 0.2s ease;
+        }
       }
 
       .overlay {
         position: absolute;
         inset: 0;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(11, 31, 66, 0.85);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 16px;
+        gap: 8px;
         opacity: 0;
-        transition: opacity 0.3s ease;
-        backdrop-filter: blur(2px);
-
-        .file-input {
-          display: none;
-        }
+        transition: opacity 0.2s ease;
 
         button {
-          transform: scale(0.9);
-          transition: transform 0.2s ease;
+          width: 32px;
+          height: 32px;
+          padding: 0;
+          line-height: 0;
 
-          &:hover {
-            transform: scale(1);
+          &.upload-btn {
+            background: white;
+            color: #0B1F42;
+          }
+
+          &.remove-btn {
+            background: #DC3545;
+            color: white;
+          }
+
+          mat-icon {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin: 0;
           }
         }
       }
     }
+
+    .file-input {
+      display: none;
+    }
   }
 
-  // Form Grid
   .form-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-    align-items: start;
+    gap: 1.5rem;
+    padding: 2rem;
 
     mat-form-field {
       width: 100%;
     }
 
-    // Full width items
     .municipality-toggle {
       grid-column: 1 / -1;
       padding: 8px 0;
     }
 
-    // Nepali font input
     .nepali-font {
       font-family: var(--font-nepali);
       font-size: 1.1em;
     }
-
-    // Password field with icon
-    .mat-form-field-suffix {
-      color: var(--text-hint);
-      cursor: help;
-    }
   }
 
-  // Form Actions
   .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-color);
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: #f8f9fa;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
 
     button {
-      min-width: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      min-width: 140px;
+      height: 48px;
+      border-radius: 24px;
+
+      .button-content {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
       mat-spinner {
+        margin: 0 auto;
+      }
+
+      mat-icon {
+        margin: 0; // Remove default margin
+      }
+
+      &[color="primary"] {
+        background: linear-gradient(135deg, #0B1F42, #123772);
+        color: white;
+        box-shadow: 0 4px 12px rgba(11, 31, 66, 0.2);
+
+        &:hover:not([disabled]) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(11, 31, 66, 0.3);
+          background: linear-gradient(135deg, #123772, #1A4894);
+        }
+      }
+
+      &[type="submit"] {
+        display: flex;
+
+        .mdc-button__label {
+          display: flex;
+        }
+      }
+
+      &:not([color="primary"]) {
+        border: 2px solid #123772;
+        color: #123772;
+      }
+
+      mat-icon {
         margin-right: 8px;
       }
     }

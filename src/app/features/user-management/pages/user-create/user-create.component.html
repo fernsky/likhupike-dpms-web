@@ -1,20 +1,22 @@
 <div class="create-user-container">
-  <div class="page-header">
-    <h1>{{ "user.create.title" | transloco }}</h1>
-  </div>
-
   <mat-progress-bar
     *ngIf="loading$ | async"
     mode="indeterminate"
     class="page-loading-bar"
-    aria-label="{{ 'common.loading' | transloco }}"
   ></mat-progress-bar>
 
-  <app-user-form
-    [loading]="loading$ | async"
-    [errors]="errors$ | async"
-    [isEdit]="false"
-    (submitForm)="onSubmit($event)"
-    (cancel)="onCancel()"
-  ></app-user-form>
+  <div class="page-header">
+    <div class="title-section">
+      <h1>{{ "user.create.title" | transloco }}</h1>
+      <p class="subtitle">{{ "user.create.description" | transloco }}</p>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <app-user-form
+      [isEdit]="false"
+      (submitForm)="onSubmit($event)"
+      (cancel)="onCancel()"
+    ></app-user-form>
+  </div>
 </div>

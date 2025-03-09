@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { takeUntil, filter } from 'rxjs/operators';
+import { Subject, filter, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TranslocoModule } from '@jsverse/transloco';
+import { UserFormComponent } from '../../components/user-form/user-form.component';
 import { UserActions } from '../../store/user.actions';
 import { CreateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
@@ -11,6 +14,13 @@ import * as UserSelectors from '../../store/user.selectors';
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
   styleUrls: ['./user-edit.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatProgressBarModule,
+    TranslocoModule,
+    UserFormComponent,
+  ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {
   loading$ = this.store.select(UserSelectors.selectUserUpdating);
@@ -26,21 +36,17 @@ export class UserEditComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Clear any existing errors
     this.store.dispatch(UserActions.clearUserErrors());
 
-    // Get user ID from route param and load user
     this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       this.userId = params['id'];
       if (this.userId) {
-        // Dispatch action to load user details
         this.store.dispatch(UserActions.loadUser({ id: this.userId }));
       } else {
         this.navigateBack();
       }
     });
 
-    // Navigate back on successful update
     this.store
       .select(UserSelectors.selectUserUpdating)
       .pipe(
@@ -48,9 +54,15 @@ export class UserEditComponent implements OnInit, OnDestroy {
         filter((updating) => !updating)
       )
       .subscribe(() => {
-        if (!this.store.select(UserSelectors.selectUserErrors)) {
-          this.navigateBack();
-        }
+        this.store
+          .select(UserSelectors.selectUserErrors)
+          .pipe(
+            takeUntil(this.destroy$),
+            filter((errors) => !errors || Object.keys(errors).length === 0)
+          )
+          .subscribe(() => {
+            this.navigateBack();
+          });
       });
   }
 
@@ -60,7 +72,6 @@ export class UserEditComponent implements OnInit, OnDestroy {
         id: this.userId,
         request: {
           ...request,
-          // Only include password if it was changed
           password: request.password || undefined,
         },
       })

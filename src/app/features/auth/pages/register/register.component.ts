@@ -52,7 +52,6 @@ import { BaseAuthComponent } from '../../components/base-auth/base-auth.componen
     BackgroundParticlesComponent,
     MatIcon,
     TranslocoPipe,
-    BaseAuthComponent,
   ],
 })
 export class RegisterComponent
@@ -176,15 +175,24 @@ export class RegisterComponent
             password: formData.password,
             userType: formData.userType,
             // Location based on user type
-            ...(formData.location && Object.fromEntries(
-              Object.entries(formData.location).filter(([_, v]) => v !== undefined)
-            )),
-            ...(formData.employeeInfo && Object.fromEntries(
-              Object.entries(formData.employeeInfo).filter(([_, v]) => v !== undefined)
-            )),
-            ...(formData.electedRepInfo && Object.fromEntries(
-              Object.entries(formData.electedRepInfo).filter(([_, v]) => v !== undefined)
-            )),
+            ...(formData.location &&
+              Object.fromEntries(
+                Object.entries(formData.location).filter(
+                  ([_, v]) => v !== undefined
+                )
+              )),
+            ...(formData.employeeInfo &&
+              Object.fromEntries(
+                Object.entries(formData.employeeInfo).filter(
+                  ([_, v]) => v !== undefined
+                )
+              )),
+            ...(formData.electedRepInfo &&
+              Object.fromEntries(
+                Object.entries(formData.electedRepInfo).filter(
+                  ([_, v]) => v !== undefined
+                )
+              )),
             address: 'Not available',
             dateOfBirth: '1800-01-01',
             officePost: 'Other',

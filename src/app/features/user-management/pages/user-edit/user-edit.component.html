@@ -7,17 +7,20 @@
     *ngIf="loading$ | async"
     mode="indeterminate"
     class="page-loading-bar"
-    aria-label="{{ 'common.loading' | transloco }}"
   ></mat-progress-bar>
 
-  <ng-container *ngIf="user$ | async as user">
+  <ng-container *ngIf="user$ | async as user; else loading">
     <app-user-form
-      [loading]="loading$ | async"
-      [errors]="errors$ | async"
       [user]="user"
       [isEdit]="true"
       (submitForm)="onSubmit($event)"
       (cancel)="onCancel()"
     ></app-user-form>
   </ng-container>
+
+  <ng-template #loading>
+    <div *ngIf="loading$ | async" class="loading-state">
+      {{ "common.loading" | transloco }}
+    </div>
+  </ng-template>
 </div>
