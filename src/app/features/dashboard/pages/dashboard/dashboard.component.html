@@ -21,6 +21,11 @@
 
     <!-- Main Content -->
     <mat-sidenav-content class="content-container">
+      <!-- Add menu toggle button -->
+      <app-menu-toggle
+        *ngIf="showMenuToggle$ | async"
+        (toggleMenu)="onToggleMenu()"
+      ></app-menu-toggle>
       <!-- Main Content Area -->
       <main class="main-content" role="main">
         <div class="router-outlet-container">

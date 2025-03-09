@@ -31,6 +31,7 @@ import {
 } from '../../store/dashboard.state';
 
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
+import { MenuToggleComponent } from '../../components/menu-toggle/menu-toggle.component';
 
 // Import additional Angular Material modules
 import { MatIconModule } from '@angular/material/icon';
@@ -59,6 +60,7 @@ import { TranslocoModule } from '@jsverse/transloco';
     MatBadgeModule,
     TranslocoModule,
     SidenavComponent,
+    MenuToggleComponent,
   ],
 })
 export class DashboardComponent implements OnInit {
@@ -80,6 +82,10 @@ export class DashboardComponent implements OnInit {
 
   isHandset$: Observable<boolean> = this.breakpointObserver
     .observe([Breakpoints.Handset])
+    .pipe(map((result) => result.matches));
+
+  showMenuToggle$: Observable<boolean> = this.breakpointObserver
+    .observe([Breakpoints.Handset, '(max-width: 1199px)'])
     .pipe(map((result) => result.matches));
 
   // Dashboard data observables
@@ -126,6 +132,23 @@ export class DashboardComponent implements OnInit {
           eventType: 'SYSTEM_CHANGE',
           details: {
             action: 'TOGGLE_SIDENAV',
+            state: this.sidenav.opened ? 'OPENED' : 'CLOSED',
+          },
+          severity: 'LOW',
+        })
+      );
+    }
+  }
+
+  onToggleMenu(): void {
+    this.isMobileOpen = !this.isMobileOpen;
+    if (this.sidenav) {
+      this.sidenav.toggle();
+      this.store.dispatch(
+        DashboardActions.securityEventDetected({
+          eventType: 'SYSTEM_CHANGE',
+          details: {
+            action: 'TOGGLE_MOBILE_MENU',
             state: this.sidenav.opened ? 'OPENED' : 'CLOSED',
           },
           severity: 'LOW',
