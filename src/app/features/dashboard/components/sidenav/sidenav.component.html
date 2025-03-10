@@ -27,12 +27,9 @@
     </div>
   </div>
 
-  <!-- Main Navigation -->
+  <!-- Navigation -->
   <div class="nav-section">
-    <div class="menu-subtitle" [class.hidden]="collapsed">
-      {{ "sidenav.menu.main" | transloco }}
-    </div>
-    <div class="nav-list" role="menubar" [attr.aria-label]="'Main Navigation'">
+    <div class="nav-list" role="menubar" [attr.aria-label]="'Navigation'">
       <ng-container *ngFor="let item of navigationItems">
         <div
           class="nav-item-wrapper"
@@ -142,47 +139,6 @@
           </div>
         </div>
       </ng-container>
-    </div>
-  </div>
-
-  <!-- System Navigation -->
-  <div class="nav-section">
-    <div class="menu-subtitle" [class.hidden]="collapsed">
-      {{ "sidenav.menu.system" | transloco }}
-    </div>
-    <div class="nav-list" role="menubar">
-      <div class="nav-item-wrapper">
-        <a
-          routerLink="/dashboard/settings"
-          routerLinkActive="active"
-          class="nav-item"
-          [matTooltip]="
-            collapsed ? ('sidenav.navigation.settings' | transloco) : ''
-          "
-          matTooltipPosition="right"
-        >
-          <mat-icon class="nav-icon">settings</mat-icon>
-          <span class="nav-label" [class.hidden]="collapsed">{{
-            "sidenav.navigation.settings" | transloco
-          }}</span>
-        </a>
-      </div>
-      <div class="nav-item-wrapper">
-        <a
-          routerLink="/dashboard/help"
-          routerLinkActive="active"
-          class="nav-item"
-          [matTooltip]="
-            collapsed ? ('sidenav.navigation.help' | transloco) : ''
-          "
-          matTooltipPosition="right"
-        >
-          <mat-icon class="nav-icon">help_outline</mat-icon>
-          <span class="nav-label" [class.hidden]="collapsed">{{
-            "sidenav.navigation.help" | transloco
-          }}</span>
-        </a>
-      </div>
     </div>
   </div>
 

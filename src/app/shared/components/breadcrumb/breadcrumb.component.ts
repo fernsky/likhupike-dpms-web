@@ -1,10 +1,22 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import {
+  Router,
+  ActivatedRoute,
+  NavigationEnd,
+  RouterModule,
+} from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslocoModule, TranslocoService } from '@jsverse/transloco';
-import { filter, Subject, takeUntil } from 'rxjs';
-import { Breadcrumb, BreadcrumbConfig } from './breadcrumb.interface';
+import { TranslocoModule } from '@jsverse/transloco';
+import { filter, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+
+interface BreadcrumbItem {
+  label: string;
+  translationKey?: string;
+  url: string;
+  icon?: string;
+}
 
 @Component({
   selector: 'app-breadcrumb',
@@ -14,88 +26,64 @@ import { Breadcrumb, BreadcrumbConfig } from './breadcrumb.interface';
   imports: [CommonModule, RouterModule, MatIconModule, TranslocoModule],
 })
 export class BreadcrumbComponent implements OnInit, OnDestroy {
-  @Input() config: BreadcrumbConfig = {
-    showHomeIcon: true,
-    separator: '/',
-    showIcons: true,
-    maxItems: 4,
-    responsive: true,
-  };
+  @Input() showHome = true;
+  @Input() homeIcon = 'home';
+  @Input() separator = 'chevron_right';
 
-  breadcrumbs: Breadcrumb[] = [];
-  currentLang = 'en';
+  breadcrumbs: BreadcrumbItem[] = [];
   private destroy$ = new Subject<void>();
 
   constructor(
     private router: Router,
-    private translocoService: TranslocoService
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
+        distinctUntilChanged(),
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.buildBreadcrumbs();
+        this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
       });
-
-    this.translocoService.langChanges$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((lang) => {
-        this.currentLang = lang;
-      });
-
-    // Initial breadcrumbs
-    this.buildBreadcrumbs();
   }
 
-  private buildBreadcrumbs(): void {
-    const root: Breadcrumb = {
-      label: 'Home',
-      labelNp: 'गृह',
-      url: '/dashboard',
-      icon: 'home',
-    };
+  private createBreadcrumbs(
+    route: ActivatedRoute,
+    url: string = '',
+    breadcrumbs: BreadcrumbItem[] = []
+  ): BreadcrumbItem[] {
+    const children = route.children;
 
-    const paths = this.router.url.split('/').filter((path) => path);
-    const breadcrumbs: Breadcrumb[] = [root];
-    let url = '';
+    if (children.length === 0) {
+      return breadcrumbs;
+    }
 
-    paths.forEach((path) => {
-      if (path !== 'dashboard') {
-        url += `/${path}`;
+    for (const child of children) {
+      const routeURL = child.snapshot.url
+        .map((segment) => segment.path)
+        .join('/');
+      if (routeURL !== '') {
+        url += `/${routeURL}`;
+      }
+
+      const label = child.snapshot.data['breadcrumb'];
+      if (label) {
         breadcrumbs.push({
-          label: this.formatLabel(path),
-          url,
-          icon: this.getIconForPath(path),
+          label: typeof label === 'string' ? label : label.label,
+          translationKey:
+            typeof label === 'string' ? undefined : label.translationKey,
+          url: url,
+          icon: typeof label === 'string' ? undefined : label.icon,
         });
       }
-    });
 
-    this.breadcrumbs = this.config.maxItems
-      ? breadcrumbs.slice(-this.config.maxItems)
-      : breadcrumbs;
-  }
+      return this.createBreadcrumbs(child, url, breadcrumbs);
+    }
 
-  private formatLabel(path: string): string {
-    return path
-      .split('-')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-
-  private getIconForPath(path: string): string {
-    const iconMap: { [key: string]: string } = {
-      profiles: 'account_box',
-      settings: 'settings',
-      reports: 'assessment',
-      analytics: 'insights',
-      help: 'help',
-      // Add more mappings as needed
-    };
-    return iconMap[path] || 'arrow_right';
+    return breadcrumbs;
   }
 
   ngOnDestroy(): void {

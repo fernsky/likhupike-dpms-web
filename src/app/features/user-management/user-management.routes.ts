@@ -18,7 +18,14 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
             (m) => m.UserListModule
           ),
         canActivate: [RoleGuard],
-        data: { roles: [RoleType.MUNICIPALITY_ADMIN] },
+        data: {
+          roles: [RoleType.MUNICIPALITY_ADMIN],
+          breadcrumb: {
+            label: 'Users',
+            translationKey: 'user.list.title',
+            icon: 'people',
+          },
+        },
       },
       {
         path: 'create',
@@ -27,7 +34,14 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
             (m) => m.UserCreateModule
           ),
         canActivate: [RoleGuard],
-        data: { roles: [RoleType.MUNICIPALITY_ADMIN] },
+        data: {
+          roles: [RoleType.MUNICIPALITY_ADMIN],
+          breadcrumb: {
+            label: 'Create User',
+            translationKey: 'user.create.title',
+            icon: 'person_add',
+          },
+        },
       },
       {
         path: 'edit/:id',
@@ -36,7 +50,14 @@ export const USER_MANAGEMENT_ROUTES: Routes = [
             (m) => m.UserEditModule
           ),
         canActivate: [RoleGuard],
-        data: { roles: [RoleType.MUNICIPALITY_ADMIN] },
+        data: {
+          roles: [RoleType.MUNICIPALITY_ADMIN],
+          breadcrumb: {
+            label: 'Edit User',
+            translationKey: 'user.edit.title',
+            icon: 'edit',
+          },
+        },
       },
     ],
   },

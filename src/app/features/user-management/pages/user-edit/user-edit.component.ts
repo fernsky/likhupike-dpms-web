@@ -9,6 +9,7 @@ import { UserFormComponent } from '../../components/user-form/user-form.componen
 import { UserActions } from '../../store/user.actions';
 import { CreateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-user-edit',
@@ -20,6 +21,7 @@ import * as UserSelectors from '../../store/user.selectors';
     MatProgressBarModule,
     TranslocoModule,
     UserFormComponent,
+    BreadcrumbComponent,
   ],
 })
 export class UserEditComponent implements OnInit, OnDestroy {

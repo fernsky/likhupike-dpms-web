@@ -46,6 +46,10 @@ $gold-accent: #D4AF37;   // Royal gold accent
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   border-radius: 0; // Reset to 0 to remove container rounded corners
   border-right: none; // Remove border
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
 
   // Decorative pattern overlay
   &::before {
@@ -72,6 +76,7 @@ $gold-accent: #D4AF37;   // Royal gold accent
     z-index: 2;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
+    flex-shrink: 0;
 
     // Decorative elements
     &::before {
@@ -299,6 +304,68 @@ $gold-accent: #D4AF37;   // Royal gold accent
       }
     }
   }
+
+  // Main navigation area becomes scrollable
+  .nav-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; // Important for Firefox
+
+    .nav-list {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 1rem 0.75rem;
+
+      // Custom scrollbar
+      &::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      }
+
+      // Improve spacing and consistency
+      .nav-item-wrapper {
+        margin: 2px 0;
+
+        .nav-item {
+          height: 44px; // Consistent height
+          padding: 0 1rem;
+          margin: 2px 0;
+        }
+
+        // Submenu improvements
+        .submenu {
+          margin-left: 0.5rem;
+
+          .nav-item {
+            height: 40px; // Slightly smaller for submenu items
+            padding-left: 2.75rem;
+          }
+        }
+      }
+    }
+  }
+
+  // Footer stays at bottom
+  .secondary-actions {
+    flex-shrink: 0;
+    margin-top: auto;
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
 }
 
 // Navigation sections
@@ -306,25 +373,6 @@ $gold-accent: #D4AF37;   // Royal gold accent
   padding: 0.75rem 0.5rem;
   position: relative;
   z-index: 2;
-
-  .menu-subtitle {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.7); // Brighter text
-    padding: 0.75rem 1.25rem 0.5rem;
-    margin-top: 0.5rem;
-    font-weight: 500;
-    transition: all 0.3s $transition-timing;
-    white-space: nowrap;
-    overflow: hidden;
-
-    &.hidden {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-  }
 }
 
 // Navigation List

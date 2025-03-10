@@ -47,114 +47,133 @@
   </div>
 
   <div class="form-grid">
-    <!-- Basic Information -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.email" | transloco }}</mat-label>
-      <input matInput formControlName="email" type="email" />
-      <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
-        {{ "user.form.errors.emailRequired" | transloco }}
-      </mat-error>
-      <mat-error *ngIf="userForm.get('email')?.errors?.['email']">
-        {{ "user.form.errors.emailInvalid" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <!-- Form Fields -->
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.email" | transloco }}</mat-label>
+        <input matInput formControlName="email" type="email" />
+        <mat-error *ngIf="userForm.get('email')?.errors?.['required']">
+          {{ "user.form.errors.emailRequired" | transloco }}
+        </mat-error>
+        <mat-error *ngIf="userForm.get('email')?.errors?.['email']">
+          {{ "user.form.errors.emailInvalid" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.password" | transloco }}</mat-label>
-      <input
-        matInput
-        formControlName="password"
-        type="password"
-        (input)="onPasswordChange()"
-      />
-      <mat-icon
-        matSuffix
-        [matTooltip]="'user.form.passwordRequirements' | transloco"
-        >info</mat-icon
-      >
-      <mat-error *ngFor="let error of passwordErrors">
-        {{ error }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.password" | transloco }}</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          type="password"
+          (input)="onPasswordChange()"
+        />
+        <mat-icon
+          matSuffix
+          [matTooltip]="'user.form.passwordRequirements' | transloco"
+          >info</mat-icon
+        >
+        <mat-error *ngFor="let error of passwordErrors">
+          {{ error }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.fullName" | transloco }}</mat-label>
-      <input matInput formControlName="fullName" />
-      <mat-error *ngIf="userForm.get('fullName')?.errors?.['required']">
-        {{ "user.form.errors.fullNameRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.fullName" | transloco }}</mat-label>
+        <input matInput formControlName="fullName" />
+        <mat-error *ngIf="userForm.get('fullName')?.errors?.['required']">
+          {{ "user.form.errors.fullNameRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.fullNameNepali" | transloco }}</mat-label>
-      <input matInput formControlName="fullNameNepali" class="nepali-font" />
-      <mat-error *ngIf="userForm.get('fullNameNepali')?.errors?.['required']">
-        {{ "user.form.errors.fullNameNepaliRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.fullNameNepali" | transloco }}</mat-label>
+        <input matInput formControlName="fullNameNepali" class="nepali-font" />
+        <mat-error *ngIf="userForm.get('fullNameNepali')?.errors?.['required']">
+          {{ "user.form.errors.fullNameNepaliRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Additional Information -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.dateOfBirth" | transloco }}</mat-label>
-      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf="userForm.get('dateOfBirth')?.errors?.['required']">
-        {{ "user.form.errors.dateOfBirthRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.dateOfBirth" | transloco }}</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dateOfBirth"
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="userForm.get('dateOfBirth')?.errors?.['required']">
+          {{ "user.form.errors.dateOfBirthRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.address" | transloco }}</mat-label>
-      <input matInput formControlName="address" />
-      <mat-error *ngIf="userForm.get('address')?.errors?.['required']">
-        {{ "user.form.errors.addressRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.address" | transloco }}</mat-label>
+        <input matInput formControlName="address" />
+        <mat-error *ngIf="userForm.get('address')?.errors?.['required']">
+          {{ "user.form.errors.addressRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Role and Position -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.officePost" | transloco }}</mat-label>
-      <input matInput formControlName="officePost" />
-      <mat-error *ngIf="userForm.get('officePost')?.errors?.['required']">
-        {{ "user.form.errors.officePostRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.officePost" | transloco }}</mat-label>
+        <input matInput formControlName="officePost" />
+        <mat-error *ngIf="userForm.get('officePost')?.errors?.['required']">
+          {{ "user.form.errors.officePostRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.roles" | transloco }}</mat-label>
-      <mat-select formControlName="roles" multiple>
-        <mat-option *ngFor="let role of roleTypes" [value]="role">
-          {{ "roles." + role | transloco }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="userForm.get('roles')?.errors?.['required']">
-        {{ "user.form.errors.rolesRequired" | transloco }}
-      </mat-error>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.roles" | transloco }}</mat-label>
+        <mat-select formControlName="roles" multiple>
+          <mat-option *ngFor="let role of roleTypes" [value]="role">
+            {{ "roles." + role | transloco }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="userForm.get('roles')?.errors?.['required']">
+          {{ "user.form.errors.rolesRequired" | transloco }}
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Municipality Level Toggle -->
+    <!-- Municipality Toggle -->
     <div class="municipality-toggle">
       <mat-checkbox formControlName="isMunicipalityLevel">
         {{ "user.form.isMunicipalityLevel" | transloco }}
       </mat-checkbox>
     </div>
 
-    <!-- Ward Number (disabled if municipality level) -->
-    <mat-form-field appearance="outline">
-      <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
-      <mat-select formControlName="wardNumber">
-        <mat-option [value]="null">{{
-          "user.form.selectWard" | transloco
-        }}</mat-option>
-        <mat-option
-          *ngFor="let ward of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
-          [value]="ward"
-        >
-          {{ "user.ward" | transloco }} {{ ward }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="form-field-container">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ "user.form.wardNumber" | transloco }}</mat-label>
+        <mat-select formControlName="wardNumber">
+          <mat-option [value]="null">{{
+            "user.form.selectWard" | transloco
+          }}</mat-option>
+          <mat-option
+            *ngFor="let ward of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]"
+            [value]="ward"
+          >
+            {{ "user.ward" | transloco }} {{ ward }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
 
   <!-- Form Actions -->

@@ -12,6 +12,8 @@ import { CreateUserRequest } from '../../models/user.interface';
 import * as UserSelectors from '../../store/user.selectors';
 import { PasswordValidatorService } from '@app/shared/validators/password-validator.service';
 import { MatIcon } from '@angular/material/icon';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { PageTitleComponent } from '@app/shared/components/page-title/page-title.component';
 
 @Component({
   selector: 'app-user-create',
@@ -24,6 +26,8 @@ import { MatIcon } from '@angular/material/icon';
     TranslocoModule,
     UserFormComponent,
     MatIcon,
+    BreadcrumbComponent,
+    PageTitleComponent,
   ],
   providers: [
     provideTranslocoScope({

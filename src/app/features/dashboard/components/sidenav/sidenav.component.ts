@@ -213,6 +213,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
       route: '/dashboard/settings',
       roles: [RoleType.MUNICIPALITY_ADMIN],
     },
+    {
+      id: 'help',
+      label: 'Help',
+      labelNp: 'सहायता',
+      icon: 'help_outline',
+      route: '/dashboard/help',
+    },
   ];
 
   constructor(

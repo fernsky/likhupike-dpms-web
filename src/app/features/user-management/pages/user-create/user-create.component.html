@@ -1,16 +1,18 @@
 <div class="create-user-container">
+  <app-breadcrumb></app-breadcrumb>
   <mat-progress-bar
     *ngIf="loading$ | async"
     mode="indeterminate"
     class="page-loading-bar"
   ></mat-progress-bar>
 
-  <div class="page-header">
-    <div class="title-section">
-      <h1>{{ "user.create.title" | transloco }}</h1>
-      <p class="subtitle">{{ "user.create.description" | transloco }}</p>
-    </div>
-  </div>
+  <app-page-title
+    titleTranslationKey="user.create.title"
+    descriptionTranslationKey="user.create.description"
+    icon="person_add"
+  >
+    <!-- Optional action buttons can go here -->
+  </app-page-title>
 
   <div class="content-area">
     <app-user-form

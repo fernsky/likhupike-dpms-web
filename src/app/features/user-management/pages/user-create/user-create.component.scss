@@ -1,8 +1,10 @@
 .create-user-container {
-  min-height: 100vh;
-  background: #fafafa;
   position: relative;
-  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  width: 100%;
+  min-height: 100%;
 
   .page-header {
     max-width: 1200px;
@@ -38,9 +40,10 @@
     z-index: 1000;
   }
 
+  // Remove the content-area styles that were adding the white background
   .content-area {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    // Remove max-width to allow full width expansion
   }
 }
 

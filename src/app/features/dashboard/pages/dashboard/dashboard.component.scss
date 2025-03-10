@@ -45,15 +45,24 @@ $gold-accent: #D4AF37;   // Royal gold accent
 .main-content {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
+  padding: 0;
+  width: 100%;
 
-  @media (max-width: 768px) {
-    padding: 12px;
+  .page-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      padding: 0 1rem;
+    }
   }
 }
 
 .router-outlet-container {
   min-height: 100%;
+  padding: 1.5rem 0;
 }
 
 @media (max-width: 1199px) {
